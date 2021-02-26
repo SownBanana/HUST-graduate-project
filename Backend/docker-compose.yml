@@ -67,3 +67,13 @@ services:
     working_dir: /var/www/html
     entrypoint:
       - npm
+  
+  # Pub/sub Socket.io Server
+  pubsubserver:
+    container_name: "pubsub_${APP_NAME}"
+    build:
+      context: ./pubsubserver
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
