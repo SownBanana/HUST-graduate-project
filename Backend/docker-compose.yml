@@ -59,21 +59,32 @@ services:
       - app-network
 
   # npm
-  npm:
-    image: "node:13.7"
-    container_name: "npm_${APP_NAME}"
-    volumes:
-      - ./app/:/var/www/html
-    working_dir: /var/www/html
-    entrypoint:
-      - npm
-  
+  # npm:
+  #   image: "node:13.7"
+  #   container_name: "npm_${APP_NAME}"
+  #   volumes:
+  #     - ./app/:/var/www/html
+  #   working_dir: /var/www/html
+  #   entrypoint:
+  #     - npm
+
   # Pub/sub Socket.io Server
-  pubsubserver:
-    container_name: "pubsub_${APP_NAME}"
-    build:
-      context: ./pubsubserver
-      dockerfile: Dockerfile
+  # pubsubserver:
+  #   container_name: "pubsub_${APP_NAME}"
+  #   build:
+  #     context: ./pubsubserver
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   restart: unless-stopped
+
+  redis:
+    container_name: "redis_${APP_NAME}"
+    image: redis:5-alpine
     ports:
-      - "3000:3000"
+      - 6379:6379
+    volumes:
+      - ./redis/data/redis:/data
     restart: unless-stopped
+    networks:
+      - app-network
