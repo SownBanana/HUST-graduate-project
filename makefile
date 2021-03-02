@@ -5,6 +5,8 @@ start:
 	- make composer cmd=update
 down:
 	- docker-compose down
+stop:
+	- docker-compose down
 # Make
 make:
 	- docker-compose run backend php artisan make:${sth} ${name}
@@ -20,7 +22,7 @@ enum:
 
 # Commposer
 require:
-	- docker-compose run backend composer require $(package)
+	- docker-compose run backend composer require $(name)
 composer:
 	- docker-compose run backend composer $(cmd)
 
@@ -44,10 +46,14 @@ permission:
 	- sudo chmod -R 777 server
 
 config:
+	- docker-compose run backend php artisan config:clear
 	- docker-compose run backend php artisan config:cache
-cache:
-	- docker-compose run backend php artisan config:cache
-	# - docker-compose run backend php artisan route:cache
+clear:
+	docker-compose run backend php artisan config:clear
+	docker-compose run backend php artisan cache:clear
+	docker-compose run backend php artisan view:clear
+	# docker-compose run backendphp artisan route:clear
+	# docker-compose run backend composer dump-autoload
 artisan:
 	- docker-compose run backend php artisan ${p1}${p2}
 intodock:

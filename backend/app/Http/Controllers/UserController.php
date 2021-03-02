@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
+use App\Http\Proxy\AuthenticateProxy;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Jobs\SendVerifyEmail;
@@ -10,11 +11,17 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
+    private $authProxy;
+
+    public function __construct(AuthenticateProxy $authProxy)
+    {
+        $this->authProxy = $authProxy;
+    }
+
     public function register(RegisterRequest $request)
     {
         # Can't make a admin/mod account
@@ -31,6 +38,10 @@ class UserController extends Controller
         $data['confirmation_code'] = $user->confirmation_code;
         $success['username'] =  $user->username;
         return response()->json(['success'=>$success], 201);
+    }
+
+    public function client_proxy(Request $request)
+    {
     }
 
     public function login(LoginRequest $request)
@@ -50,13 +61,12 @@ class UserController extends Controller
             if ($user->email_verified_at == null) {
                 return response()->json(['failed'=>'Verify your email first'], 401);
             }
-            $success['token'] =  $user->createToken('VLearn')-> accessToken;
-            $success['username'] =  $user->username;
-            return response()->json(['success'=>$success], 200);
+            return response($this->authProxy->attemptLogin($login_info, $request->password));
         } else {
             return response()->json(['failed'=>'Login failed'], 401);
         }
     }
+
 
     public function verify($code)
     {
@@ -71,6 +81,17 @@ class UserController extends Controller
         }
     }
 
+    public function refresh(Request $request)
+    {
+        $refreshToken = $request->refresh_token;
+        return response($this->authProxy->attemptRefresh($refreshToken));
+    }
+
+    public function logout(Request $request)
+    {
+        $this->authProxy->logout();
+        return response(null, 204);
+    }
 
     public function check_passport()
     {

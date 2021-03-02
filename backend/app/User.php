@@ -37,4 +37,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    # get token
+    public function findForPassport($username)
+    {
+        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            # user sent their email
+            return $this->where('email', $username)->first();
+        } else {
+            # they sent their username instead
+            return $this->where('username', $username)->first();
+        }
+    }
 }

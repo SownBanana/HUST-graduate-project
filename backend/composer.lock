@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "562cbbdd29ae0047009150e3047b1f94",
+    "content-hash": "6d91627a6e4c4c4d6949d023a4f1f383",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2652,6 +2652,51 @@
                 "source": "https://github.com/opis/closure/tree/3.6.1"
             },
             "time": "2020-11-07T02:01:34+00:00"
+        },
+        {
+            "name": "optimus/api-consumer",
+            "version": "0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/esbenp/laravel-api-consumer.git",
+                "reference": "bfdd13bb6df6c4b10670313f1ebe9e3fc2a9bf0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/esbenp/laravel-api-consumer/zipball/bfdd13bb6df6c4b10670313f1ebe9e3fc2a9bf0e",
+                "reference": "bfdd13bb6df6c4b10670313f1ebe9e3fc2a9bf0e",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "~6.0|~7.0|~8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "1.3.*",
+                "orchestra/testbench": "4.*",
+                "php-coveralls/php-coveralls": "2.2.*",
+                "phpunit/phpunit": "~8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Optimus\\ApiConsumer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache"
+            ],
+            "authors": [
+                {
+                    "name": "Esben Petersen",
+                    "email": "esbenspetersen@gmail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/esbenp/laravel-api-consumer/issues",
+                "source": "https://github.com/esbenp/laravel-api-consumer/tree/0.4.0"
+            },
+            "time": "2020-10-31T14:18:54+00:00"
         },
         {
             "name": "paragonie/random_compat",

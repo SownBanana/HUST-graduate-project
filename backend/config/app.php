@@ -176,6 +176,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // Fake api client
+        Optimus\ApiConsumer\Provider\LaravelServiceProvider::class,
+
     ],
 
     /*
