@@ -1,4 +1,6 @@
+./database/*
 database/*
+./database/dbdata/*
 database/dbdata/*
 database/dbdata/auto.cnf
 database/dbdata/ib_buffer_pool
