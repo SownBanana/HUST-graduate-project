@@ -1,8 +1,7 @@
-database/*
 ./database/*
-database/dbdata/*
+database/*
 ./database/dbdata/*
-database/dbdata
+database/dbdata/*
 database/dbdata/auto.cnf
 database/dbdata/ib_buffer_pool
 database/dbdata/ib_logfile0
