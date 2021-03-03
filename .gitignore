@@ -1,1 +1,11 @@
 database/*
+./database/*
+database/dbdata/*
+./database/dbdata/*
+database/dbdata
+database/dbdata/auto.cnf
+database/dbdata/ib_buffer_pool
+database/dbdata/ib_logfile0
+database/dbdata/ibdata1
+database/dbdata/ibtmp1
+redis/data/redis/dump.rdb
