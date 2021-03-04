@@ -1,0 +1,6 @@
+Recommender system:
+	- Giá trị matrix = user vote (không vote = 2.5) 		+ % nội dung khóa học được xem (live stream 		= 90%).
+	- User-base
+	
+	
+
