@@ -3,6 +3,8 @@ start:
 	- make cache
 	- make queue
 	- make composer cmd=update
+up:
+	- docker-compose up -d
 down:
 	- docker-compose down
 stop:
