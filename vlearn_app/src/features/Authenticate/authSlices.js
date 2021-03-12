@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
-
+import updateOptions from "../../commons/FetchCommon";
 const initialState = {
 	access_token: null,
 	refresh_token: null,
@@ -17,22 +16,55 @@ const auth = createSlice({
 			state.access_token = action.payload.access_token;
 			state.refresh_token = action.payload.refresh_token;
 			state.expires_in =
-				Math.floor(Date.now() / 1000) + 10;
-				// Math.floor(Date.now() / 1000) + action.payload.expires_in - 10;
+				Math.floor(Date.now() / 1000) + action.payload.expires_in - 10;
 			state.isLoggedIn = true;
+			localStorage.setItem("auth", JSON.stringify(state));
 		},
 		authFail: (state, action) => {
 			state.isLoggedIn = false;
 			state.access_token = null;
 			state.refresh_token = null;
+			state.expires_in = 0;
+			let a = JSON.stringify(state);
+			localStorage.setItem("auth", JSON.stringify(state));
 		},
 		refreshSuccess: (state, action) => {
 			state.token = action.payload.token;
 			state.refreshToken = action.payload.refreshToken;
+			localStorage.setItem("auth", JSON.stringify(state));
 		},
-		refreshFail: (state, action) => {},
+		refreshFail: (state, action) => {
+			state.isLoggedIn = false;
+			state.access_token = null;
+			state.refresh_token = null;
+			state.expires_in = 0;
+			localStorage.setItem("auth", JSON.stringify(state));
+		},
 	},
 });
+
+export const logout = () => async (dispatch) => {
+	console.log("Log out");
+	const settings = {
+		method: "POST",
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/json",
+			"Access-Control-Allow-Origin": "http://localhost:3000",
+			"Access-Control-Allow-Credentials": "true",
+		},
+	};
+	try {
+		const response = await fetch(
+			"http://localhost:8088/api/logout",
+			updateOptions(settings)
+		);
+		console.log(response);
+		dispatch(authFail());
+	} catch (e) {
+		console.log(e);
+	}
+};
 
 export const login = (login, password) => async (dispatch) => {
 	console.log("Logining");

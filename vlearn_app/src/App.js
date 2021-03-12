@@ -4,23 +4,19 @@ import { Route, Switch } from "react-router-dom";
 import PrivateRoute from "./commons/PrivateRoute";
 import Home from "./features/Home";
 import { Suspense } from "react";
-import Login from "./features/Authenticate/pages/Login/";
-import Register from "./features/Authenticate/pages/Register/";
-// import axios from "axios";
-
+import { useDispatch } from "react-redux";
+import { authSuccess } from "./features/Authenticate/authSlices";
 const Authenticate = React.lazy(() => import("./features/Authenticate/"));
-// axios.defaults.headers.post["Accept"] = "application/json";
+
 function App() {
+	const dispatch = useDispatch();
+	if (localStorage && JSON.parse(localStorage.getItem("auth")).isLoggedIn)
+		dispatch(authSuccess(JSON.parse(localStorage.getItem("auth"))));
 	return (
 		<div className="App">
-			{/* <Home /> */}
 			<Suspense fallback={<div>Loading ...</div>}>
 				<Switch>
-					<Route exact path="/auth" component={Authenticate} />
-					<Route exact path={`/auth/login`}>
-						<Login />
-					</Route>
-					<Route exact path="/auth/register/" component={Register} />
+					<Route path="/auth" component={Authenticate} />
 					<PrivateRoute exact path="/" component={Home} />
 				</Switch>
 			</Suspense>
