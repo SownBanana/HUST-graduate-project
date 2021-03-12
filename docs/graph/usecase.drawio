@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-03-12T01:42:44.476Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36" etag="aPM8zr1dPK8X2D3cZKbY" version="14.4.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-12T01:44:13.592Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36" etag="WL9be4GdRxhAVpfmdSyF" version="14.4.3" type="github">
   <diagram id="5plZKbPlIHDqdeCXFDGE" name="Page-1">
     <mxGraphModel dx="1021" dy="512" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#F4F3ED" math="0" shadow="0">
       <root>
@@ -227,7 +227,7 @@
         <mxCell id="KcbtVHqw2if6-ZRaB_cP-7" value="Tạo bài tập" style="ellipse;whiteSpace=wrap;html=1;rounded=0;sketch=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" vertex="1" parent="1">
           <mxGeometry x="130" y="565" width="110" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="KcbtVHqw2if6-ZRaB_cP-8" value="WebRTC" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;rounded=0;sketch=0;strokeColor=#d6b656;fillColor=#fff2cc;align=left;fontColor=#393C56;" vertex="1" parent="1">
+        <mxCell id="KcbtVHqw2if6-ZRaB_cP-8" value="WebRTC" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;rounded=0;sketch=0;strokeColor=#d6b656;fillColor=#fff2cc;align=left;fontColor=#393C56;size=18;" vertex="1" parent="1">
           <mxGeometry x="255" y="630" width="60" height="60" as="geometry" />
         </mxCell>
         <mxCell id="KcbtVHqw2if6-ZRaB_cP-9" value="extend" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=0;entryDy=0;dashed=1;strokeColor=#E07A5F;fontColor=#393C56;" edge="1" parent="1" source="KcbtVHqw2if6-ZRaB_cP-10" target="IZT8jsWd7h7Ih6-XtFO0-45">
