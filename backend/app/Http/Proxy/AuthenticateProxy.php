@@ -77,7 +77,8 @@ class AuthenticateProxy
         // ]);
 
         $response = $this->apiConsumer->post('/oauth/token', $data);
-
+        // var_dump(env('OAUTH_CLIENT_ID'));
+        // var_dump($response);
         if (!$response->isSuccessful()) {
             throw new Exception();
         }
@@ -96,9 +97,10 @@ class AuthenticateProxy
         );
 
         return [
+            'status' => 'success',
             'access_token' => $data->access_token,
             'refresh_token' => $data->refresh_token,
-            'expires_in' => $data->expires_in
+            'expires_in' => $data->expires_in,
         ];
     }
 

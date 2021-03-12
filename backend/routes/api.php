@@ -17,6 +17,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+// Route::group([
+//     'middleware' => 'cors'
+// ], function () {
+//     Route::post('/register', 'UserController@register');
+//     Route::post('/login', 'UserController@login');
+//     Route::post('/auth/refresh', 'UserController@refresh');
+//     Route::get('/check-alive', 'APIController@check_alive');
+// });
 
 Route::post('/register', 'UserController@register');
 Route::post('/login', 'UserController@login');

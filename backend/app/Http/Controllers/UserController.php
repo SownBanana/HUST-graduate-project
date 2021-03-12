@@ -47,7 +47,8 @@ class UserController extends Controller
     public function login(LoginRequest $request)
     {
         $login_info = $request->login;
-        if (filter_var($login_info, FILTER_VALIDATE_EMAIL)) {
+        $isEmail = filter_var($login_info, FILTER_VALIDATE_EMAIL);
+        if ($isEmail) {
             # user sent their email
             $credentials['email'] = $login_info;
         } else {
@@ -59,11 +60,24 @@ class UserController extends Controller
             $user = Auth::user();
             # Check if user verify email
             if ($user->email_verified_at == null) {
-                return response()->json(['failed'=>'Verify your email first'], 401);
+                return response()->json(['status'=>'failed','message'=>'Bạn chưa xác thực tài khoản của mình'], 401);
             }
             return response($this->authProxy->attemptLogin($login_info, $request->password));
         } else {
-            return response()->json(['failed'=>'Login failed'], 401);
+            if ($isEmail) {
+                if (!User::where('email', $login_info)) {
+                    $mess = 'Email chưa được sử dụng';
+                } else {
+                    $mess = 'Mật khẩu không chính xác';
+                }
+            } else {
+                if (!User::where('username', $login_info)) {
+                    $mess = 'Tên đăng nhập không tồn tại';
+                } else {
+                    $mess = 'Mật khẩu không chính xác';
+                }
+            }
+            return response()->json(['status'=>'failed', 'message'=>$mess], 401);
         }
     }
 

@@ -1,8 +1,9 @@
 start:
 	- docker-compose up -d
+	- make composer cmd=update
+	- make clear
 	- make cache
 	- make queue
-	- make composer cmd=update
 up:
 	- docker-compose up -d
 down:
@@ -37,6 +38,8 @@ refresh:
 	- make passport_client
 queue:
 	- docker-compose run backend php artisan queue:work redis --tries=3 --queue=mails --daemon &
+queue-display:
+	- docker-compose run backend php artisan queue:work redis --tries=3 --queue=mails --daemon
 passport_client:
 	- docker-compose run backend php artisan passport:install
 
@@ -54,8 +57,8 @@ clear:
 	docker-compose run backend php artisan config:clear
 	docker-compose run backend php artisan cache:clear
 	docker-compose run backend php artisan view:clear
-	# docker-compose run backendphp artisan route:clear
-	# docker-compose run backend composer dump-autoload
+	docker-compose run backend php artisan route:clear
+	docker-compose run backend composer dump-autoload
 artisan:
 	- docker-compose run backend php artisan ${p1}${p2}
 intodock:
