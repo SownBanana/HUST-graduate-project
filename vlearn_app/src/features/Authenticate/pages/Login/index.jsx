@@ -1,28 +1,21 @@
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import {
 	Typography,
-	// Link,
 	Grid,
 	makeStyles,
 	CssBaseline,
 	Paper,
 	Avatar,
 	TextField,
-	// FormControlLabel,
-	// Checkbox,
 	Button,
 } from "@material-ui/core/";
 
 import { Link, Redirect } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-	authSuccess,
-	authFail,
-	refreshSuccess,
-	refreshFail,
-	login as postLogin,
-} from "../../authSlices";
+import { authFail, login as postLogin, resendVerify } from "../../authSlices";
+import { closeSnackbar, enqueueSnackbar } from "../../../Toast/toastSlices";
+import SnackButton from "../../../../components/SnackButton";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -55,17 +48,58 @@ const useStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
+	textLeft: {
+		textAlign: "left",
+	},
+	textRight: {
+		textAlign: "right",
+	},
+	noMargin: {
+		margin: 0,
+	},
+	whiteButton: {
+		color: "white",
+	},
 }));
 
 function Login() {
 	const isAuthed = useSelector((state) => state.auth.isLoggedIn);
+	const wrongLogin = useSelector((state) => state.auth.error.wrongLogin);
+	const wrongPass = useSelector((state) => state.auth.error.wrongPass);
+	const notConfirm = useSelector((state) => state.auth.error.notConfirm);
+
 	const [login, setLogin] = useState("");
 	const [password, setPassword] = useState("");
 	const classes = useStyles();
 	const dispatch = useDispatch();
+
 	const handleChange = (e, func) => {
 		func(e.target.value);
 	};
+
+	useEffect(() => {
+		if (isAuthed) {
+			const key = new Date().getTime() + Math.random();
+			dispatch(
+				enqueueSnackbar({
+					key: key,
+					message: "Bạn đã đăng nhập.",
+					options: {
+						key: key,
+						// preventDuplicate: true,
+						variant: "success",
+						autoHideDuration: 1000,
+						anchorOrigin: {
+							vertical: "top",
+							horizontal: "center",
+						},
+						action: (key) => <SnackButton notifyKey={key} />,
+					},
+				})
+			);
+		}
+	}, [isAuthed]);
+
 	return isAuthed ? (
 		<Redirect to="/" />
 	) : (
@@ -78,36 +112,56 @@ function Login() {
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h1" variant="h5">
-						Sign in
+						Đăng nhập
 					</Typography>
 					<form
 						className={classes.form}
 						onSubmit={(e) => {
 							e.preventDefault();
-							console.log(login, password);
-							dispatch(postLogin(login, password));
+							dispatch(postLogin({ login, password }));
 						}}
 					>
 						<TextField
+							error={wrongLogin || notConfirm !== ""}
 							variant="outlined"
 							margin="normal"
 							required
 							fullWidth
 							id="email"
-							label="Email Address"
+							label="Email/Tên đăng nhập"
 							name="email"
 							autoComplete="email"
 							autoFocus
 							value={login}
 							onChange={(e) => handleChange(e, setLogin)}
+							helperText={
+								notConfirm !== "" && (
+									<p className={classes.noMargin}>
+										Bạn chưa xác thực Email. Nhấn vào{" "}
+										<a
+											onClick={(e) => {
+												e.preventDefault();
+												dispatch(resendVerify(notConfirm));
+												dispatch(authFail());
+											}}
+											href={`${process.env.REACT_APP_BACKEND_URL}/api/resend-confirm/${notConfirm}`}
+										>
+											đây
+										</a>{" "}
+										để gửi lại.
+									</p>
+								)
+							}
 						/>
+						{/* <a href="#">here</a> */}
 						<TextField
+							error={wrongPass}
 							variant="outlined"
 							margin="normal"
 							required
 							fullWidth
 							name="password"
-							label="Password"
+							label="Mật khẩu"
 							type="password"
 							id="password"
 							autoComplete="current-password"
@@ -125,18 +179,16 @@ function Login() {
 							color="primary"
 							className={classes.submit}
 						>
-							Sign In
+							Đăng nhập
 						</Button>
 						<Grid container>
-							<Grid item xs>
+							<Grid item xs={6} className={classes.textLeft}>
 								<Link to="#" variant="body2">
-									Forgot password?
+									Quên mật khẩu
 								</Link>
 							</Grid>
-							<Grid item>
-								<Link to={`register`} variant="body2">
-									Don't have an account? Sign Up
-								</Link>
+							<Grid item xs={6} className={classes.textRight}>
+								<Link to={`register`}>Nhấn vào đây để đăng ký</Link>
 							</Grid>
 						</Grid>
 					</form>

@@ -14,13 +14,12 @@ export default function Authenticate() {
 				<Link to={`auth/login`}>Login </Link>
 				<Link to={`auth/register`}>Register </Link>
 				<a
-					href="#"
 					onClick={(e) => {
 						e.preventDefault();
 						dispatch(logout());
 					}}
 				>
-					Logout{" "}
+					Logout
 				</a>
 			</Route>
 			<Route path="/auth/login" component={Login} />

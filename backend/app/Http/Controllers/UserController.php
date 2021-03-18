@@ -40,13 +40,10 @@ class UserController extends Controller
         return response()->json(['success'=>$success], 201);
     }
 
-    public function client_proxy(Request $request)
-    {
-    }
-
     public function login(LoginRequest $request)
     {
         $login_info = $request->login;
+        // var_dump(User::where('email', $login_info)->first() != null);
         $isEmail = filter_var($login_info, FILTER_VALIDATE_EMAIL);
         if ($isEmail) {
             # user sent their email
@@ -60,28 +57,48 @@ class UserController extends Controller
             $user = Auth::user();
             # Check if user verify email
             if ($user->email_verified_at == null) {
-                return response()->json(['status'=>'failed','message'=>'Bạn chưa xác thực tài khoản của mình'], 401);
+                return response()->json(['status'=>'notConfirm','email'=>$user->email], 401);
             }
             return response($this->authProxy->attemptLogin($login_info, $request->password));
         } else {
             if ($isEmail) {
-                if (!User::where('email', $login_info)) {
+                if (User::where('email', $login_info)->first() == null) {
                     $mess = 'Email chưa được sử dụng';
+                    $type = 'login';
                 } else {
                     $mess = 'Mật khẩu không chính xác';
+                    $type = 'password';
                 }
             } else {
-                if (!User::where('username', $login_info)) {
+                if (User::where('username', $login_info)->first() == null) {
                     $mess = 'Tên đăng nhập không tồn tại';
+                    $type = 'login';
                 } else {
                     $mess = 'Mật khẩu không chính xác';
+                    $type = 'password';
                 }
             }
-            return response()->json(['status'=>'failed', 'message'=>$mess], 401);
+            return response()->json(['status'=>'failed', 'type'=>$type, 'message'=>$mess], 401);
         }
     }
 
-
+    public function resendConfirm(Request $request)
+    {
+        $login_info = $request->email;
+        if (filter_var($login_info, FILTER_VALIDATE_EMAIL)) {
+            $user = User::where('email', $login_info)->first();
+        } else {
+            $user = User::where('username', $login_info)->first();
+        }
+        if ($user) {
+            $confirmation_code = time().uniqid(true);
+            $user->confirmation_code = $confirmation_code;
+            $user->save();
+            dispatch(new SendVerifyEmail($user))->onQueue('mails');
+            return response()->json(['status'=>'success','mss'=>'Đã gửi email xác thực cho '.$user->email]);
+        }
+        return response()->json(['status'=>'error', 'mss'=>'Không tìm thấy thông tin đăng nhập '.$login_info]);
+    }
     public function verify($code)
     {
         $user = User::where('confirmation_code', $code)->first();
@@ -89,7 +106,7 @@ class UserController extends Controller
             $user->confirmation_code = null;
             $user->email_verified_at = now();
             $user->save();
-            return Redirect::to('http://localhost');
+            return Redirect::to('http://localhost:3000');
         } else {
             abort(404, 'Link xác thực hết hạn');
         }

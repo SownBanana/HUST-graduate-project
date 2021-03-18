@@ -1,12 +1,21 @@
 import { Button } from "@material-ui/core";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import SnackButton from "../../components/SnackButton";
 import { checkPassport } from "../Authenticate/authSlices";
+import {
+	enqueueSnackbar,
+	closeSnackbar,
+	// removeSnackbar,
+} from "../Toast/toastSlices";
+
+const whiteButton = {
+	color: "white",
+};
 
 function Home() {
 	const dispatch = useDispatch();
-	const access_token = useSelector((state) => state.auth.access_token);
 	return (
 		<div>
 			Home
@@ -15,21 +24,45 @@ function Home() {
 				onClick={(e) => {
 					e.preventDefault();
 					// console.log("passport");
-					dispatch(checkPassport(access_token));
+					dispatch(checkPassport());
 				}}
 			>
 				Check Auth
 			</Button>
-			{/* <Suspense fallback={<div>Loading ...</div>}>
-				<Switch>
-					<Route exact path="/" component={Home} />
-					<Route exact path="/auth" component={Authenticate} />
-					<Route exact path={`/auth/login`}>
-						<Login />
-					</Route>
-					<Route exact path="/auth/register/" component={Register} />
-				</Switch>
-			</Suspense> */}
+			<Button
+				variant="contained"
+				onClick={(e) => {
+					e.preventDefault();
+					const key = new Date().getTime() + Math.random();
+					dispatch(
+						enqueueSnackbar({
+							key: key,
+							message: "Failed fetching data.",
+							options: {
+								key: key,
+								// preventDuplicate: true,
+								variant: "success",
+								autoHideDuration: 2000,
+								anchorOrigin: {
+									vertical: "top",
+									horizontal: "right",
+								},
+								action: (key) => <SnackButton notifyKey={key} />,
+								// action: (
+								// 	<Button onClick={() => alert("message") }>
+								// 		'Alert'
+								// 	</Button>
+								// )
+							},
+						})
+					);
+				}}
+			>
+				Display snackbar
+			</Button>
+			{/* <Button variant="contained" onClick={closeSnackbar()}>
+				Dismiss all snackbars
+			</Button> */}
 		</div>
 	);
 }

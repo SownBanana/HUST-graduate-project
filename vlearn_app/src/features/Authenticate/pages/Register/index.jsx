@@ -1,19 +1,18 @@
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import {
 	Typography,
-	// Link,
 	Grid,
 	makeStyles,
 	CssBaseline,
 	Avatar,
 	TextField,
-	FormControlLabel,
-	Checkbox,
 	Button,
-    Container
+	Container,
 } from "@material-ui/core/";
 import { Link } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { register } from "../../authSlices";
+import { useState } from "react";
 const useStyles = makeStyles((theme) => ({
 	root: {
 		height: "100vh",
@@ -48,92 +47,124 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Register() {
+	const dispatch = useDispatch();
 	const classes = useStyles();
+	const [name, setName] = useState("");
+	const [username, setUsername] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [repassword, setRepassword] = useState("");
+	const handleChange = (e, func) => {
+		func(e.target.value);
+	};
 	return (
 		<Container component="main" maxWidth="sm">
 			<CssBaseline />
-            <Grid container>
-			<div className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<LockOutlinedIcon />
-				</Avatar>
-				<Typography component="h1" variant="h5">
-					Sign up
-				</Typography>
-				<form className={classes.form} noValidate>
-					<Grid container spacing={2}>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								autoComplete="fname"
-								name="firstName"
-								variant="outlined"
-								required
-								fullWidth
-								id="firstName"
-								label="First Name"
-								autoFocus
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="lastName"
-								label="Last Name"
-								name="lastName"
-								autoComplete="lname"
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="email"
-								label="Email Address"
-								name="email"
-								autoComplete="email"
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								name="password"
-								label="Password"
-								type="password"
-								id="password"
-								autoComplete="current-password"
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<FormControlLabel
-								control={<Checkbox value="allowExtraEmails" color="primary" />}
-								label="I want to receive inspiration, marketing promotions and updates via email."
-							/>
-						</Grid>
-					</Grid>
-					<Button
-						type="submit"
-						fullWidth
-						variant="contained"
-						color="primary"
-						className={classes.submit}
+			<Grid container>
+				<div className={classes.paper}>
+					<Avatar className={classes.avatar}>
+						<LockOutlinedIcon />
+					</Avatar>
+					<Typography component="h1" variant="h5">
+						Đăng ký tài khoản
+					</Typography>
+					<form
+						className={classes.form}
+						noValidate
+						onSubmit={(e) => {
+							e.preventDefault();
+							dispatch(register({ name, username, email, password }));
+						}}
 					>
-						Sign Up
-					</Button>
-					<Grid container justify="flex-end">
-						<Grid item>
-							<Link to="login" variant="body2">
-								Already have an account? Sign in
-							</Link>
+						<Grid container spacing={2}>
+							<Grid item xs={12}>
+								<TextField
+									autoComplete="name"
+									name="name"
+									variant="outlined"
+									required
+									fullWidth
+									id="name"
+									label="Họ tên"
+									autoFocus
+									onChange={(e) => handleChange(e, setName)}
+									value={name}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="username"
+									label="Tên tài khoản"
+									name="username"
+									autoComplete="username"
+									onChange={(e) => handleChange(e, setUsername)}
+									value={username}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="email"
+									label="Địa chỉ Email"
+									name="email"
+									autoComplete="email"
+									onChange={(e) => handleChange(e, setEmail)}
+									value={email}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									name="password"
+									label="Mật khẩu"
+									type="password"
+									id="password"
+									autoComplete="current-password"
+									onChange={(e) => handleChange(e, setPassword)}
+									value={password}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									name="repassword"
+									label="Nhập lại mật khẩu"
+									type="repassword"
+									id="repassword"
+									autoComplete="password"
+									onChange={(e) => handleChange(e, setRepassword)}
+									value={repassword}
+								/>
+							</Grid>
 						</Grid>
-					</Grid>
-				</form>
-			</div>
-            </Grid>
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							color="primary"
+							className={classes.submit}
+						>
+							Đăng ký
+						</Button>
+						<Grid container justify="flex-end">
+							<Grid item>
+								<Link to="login" variant="body2">
+									Đã có tài khoản? Click vào đây để đăng nhập.
+								</Link>
+							</Grid>
+						</Grid>
+					</form>
+				</div>
+			</Grid>
 		</Container>
 	);
 }
