@@ -12,18 +12,14 @@ export const logout = createAsyncThunk("auth/logout", async () => {
 
 export const register = createAsyncThunk("auth/register", async (params) => {
 	try {
-		console.log("params", params);
-		const response = await AuthAPI.register(params);
-		console.log(response);
-		return response.json();
+		return await AuthAPI.register(params);
 	} catch (e) {
 		console.log(e);
 	}
 });
 export const login = createAsyncThunk("auth/login", async (params) => {
 	try {
-		const response = await AuthAPI.login(params);
-		return response.json();
+		return await AuthAPI.login(params);
 	} catch (e) {
 		console.log(e);
 	}
@@ -34,8 +30,7 @@ export const accessTokenExpired = (refresh_token) =>
 		console.log("getting new token");
 		console.log(refresh_token);
 		try {
-			const response = await AuthAPI.refreshToken(refresh_token);
-			const data = await response.json();
+			const data = await AuthAPI.refreshToken(refresh_token);
 			if (data.status === "success") dispatch(authSuccess(data));
 			else dispatch(authFail());
 		} catch (e) {
@@ -47,8 +42,7 @@ export const resendVerify = (email) =>
 	async function resendEmail(dispatch) {
 		console.log(email);
 		try {
-			const response = await AuthAPI.resendEmail(email);
-			const data = await response.json();
+			const data = await AuthAPI.resendEmail(email);
 			const key = new Date().getTime() + Math.random();
 			dispatch(
 				enqueueSnackbar({
@@ -73,8 +67,7 @@ export const resendVerify = (email) =>
 
 export const checkPassport = () => async (dispatch) => {
 	console.log("checking passport");
-	const response = await AuthAPI.checkPassport();
-	const data = await response.json();
+	const data = await AuthAPI.checkPassport();
 	const key = new Date().getTime() + Math.random();
 	dispatch(
 		enqueueSnackbar({
@@ -118,6 +111,7 @@ function setSuccess(
 	state.expires_on = expires_on
 		? expires_on
 		: Math.floor(Date.now() / 1000) + expires_in - 10;
+	// : Math.floor(Date.now() / 1000) + 10;
 	state.isLoggedIn = true;
 	clearError(state);
 }

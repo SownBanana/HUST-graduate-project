@@ -2,7 +2,7 @@ import { IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { closeSnackbar } from "../features/Toast/toastSlices";
+import { closeSnackbar } from "./toastSlices";
 import PropTypes from "prop-types"; // ES6
 
 const whiteButton = {

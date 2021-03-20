@@ -49,13 +49,11 @@ const toast = createSlice({
 			state.notifications.push(action.payload);
 		},
 		closeSnackbar: (state, action) => {
-			const x = state.notifications;
 			state.notifications = state.notifications.map((notification) =>
 				notification.key === action.payload
 					? { ...notification, dismissed: true }
 					: { ...notification }
 			);
-			const a = state.notifications;
 			// 	notification.options.key === action.payload
 			// 		? (notification.dismissed = true)
 			// 		: notification

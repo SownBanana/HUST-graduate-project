@@ -2,7 +2,7 @@ import { Button } from "@material-ui/core";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import SnackButton from "../../components/SnackButton";
+import SnackButton from "../Toast/SnackButton";
 import { checkPassport } from "../Authenticate/authSlices";
 import {
 	enqueueSnackbar,

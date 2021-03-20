@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authFail, login as postLogin, resendVerify } from "../../authSlices";
 import { closeSnackbar, enqueueSnackbar } from "../../../Toast/toastSlices";
-import SnackButton from "../../../../components/SnackButton";
+import SnackButton from "../../../Toast/SnackButton";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
