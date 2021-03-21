@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-03-21T08:03:24.357Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36" etag="2dwr5m1zGi-Zo459tPCO" version="14.4.9" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-21T11:24:24.567Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36" etag="UgGiV0xAn7LIK2iS6riM" version="14.4.9" type="github" pages="2">
   <diagram id="cM6VMcbjnyJKN2k9jcpX" name="authenticate">
     <mxGraphModel dx="868" dy="435" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#F4F1DE" math="0" shadow="0">
       <root>
@@ -54,6 +54,50 @@
         </mxCell>
         <mxCell id="9pYhpZF7jL592bq8DV1k-17" value="Liên kết tài khoản với bên thứ 3" style="ellipse;whiteSpace=wrap;html=1;rounded=0;sketch=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" vertex="1" parent="1">
           <mxGeometry x="364" y="530" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="ZPKpgm2iC9W3ZL_deann" name="viewlistcourse">
+    <mxGraphModel dx="868" dy="435" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#F4F1DE" math="0" shadow="0">
+      <root>
+        <mxCell id="L55rA-ae6Pmayubvea0K-0" />
+        <mxCell id="L55rA-ae6Pmayubvea0K-1" parent="L55rA-ae6Pmayubvea0K-0" />
+        <mxCell id="VijKDs0SALoX3phCvwJv-0" value="Tìm kiếm khóa học" style="whiteSpace=wrap;html=1;rounded=0;sketch=0;strokeColor=#E07A5F;fontColor=#393C56;fillColor=#FFF2CC;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" vertex="1" parent="L55rA-ae6Pmayubvea0K-1">
+          <mxGeometry x="270" y="130" width="500" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-1" style="edgeStyle=none;rounded=1;sketch=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" edge="1" parent="L55rA-ae6Pmayubvea0K-1" source="VijKDs0SALoX3phCvwJv-5" target="VijKDs0SALoX3phCvwJv-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-2" style="edgeStyle=none;rounded=1;sketch=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" edge="1" parent="L55rA-ae6Pmayubvea0K-1" source="VijKDs0SALoX3phCvwJv-5" target="VijKDs0SALoX3phCvwJv-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-3" style="edgeStyle=none;rounded=1;sketch=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" edge="1" parent="L55rA-ae6Pmayubvea0K-1" source="VijKDs0SALoX3phCvwJv-5" target="VijKDs0SALoX3phCvwJv-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-4" style="edgeStyle=none;rounded=1;sketch=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" edge="1" parent="L55rA-ae6Pmayubvea0K-1" source="VijKDs0SALoX3phCvwJv-5" target="VijKDs0SALoX3phCvwJv-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-18" style="rounded=1;sketch=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" edge="1" parent="L55rA-ae6Pmayubvea0K-1" source="VijKDs0SALoX3phCvwJv-5" target="VijKDs0SALoX3phCvwJv-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-5" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#F2CC8F;strokeColor=#E07A5F;fontColor=#393C56;" vertex="1" parent="L55rA-ae6Pmayubvea0K-1">
+          <mxGeometry x="150" y="350" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-7" value="Tìm kiếm theo topic" style="ellipse;whiteSpace=wrap;html=1;rounded=0;sketch=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" vertex="1" parent="L55rA-ae6Pmayubvea0K-1">
+          <mxGeometry x="465" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-9" value="Tìm kiếm theo tên" style="ellipse;whiteSpace=wrap;html=1;rounded=0;sketch=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" vertex="1" parent="L55rA-ae6Pmayubvea0K-1">
+          <mxGeometry x="465" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-14" value="Tìm kiếm theo tác giả" style="ellipse;whiteSpace=wrap;html=1;rounded=0;sketch=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" vertex="1" parent="L55rA-ae6Pmayubvea0K-1">
+          <mxGeometry x="465" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-16" value="Lộ trình khóa học" style="ellipse;whiteSpace=wrap;html=1;rounded=0;sketch=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" vertex="1" parent="L55rA-ae6Pmayubvea0K-1">
+          <mxGeometry x="465" y="430" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VijKDs0SALoX3phCvwJv-17" value="Gợi ý khóa học" style="ellipse;whiteSpace=wrap;html=1;rounded=0;sketch=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" vertex="1" parent="L55rA-ae6Pmayubvea0K-1">
+          <mxGeometry x="460" y="520" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
