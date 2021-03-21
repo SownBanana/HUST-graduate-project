@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-03-21T11:53:58.071Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36" etag="AEMJjxP-p7SuLVbrIzQp" version="14.4.9" type="github" pages="3">
+<mxfile host="app.diagrams.net" modified="2021-03-21T11:57:10.041Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36" etag="F7UBh9ZMUtPWu6cpRLLW" version="14.4.9" type="github" pages="3">
   <diagram id="cM6VMcbjnyJKN2k9jcpX" name="authenticate">
     <mxGraphModel dx="868" dy="435" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#F4F1DE" math="0" shadow="0">
       <root>
@@ -116,6 +116,9 @@
         </mxCell>
         <mxCell id="zSKHJO6p2ae1-nztyVXY-0" value="Xem khóa học" style="ellipse;whiteSpace=wrap;html=1;rounded=0;sketch=0;strokeColor=#E07A5F;fillColor=#F2CC8F;fontColor=#393C56;" vertex="1" parent="L55rA-ae6Pmayubvea0K-1">
           <mxGeometry x="465" y="560" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="qMyzxd7xJ-hHEYmglyBV-0" value="- Elastic search&lt;br&gt;- Recommender System" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;rounded=0;sketch=0;strokeColor=#d6b656;align=left;fontColor=#393C56;fillColor=#FFFDF5;" vertex="1" parent="L55rA-ae6Pmayubvea0K-1">
+          <mxGeometry x="380" y="320" width="90" height="110" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
