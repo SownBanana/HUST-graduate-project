@@ -8,10 +8,13 @@ import {
 	TextField,
 	Button,
 	Container,
+	Collapse,
 } from "@material-ui/core/";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { register } from "../../authSlices";
+import { register as reg } from "../../authSlices";
+import { useForm } from "react-hook-form";
+import globalStyles from "../../../../style/GlobalStyles";
 import { useState } from "react";
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -48,15 +51,77 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Register() {
 	const dispatch = useDispatch();
+	globalStyles();
 	const classes = useStyles();
-	const [name, setName] = useState("");
-	const [username, setUsername] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [repassword, setRepassword] = useState("");
-	const handleChange = (e, func) => {
-		func(e.target.value);
+	const { register, handleSubmit, errors, getValues } = useForm();
+	const onSubmit = ({ name, username, email, password }) => {
+		dispatch(reg({ name, username, email, password }));
 	};
+	const [passwordErrorCheck, setPasswordErrorCheck] = useState({
+		spe: false,
+		cap: false,
+		nor: false,
+		num: false,
+		timeOut: 0,
+	});
+	var timer = 0;
+	const checkErrorPassword = (password) => {
+		// console.log(timer);
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			let check = false;
+			//validate letter
+			if (password.match(/[a-z]/)) {
+				setPasswordErrorCheck((passwordErrorCheck) => {
+					return { ...passwordErrorCheck, nor: false };
+				});
+			} else {
+				check = true;
+				setPasswordErrorCheck((passwordErrorCheck) => {
+					return { ...passwordErrorCheck, nor: true };
+				});
+			}
+
+			//validate capital letter
+			if (password.match(/[A-Z]/)) {
+				setPasswordErrorCheck((passwordErrorCheck) => {
+					return { ...passwordErrorCheck, cap: false };
+				});
+			} else {
+				check = true;
+				setPasswordErrorCheck((passwordErrorCheck) => {
+					return { ...passwordErrorCheck, cap: true };
+				});
+			}
+
+			//validate special character
+			if (password.match(/[!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~]/)) {
+				setPasswordErrorCheck((passwordErrorCheck) => {
+					return { ...passwordErrorCheck, spe: false };
+				});
+			} else {
+				check = true;
+				setPasswordErrorCheck((passwordErrorCheck) => {
+					return { ...passwordErrorCheck, spe: true };
+				});
+			}
+
+			//validate number
+			if (password.match(/\d/)) {
+				setPasswordErrorCheck((passwordErrorCheck) => {
+					return { ...passwordErrorCheck, num: false };
+				});
+			} else {
+				check = true;
+				setPasswordErrorCheck((passwordErrorCheck) => {
+					return { ...passwordErrorCheck, num: true };
+				});
+			}
+			// console.log(passwordErrorCheck);
+			return !check;
+		}, 100);
+	};
+
 	return (
 		<Container component="main" maxWidth="sm">
 			<CssBaseline />
@@ -71,10 +136,7 @@ export default function Register() {
 					<form
 						className={classes.form}
 						noValidate
-						onSubmit={(e) => {
-							e.preventDefault();
-							dispatch(register({ name, username, email, password }));
-						}}
+						onSubmit={handleSubmit(onSubmit)}
 					>
 						<Grid container spacing={2}>
 							<Grid item xs={12}>
@@ -82,68 +144,137 @@ export default function Register() {
 									autoComplete="name"
 									name="name"
 									variant="outlined"
-									required
 									fullWidth
 									id="name"
 									label="Họ tên"
 									autoFocus
-									onChange={(e) => handleChange(e, setName)}
-									value={name}
+									inputRef={register({ required: true })}
+									error={"name" in errors}
 								/>
+								<Collapse in={"name" in errors}>
+									<div className="errorHelperText">Nhập tên của bạn</div>
+								</Collapse>
 							</Grid>
 							<Grid item xs={12}>
 								<TextField
 									variant="outlined"
-									required
 									fullWidth
 									id="username"
 									label="Tên tài khoản"
 									name="username"
 									autoComplete="username"
-									onChange={(e) => handleChange(e, setUsername)}
-									value={username}
+									inputRef={register({ required: true })}
+									error={"username" in errors}
 								/>
+								<Collapse in={"username" in errors}>
+									<div className="errorHelperText">
+										Nhập tên tài khoản của bạn
+									</div>
+								</Collapse>
 							</Grid>
 							<Grid item xs={12}>
 								<TextField
 									variant="outlined"
-									required
 									fullWidth
 									id="email"
 									label="Địa chỉ Email"
 									name="email"
 									autoComplete="email"
-									onChange={(e) => handleChange(e, setEmail)}
-									value={email}
+									inputRef={register({
+										required: true,
+										pattern: {
+											value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+										},
+									})}
+									error={"email" in errors}
 								/>
+								<Collapse
+									in={"email" in errors && errors.email.type === "required"}
+								>
+									<div className="errorHelperText">
+										Nhập địa chỉ email của bạn
+									</div>
+								</Collapse>
+								<Collapse
+									in={"email" in errors && errors.email.type === "pattern"}
+								>
+									<div className="errorHelperText">
+										Địa chỉ email không hợp lệ
+									</div>
+								</Collapse>
 							</Grid>
 							<Grid item xs={12}>
 								<TextField
 									variant="outlined"
-									required
 									fullWidth
 									name="password"
 									label="Mật khẩu"
 									type="password"
 									id="password"
 									autoComplete="current-password"
-									onChange={(e) => handleChange(e, setPassword)}
-									value={password}
+									inputRef={register({
+										required: true,
+										minLength: 6,
+										validate: checkErrorPassword,
+									})}
+									error={"password" in errors}
 								/>
+								<Collapse
+									in={
+										"password" in errors && errors.password.type === "required"
+									}
+								>
+									<div className="errorHelperText">
+										Nhập địa mật khẩu của bạn
+									</div>
+								</Collapse>
+								<Collapse
+									in={
+										"password" in errors && errors.password.type === "minLength"
+									}
+								>
+									<div className="errorHelperText">
+										Mật khẩu của bạn quá ngắn
+									</div>
+								</Collapse>
+								<Collapse in={passwordErrorCheck.spe}>
+									<div className="errorHelperText">
+										Mật khẩu của bạn cần chứa ít nhất 1 ký tự đặc biệt
+									</div>
+								</Collapse>
+								<Collapse in={passwordErrorCheck.cap}>
+									<div className="errorHelperText">
+										Mật khẩu của bạn cần chứa ít nhất 1 ký tự in hoa
+									</div>
+								</Collapse>
+								<Collapse in={passwordErrorCheck.nor}>
+									<div className="errorHelperText">
+										Mật khẩu của bạn cần chứa ít nhất 1 ký tự thường
+									</div>
+								</Collapse>
+								<Collapse in={passwordErrorCheck.num}>
+									<div className="errorHelperText">
+										Mật khẩu của bạn cần chứa ít nhất 1 số
+									</div>
+								</Collapse>
 							</Grid>
 							<Grid item xs={12}>
 								<TextField
 									variant="outlined"
-									required
 									fullWidth
 									name="repassword"
 									label="Nhập lại mật khẩu"
-									type="repassword"
+									type="password"
 									id="repassword"
 									autoComplete="password"
-									onChange={(e) => handleChange(e, setRepassword)}
-									value={repassword}
+									inputRef={register({
+										validate: (value) => value === getValues().password,
+									})}
+									error={"repassword" in errors}
 								/>
+								<Collapse in={"repassword" in errors}>
+									<div className="errorHelperText">Mật khẩu không khớp</div>
+								</Collapse>
 							</Grid>
 						</Grid>
 						<Button

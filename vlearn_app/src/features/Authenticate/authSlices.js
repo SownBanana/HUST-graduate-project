@@ -128,6 +128,7 @@ const initialState = {
 		usedUsername: false,
 		usedEmail: false,
 	},
+	
 };
 
 const auth = createSlice({

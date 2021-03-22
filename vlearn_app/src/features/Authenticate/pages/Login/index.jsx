@@ -14,8 +14,9 @@ import { Link, Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authFail, login as postLogin, resendVerify } from "../../authSlices";
-import { closeSnackbar, enqueueSnackbar } from "../../../Toast/toastSlices";
+import { enqueueSnackbar } from "../../../Toast/toastSlices";
 import SnackButton from "../../../Toast/SnackButton";
+import BackToPrevious from "../../../../commons/components/BackToPrevious";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -70,6 +71,8 @@ function Login() {
 
 	const [login, setLogin] = useState("");
 	const [password, setPassword] = useState("");
+	// const { register, handleSubmit, watch, errors } = useForm();
+
 	const classes = useStyles();
 	const dispatch = useDispatch();
 
@@ -98,10 +101,11 @@ function Login() {
 				})
 			);
 		}
-	}, [isAuthed]);
+	}, [isAuthed, dispatch]);
 
 	return isAuthed ? (
-		<Redirect to="/" />
+		// <Redirect to="/" />
+		<BackToPrevious />
 	) : (
 		<Grid container component="main" className={classes.root}>
 			<CssBaseline />

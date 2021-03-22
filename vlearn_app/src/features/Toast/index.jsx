@@ -3,20 +3,17 @@ import { Slide, Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	// closeToast,
 	removeSnackbar,
-	ToastType,
+	// ToastType,
 } from "./toastSlices";
-import { SnackbarProvider, useSnackbar } from "notistack";
+// import { SnackbarProvider, useSnackbar } from "notistack";
 
 function SlideTransition(props) {
 	return <Slide {...props} direction="left" />;
 }
 
 export default function Toast() {
-	const { open, duration, title, message, type } = useSelector(
-		(state) => state.toast
-	);
+	const { open, duration, message, type } = useSelector((state) => state.toast);
 	const dispatch = useDispatch();
 
 	const handleCloseToast = (event, reason) => {

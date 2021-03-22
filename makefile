@@ -32,7 +32,6 @@ composer:
 # Database
 migrate:
 	- docker-compose run backend php artisan migrate$(option)
-	- make passport_client
 refresh:
 	- docker-compose run backend php artisan migrate:refresh
 	- make passport_client

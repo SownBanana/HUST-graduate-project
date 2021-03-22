@@ -52,6 +52,14 @@ const authAPI = {
 		});
 		return response.data;
 	},
+	getSocialURL: async (social) => {
+		const response = await api.get(`api/auth/${social}/url`);
+		return response.data;
+	},
+	getSocialCallback: async (social, search) => {
+		const response = await api.get(`/api/auth/${social}/callback${search}`);
+		return response.data;
+	},
 };
 
 // Using fetch

@@ -4,15 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import SnackButton from "../Toast/SnackButton";
 import { checkPassport } from "../Authenticate/authSlices";
-import {
-	enqueueSnackbar,
-	closeSnackbar,
-	// removeSnackbar,
-} from "../Toast/toastSlices";
-
-const whiteButton = {
-	color: "white",
-};
+import { enqueueSnackbar } from "../Toast/toastSlices";
 
 function Home() {
 	const dispatch = useDispatch();
