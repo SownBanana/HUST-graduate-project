@@ -87,13 +87,6 @@ class SocialGrant extends AbstractGrant
             throw OAuthServerException::invalidRequest('social_id');
         }
 
-        // $user = $this->userRepository->getUserEntityByUserCredentials(
-        //     $username,
-        //     $password,
-        //     $this->getIdentifier(),
-        //     $client
-        // );
-
         $user = $this->getUserFromSocialNetwork(new Request($request->getParsedBody()));
 
         if ($user instanceof UserEntityInterface === false) {

@@ -38,8 +38,6 @@ class OauthController extends Controller
         if ($socialAccount) {
             if ($user = $socialAccount->user) {
                 return response($this->authProxy->attemptSocial($social, $socialProvider->getId()));
-                // return response($user->createToken());
-                // return $this->getBearerTokenByUser($user, 1, true);
             }
         } else {
             $socialAccount = SocialAccount::create(
@@ -63,31 +61,5 @@ class OauthController extends Controller
                 'social_id'=>$socialAccount->id,
             ]);
         }
-    }
-
-    public function tmp($social)
-    {
-        $socialUser = Socialite::driver($social)->stateless()->user();
-        $user = null;
-        
-        DB::transaction(function () use ($socialUser, &$user, $social) {
-            $socialAccount = SocialAccount::firstOrNew(
-                ['social_id' => $socialUser->getId(), 'social_provider' => $social],
-                ['social_name' => $socialUser->getName()]
-            );
-
-            if (!($user = $socialAccount->user)) {
-                $user = User::create([
-                    'email' => $socialUser->getEmail(),
-                    'name' => $socialUser->getName(),
-                ]);
-                $socialAccount->fill(['user_id' => $user->id])->save();
-            }
-        });
-
-        return response()->json([
-            'user' => new UserResource($user),
-            $social.'_user' => $socialUser,
-        ]);
     }
 }
