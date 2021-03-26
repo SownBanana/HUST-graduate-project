@@ -1,10 +1,134 @@
-import { createSlice } from "@reduxjs/toolkit";
-import updateOptions from "../../commons/FetchCommon";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import AuthAPI from "../../commons/api/AuthAPI";
+import { enqueueSnackbar } from "../Toast/toastSlices";
+
+export const logout = createAsyncThunk("auth/logout", async () => {
+	try {
+		await AuthAPI.logout();
+	} catch (e) {
+		console.log(e);
+	}
+});
+
+export const register = createAsyncThunk("auth/register", async (params) => {
+	try {
+		return await AuthAPI.register(params);
+	} catch (e) {
+		console.log(e);
+	}
+});
+export const login = createAsyncThunk("auth/login", async (params) => {
+	try {
+		return await AuthAPI.login(params);
+	} catch (e) {
+		console.log(e);
+	}
+});
+
+export const accessTokenExpired = (refresh_token) =>
+	async function getNewToken(dispatch) {
+		console.log("getting new token");
+		console.log(refresh_token);
+		try {
+			const data = await AuthAPI.refreshToken(refresh_token);
+			if (data.status === "success") dispatch(authSuccess(data));
+			else dispatch(authFail());
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+export const resendVerify = (email) =>
+	async function resendEmail(dispatch) {
+		console.log(email);
+		try {
+			const data = await AuthAPI.resendEmail(email);
+			const key = new Date().getTime() + Math.random();
+			dispatch(
+				enqueueSnackbar({
+					key: key,
+					message: data.mss,
+					options: {
+						key: key,
+						// preventDuplicate: true,
+						variant: data.status === "success" ? "success" : "error",
+						autoHideDuration: 2000,
+						anchorOrigin: {
+							vertical: "bottom",
+							horizontal: "left",
+						},
+					},
+				})
+			);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+export const checkPassport = () => async (dispatch) => {
+	console.log("checking passport");
+	const data = await AuthAPI.checkPassport();
+	const key = new Date().getTime() + Math.random();
+	dispatch(
+		enqueueSnackbar({
+			key: key,
+			message: "success" in data ? "Authenticated" : "Unauthenticated",
+			options: {
+				key: key,
+				// preventDuplicate: true,
+				variant: "success" in data ? "success" : "error",
+				autoHideDuration: 2000,
+				anchorOrigin: {
+					vertical: "bottom",
+					horizontal: "left",
+				},
+			},
+		})
+	);
+};
+
+function clearError(state) {
+	state.error.wrongLogin = false;
+	state.error.wrongPass = false;
+	state.error.notConfirm = "";
+	state.error.usedUsername = false;
+	state.error.usedEmail = false;
+}
+
+function setFail(state) {
+	state.isLoggedIn = false;
+	state.access_token = null;
+	state.refresh_token = null;
+	state.expires_on = 0;
+	clearError(state);
+}
+function setSuccess(
+	state,
+	{ access_token, refresh_token, expires_on, expires_in }
+) {
+	state.access_token = access_token;
+	state.refresh_token = refresh_token;
+	state.expires_on = expires_on
+		? expires_on
+		: Math.floor(Date.now() / 1000) + expires_in - 10;
+	// : Math.floor(Date.now() / 1000) + 10;
+	state.isLoggedIn = true;
+	clearError(state);
+}
+
 const initialState = {
 	access_token: null,
 	refresh_token: null,
-	expires_in: 0,
+	expires_on: 0,
 	isLoggedIn: false,
+	error: {
+		wrongLogin: false,
+		wrongPass: false,
+		notConfirm: "",
+		usedUsername: false,
+		usedEmail: false,
+	},
+	
 };
 
 const auth = createSlice({
@@ -12,144 +136,43 @@ const auth = createSlice({
 	initialState,
 	reducers: {
 		authSuccess: (state, action) => {
-			console.log("Dang nhap thanh cong");
-			state.access_token = action.payload.access_token;
-			state.refresh_token = action.payload.refresh_token;
-			state.expires_in =
-				Math.floor(Date.now() / 1000) + action.payload.expires_in - 10;
-			state.isLoggedIn = true;
-			localStorage.setItem("auth", JSON.stringify(state));
+			setSuccess(state, action.payload);
+			localStorage.setItem("auth", JSON.stringify({ ...state, error: null }));
 		},
-		authFail: (state, action) => {
-			state.isLoggedIn = false;
-			state.access_token = null;
-			state.refresh_token = null;
-			state.expires_in = 0;
-			let a = JSON.stringify(state);
-			localStorage.setItem("auth", JSON.stringify(state));
+		authFail: (state) => {
+			setFail(state);
+			localStorage.setItem("auth", JSON.stringify({ ...state, error: null }));
 		},
-		refreshSuccess: (state, action) => {
-			state.token = action.payload.token;
-			state.refreshToken = action.payload.refreshToken;
-			localStorage.setItem("auth", JSON.stringify(state));
+	},
+	extraReducers: {
+		[login.fulfilled]: (state, action) => {
+			console.log(action.payload);
+			if (action.payload.status === "success") {
+				setSuccess(state, action.payload);
+			} else if (action.payload.status === "notConfirm") {
+				setFail(state);
+				state.error.notConfirm = action.payload.email;
+			} else {
+				setFail(state);
+				if (action.payload.type === "login") {
+					state.error.wrongLogin = true;
+				} else {
+					state.error.wrongPass = true;
+				}
+			}
+			localStorage.setItem("auth", JSON.stringify({ ...state, error: null }));
 		},
-		refreshFail: (state, action) => {
-			state.isLoggedIn = false;
-			state.access_token = null;
-			state.refresh_token = null;
-			state.expires_in = 0;
-			localStorage.setItem("auth", JSON.stringify(state));
+		[logout.rejected]: (state) => {
+			setFail(state);
+			localStorage.setItem("auth", JSON.stringify({ ...state, error: null }));
+		},
+		[logout.fulfilled]: (state) => {
+			setFail(state);
+			localStorage.setItem("auth", JSON.stringify({ ...state, error: null }));
 		},
 	},
 });
 
-export const logout = () => async (dispatch) => {
-	console.log("Log out");
-	const settings = {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-			"Access-Control-Allow-Origin": "http://localhost:3000",
-			"Access-Control-Allow-Credentials": "true",
-		},
-	};
-	try {
-		const response = await fetch(
-			"http://localhost:8088/api/logout",
-			updateOptions(settings)
-		);
-		console.log(response);
-		dispatch(authFail());
-	} catch (e) {
-		console.log(e);
-	}
-};
-
-export const login = (login, password) => async (dispatch) => {
-	console.log("Logining");
-	console.log(login, password);
-	const settings = {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-			"Access-Control-Allow-Origin": "http://localhost:3000",
-			"Access-Control-Allow-Credentials": "true",
-		},
-		body: JSON.stringify({
-			login,
-			password,
-		}),
-	};
-	try {
-		const response = await fetch("http://localhost:8088/api/login", settings);
-		console.log(response);
-		const data = await response.json();
-		if (data.status === "success") dispatch(authSuccess(data));
-		else dispatch(authFail(data));
-	} catch (e) {
-		console.log(e);
-	}
-};
-export const accessTokenExpired = (refresh_token) => async (dispatch) => {
-	console.log("getting token");
-	console.log(refresh_token);
-	const settings = {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-			"Access-Control-Allow-Origin": "http://localhost:3000",
-			"Access-Control-Allow-Credentials": "true",
-		},
-		body: JSON.stringify({
-			refresh_token,
-		}),
-	};
-	try {
-		const response = await fetch(
-			"http://localhost:8088/api/auth/refresh",
-			settings
-		);
-		console.log(response);
-		const data = await response.json();
-		if (data.status === "success") dispatch(authSuccess(data));
-		else dispatch(authFail(data));
-	} catch (e) {
-		console.log(e);
-	}
-};
-export const checkPassport = (access_token) => async (dispatch) => {
-	console.log("checking passport");
-	const settings = {
-		method: "GET",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-			"Access-Control-Allow-Origin": "http://localhost:3000",
-			"Access-Control-Allow-Credentials": "true",
-			Authorization: "Bearer " + access_token,
-		},
-	};
-	try {
-		const response = await fetch(
-			"http://localhost:8088/api/check-passport",
-			settings
-		);
-		console.log(response);
-		const data = await response.json();
-		console.log(data);
-	} catch (e) {
-		console.log(e);
-	}
-};
-
-export const {
-	authSuccess,
-	authFail,
-	refreshSuccess,
-	refreshFail,
-} = auth.actions;
+export const { authSuccess, authFail } = auth.actions;
 
 export default auth.reducer;

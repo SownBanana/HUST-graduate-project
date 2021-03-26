@@ -9,18 +9,40 @@ import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import rootReducer from "./reducers";
 import RefreshTokenMiddleWare from "./middlewares/RefreshTokenMiddleWare";
 import logger from "redux-logger";
+import { SnackbarProvider } from "notistack";
 
 const store = configureStore({
 	reducer: rootReducer,
-	middleware: [RefreshTokenMiddleWare, ...getDefaultMiddleware(), logger],
+	middleware: [
+		RefreshTokenMiddleWare,
+		...getDefaultMiddleware({
+			serializableCheck: {
+				// Ignore these action types
+				ignoredActions: ["toast"],
+				// Ignore these field paths in all actions
+				ignoredActionPaths: ["payload.options.action"],
+				// Ignore these paths in the state
+				ignoredPaths: ["toast.notifications"],
+			},
+		}),
+		logger,
+	],
 });
 
 ReactDOM.render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<Router>
-				<App />
-			</Router>
+			<SnackbarProvider
+				dense
+				anchorOrigin={{
+					vertical: "top",
+					horizontal: "right",
+				}}
+			>
+				<Router>
+					<App />
+				</Router>
+			</SnackbarProvider>
 		</Provider>
 	</React.StrictMode>,
 	document.getElementById("root")
