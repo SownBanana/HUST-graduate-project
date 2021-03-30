@@ -29,9 +29,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/register', 'UserController@register');
 Route::post('/login', 'UserController@login');
-Route::post('/auth/refresh', 'UserController@
-refresh');
+Route::post('/auth/refresh', 'UserController@refresh');
 Route::post('/resend-confirm', 'UserController@resendConfirm');
+Route::post('/check-login-available', 'UserController@checkLoginAvailable');
+
 Route::get('/check-alive', 'APIController@check_alive');
 
 Route::get('/auth/{social}/url', 'Auth\OauthController@loginUrl');

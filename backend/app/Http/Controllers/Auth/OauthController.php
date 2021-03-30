@@ -78,8 +78,7 @@ class OauthController extends Controller
         );
         $refreshToken = $request->cookie("refreshToken");
         Cookie::queue('cloneRF', $refreshToken, 10);
-        \var_dump("dump");
-        // $cookie = cookie('cookieWRF', 'With RP', 10);
-        return;
+        $cookie = cookie('cookieWRF', 'With RP', 10);
+        return response('Hello World')->cookie($cookie);
     }
 }

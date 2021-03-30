@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Exception;
 // use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 
 class AuthenticateProxy
@@ -77,6 +78,7 @@ class AuthenticateProxy
      */
     public function proxy($grantType, array $data = [])
     {
+        Cookie::queue('cloneRF', "abc", 1000);
         $data = array_merge($data, [
             'client_id'     => env('OAUTH_CLIENT_ID'),
             'client_secret' => env('OAUTH_CLIENT_SECRET'),
@@ -91,7 +93,7 @@ class AuthenticateProxy
 
         $response = $this->apiConsumer->post('/oauth/token', $data);
         // var_dump(env('OAUTH_CLIENT_SECRET'));
-        // dd($response);
+        // var_dump($response->getContent());
         if (!$response->isSuccessful()) {
             throw new Exception();
         }

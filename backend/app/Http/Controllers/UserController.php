@@ -62,7 +62,8 @@ class UserController extends Controller
             if ($user->email_verified_at == null) {
                 return response()->json(['status'=>'notConfirm','email'=>$user->email], 401);
             }
-            return response($this->authProxy->attemptLogin($login_info, $request->password));
+            $cookie = cookie('cookieWRF', 'With RP', 10);
+            return response($this->authProxy->attemptLogin($login_info, $request->password))->withCookie($cookie);
         } else {
             if ($isEmail) {
                 if (User::where('email', $login_info)->first() == null) {
@@ -117,8 +118,10 @@ class UserController extends Controller
 
     public function refresh(Request $request)
     {
-        $refreshToken = $request->refresh_token;
-        return response($this->authProxy->attemptRefresh($refreshToken));
+        // $refreshToken = $request->refresh_token;
+        // return response($this->authProxy->attemptRefresh($refreshToken));
+        $cookie = cookie('cookieWRF', 'With RP', 10);
+        return response($this->authProxy->attemptRefresh())->withCookie($cookie);
     }
 
     public function logout(Request $request)
@@ -131,5 +134,24 @@ class UserController extends Controller
     {
         $user = Auth::user();
         return response()->json(['success' => $user], 200);
+    }
+
+    public function getUserFromLoginInfor($login_info)
+    {
+        if (filter_var($login_info, FILTER_VALIDATE_EMAIL)) {
+            $user = User::where('email', $login_info)->first();
+        } else {
+            $user = User::where('username', $login_info)->first();
+        }
+        return $user;
+    }
+
+    public function checkLoginAvailable(Request $request)
+    {
+        $login_info = $request->login;
+        if ($user = $this->getUserFromLoginInfor($login_info)) {
+            return response()->json(['status'=>"existed"]);
+        }
+        return response()->json(['status'=>"available"]);
     }
 }
