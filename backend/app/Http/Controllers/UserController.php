@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
+use \Debugbar;
+
 class UserController extends Controller
 {
     private $authProxy;
@@ -42,6 +44,7 @@ class UserController extends Controller
 
     public function login(LoginRequest $request)
     {
+        Debugbar::error("zyz");
         $login_info = $request->login;
         // var_dump(User::where('email', $login_info)->first() != null);
         $isEmail = filter_var($login_info, FILTER_VALIDATE_EMAIL);
@@ -106,7 +109,7 @@ class UserController extends Controller
             $user->confirmation_code = null;
             $user->email_verified_at = now();
             $user->save();
-            return Redirect::to('http://localhost:3000');
+            return Redirect::to('http://localhost:8080');
         } else {
             abort(404, 'Link xác thực hết hạn');
         }

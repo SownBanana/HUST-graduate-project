@@ -36,6 +36,7 @@ Route::get('/check-alive', 'APIController@check_alive');
 
 Route::get('/auth/{social}/url', 'Auth\OauthController@loginUrl');
 Route::get('/auth/{social}/callback', 'Auth\OauthController@loginCallback');
+Route::get('/check-refresh', 'Auth\OauthController@checkRefreshTokenInCookie');
 // Route::get('/auth/{social}/url', [OauthController::class, 'loginUrl']);
 
 Route::group(['middleware' => 'auth:api'], function () {

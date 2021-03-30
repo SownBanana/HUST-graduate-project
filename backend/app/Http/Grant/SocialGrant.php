@@ -16,14 +16,13 @@ use App\Models\SocialAccount;
 use Laravel\Passport\Bridge\User;
 use League\OAuth2\Server\Grant\AbstractGrant;
 
-
 class SocialGrant extends AbstractGrant
 {
-     /**
-     * @param UserRepositoryInterface         $userRepository
-     * @param RefreshTokenRepositoryInterface $refreshTokenRepository
-     */
-     public function __construct(
+    /**
+    * @param UserRepositoryInterface         $userRepository
+    * @param RefreshTokenRepositoryInterface $refreshTokenRepository
+    */
+    public function __construct(
         UserRepositoryInterface $userRepository,
         RefreshTokenRepositoryInterface $refreshTokenRepository
     ) {
@@ -98,7 +97,8 @@ class SocialGrant extends AbstractGrant
         return $user;
     }
 
-    private function getUserFromSocialNetwork(Request $request){
+    private function getUserFromSocialNetwork(Request $request)
+    {
         $provider = config('auth.guards.api.provider');
 
         if (is_null($model = config('auth.providers.'.$provider.'.model'))) {
@@ -108,8 +108,12 @@ class SocialGrant extends AbstractGrant
         $socialAccount = SocialAccount::whereSocialProvider($request->social_provider)
         ->whereSocialId($request->social_id)->first();
 
-        if(!$socialAccount) return;
-        if (!($user = $socialAccount->user)) return;
+        if (!$socialAccount) {
+            return;
+        }
+        if (!($user = $socialAccount->user)) {
+            return;
+        }
         return new User($user->getAuthIdentifier());
     }
 

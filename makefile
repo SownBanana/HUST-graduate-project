@@ -1,9 +1,9 @@
 start:
 	- docker-compose up -d
-	- make composer cmd=update
-	- make clear
-	- make cache
-	- make queue
+	- make intodock dock=backend
+	# - make composer cmd=update
+	# - make clear
+	# - make queue
 up:
 	- docker-compose up -d
 down:

@@ -78,8 +78,8 @@ class AuthenticateProxy
     public function proxy($grantType, array $data = [])
     {
         $data = array_merge($data, [
-            'client_id'     => env('OAUTH2_CLIENT_ID'),
-            'client_secret' => env('OAUTH2_CLIENT_SECRET'),
+            'client_id'     => env('OAUTH_CLIENT_ID'),
+            'client_secret' => env('OAUTH_CLIENT_SECRET'),
             'grant_type'    => $grantType
         ]);
 

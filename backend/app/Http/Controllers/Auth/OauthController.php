@@ -9,6 +9,8 @@ use App\Models\SocialAccount;
 use App\Models\User;
 use App\Http\Proxy\AuthenticateProxy;
 use App\Traits\PassportToken;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Http\Request;
 
 class OauthController extends Controller
 {
@@ -61,5 +63,23 @@ class OauthController extends Controller
                 'social_id'=>$socialAccount->id,
             ]);
         }
+    }
+
+    public function checkRefreshTokenInCookie(Request $request)
+    {
+        Cookie::queue(
+            "abc",
+            123,
+            864000, // 10 days
+            null,
+            null,
+            false,
+            true // HttpOnly
+        );
+        $refreshToken = $request->cookie("refreshToken");
+        Cookie::queue('cloneRF', $refreshToken, 10);
+        \var_dump("dump");
+        // $cookie = cookie('cookieWRF', 'With RP', 10);
+        return;
     }
 }
