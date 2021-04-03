@@ -44,7 +44,7 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function socialAccounts(): HasMany
+    public function socialAccounts()
     {
         return $this->hasMany(SocialAccount::class);
     }

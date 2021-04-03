@@ -9,6 +9,8 @@ use App\Models\SocialAccount;
 use App\Models\User;
 use App\Http\Proxy\AuthenticateProxy;
 use App\Traits\PassportToken;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class OauthController extends Controller
 {
@@ -53,13 +55,46 @@ class OauthController extends Controller
         if (User::whereEmail($socialProvider->getEmail())->first()) {
             return response()->json([
                 'status'=>'existed',
-                'social_id'=>$socialAccount->id,
+                'social_provider' => $social,
+                'social_id'=>$socialProvider->getId(),
+                'social_email' => $socialProvider->getEmail(),
+                'social_name' => $socialProvider->getName(),
+                'social_avatar' => $socialProvider->getAvatar(),
             ]);
         } else {
             return response()->json([
                 'status'=>'new',
-                'social_id'=>$socialAccount->id,
+                'social_provider' => $social,
+                'social_id'=>$socialProvider->getId(),
+                'social_email' => $socialProvider->getEmail(),
+                'social_name' => $socialProvider->getName(),
+                'social_avatar' => $socialProvider->getAvatar(),
             ]);
         }
+    }
+
+    public function createAccountWithSocialProvider(Request $request)
+    {
+        $input = $request->all();
+        if ($request->isUsePassword) {
+            $input['password'] = Hash::make($input['password']);
+        }
+        $socialAccount = SocialAccount::whereSocialProvider($request->social)
+            ->whereSocialId($request->social_id)
+            ->first();
+        $user = User::create($input);
+        $socialAccount->user()->associate($user);
+        $socialAccount->save();
+        return response($this->authProxy->attemptSocial($request->social, $request->social_id));
+    }
+    public function attachUserWithSocialProvider(Request $request)
+    {
+        $socialAccount = SocialAccount::whereSocialProvider($request->social)
+            ->whereSocialId($request->social_id)
+            ->first();
+        $user = User::whereUsername($request->username)->first();
+        $socialAccount->user()->associate($user);
+        $socialAccount->save();
+        return response($this->authProxy->attemptSocial($socialAccount->social_provider, $socialAccount->social_id));
     }
 }

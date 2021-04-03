@@ -36,6 +36,8 @@ Route::post('/check-login-available', 'UserController@checkLoginAvailable');
 
 Route::get('/auth/{social}/url', 'Auth\OauthController@loginUrl');
 Route::get('/auth/{social}/callback', 'Auth\OauthController@loginCallback');
+Route::post('/auth/create-social', 'Auth\OauthController@createAccountWithSocialProvider');
+Route::get('/auth/attach-social', 'Auth\OauthController@attachUserWithSocialProvider');
 // Route::get('/auth/{social}/url', [OauthController::class, 'loginUrl']);
 
 Route::group(['middleware' => 'auth:api'], function () {
