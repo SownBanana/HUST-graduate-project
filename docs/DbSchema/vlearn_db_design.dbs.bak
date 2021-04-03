@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="VLearn" id="Project_cdd" database="MySql" >
+	<schema name="vlearn" >
+		<table name="users" >
+			<column name="id" type="int" length="100" jt="4" mandatory="y" unsigned="y" />
+			<column name="username" type="varchar" length="100" jt="12" />
+			<column name="email" type="varchar" length="100" jt="12" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="pk_users_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout_26ef" show_relation="columns" >
+		<entity schema="vlearn" name="users" color="C1D8EE" x="416" y="256" />
+		<callout x="48" y="48" pointer="Round" >
+			<comment><![CDATA[DbSchema is disconnected from the database.
+New designed tables will be saved to project file and later can be create in any database.
+Right-click the layout to create new tables. Drop this callout from its context menu.]]></comment>
+		</callout>
+	</layout>
+</project>

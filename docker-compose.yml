@@ -16,6 +16,7 @@ services:
       - database
     networks:
       - app-network
+    restart: unless-stopped
 
   # The Database
   database:
@@ -43,6 +44,7 @@ services:
       - "3307:3306"
     networks:
       - app-network
+    restart: unless-stopped
 
   # The Application
   backend:
@@ -57,6 +59,7 @@ services:
       - 9000:9000
     networks:
       - app-network
+    restart: unless-stopped
 
   # The Redis server
   redis:

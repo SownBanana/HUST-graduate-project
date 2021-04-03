@@ -129,4 +129,23 @@ class UserController extends Controller
         $user = Auth::user();
         return response()->json(['success' => $user], 200);
     }
+
+    public function getUserFromLoginInfor($login_info)
+    {
+        if (filter_var($login_info, FILTER_VALIDATE_EMAIL)) {
+            $user = User::where('email', $login_info)->first();
+        } else {
+            $user = User::where('username', $login_info)->first();
+        }
+        return $user;
+    }
+
+    public function checkLoginAvailable(Request $request)
+    {
+        $login_info = $request->login;
+        if ($user = $this->getUserFromLoginInfor($login_info)) {
+            return response()->json(['status'=>"existed"]);
+        }
+        return response()->json(['status'=>"available"]);
+    }
 }
