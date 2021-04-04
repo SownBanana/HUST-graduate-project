@@ -13,6 +13,6 @@ final class UserRole extends Enum
 {
     const Admin = 0;
     const Mod = 1;
-    const Teacher = 2;
+    const Instructor = 2;
     const Student = 3;
 }

@@ -1,11 +1,193 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="VLearn" id="Project_cdd" database="MySql" >
 	<schema name="vlearn" >
-		<table name="users" >
-			<column name="id" type="int" length="100" jt="4" mandatory="y" unsigned="y" />
+		<table name="answer" prior="ans" >
+			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="question_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="content" type="varchar" length="250" jt="12" />
+			<column name="is_true" type="boolean" jt="-7" />
+			<index name="pk_answer_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_answer_learn_unit" to_schema="vlearn" to_table="learn_unit" >
+				<fk_column name="question_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="course_student" prior="tbl" generator_rows="225" >
+			<column name="course_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="student_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="lesson_checkpoint" type="int" jt="4" />
+			<column name="rate" type="int" jt="4" />
+			<index name="pk_course_student" unique="PRIMARY_KEY" >
+				<column name="student_id" />
+				<column name="course_id" />
+			</index>
+			<fk name="fk_course_student_courses" to_schema="vlearn" to_table="courses" >
+				<fk_column name="course_id" pk="id" />
+			</fk>
+			<fk name="fk_course_student_users" to_schema="vlearn" to_table="users" >
+				<fk_column name="student_id" pk="id" />
+			</fk>
+			<fk name="fk_course_student_learn_unit" to_schema="vlearn" to_table="learn_unit" >
+				<fk_column name="lesson_checkpoint" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="course_topic" prior="tbl" generator_rows="225" >
+			<column name="course_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="topic_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<index name="pk_course_topic" unique="PRIMARY_KEY" >
+				<column name="course_id" />
+				<column name="topic_id" />
+			</index>
+			<fk name="fk_course_topic_courses" to_schema="vlearn" to_table="courses" >
+				<fk_column name="course_id" pk="id" />
+			</fk>
+			<fk name="fk_course_topic_topics" to_schema="vlearn" to_table="topics" >
+				<fk_column name="topic_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="courses" prior="tbl" generator_rows="150" >
+			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="instructor_id" prior="owner_id" type="int" jt="4" unsigned="y" />
+			<column name="title" type="varchar" length="125" jt="12" />
+			<column name="introduce" type="varchar" length="125" jt="12" />
+			<column name="price" type="int" jt="4" />
+			<index name="pk_courses_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_courses_instructor" to_schema="vlearn" to_table="users" >
+				<fk_column name="instructor_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="instructors" prior="tbl" generator_rows="150" >
+			<column name="user_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="introduce" type="varchar" length="1000" jt="12" />
+			<column name="receive_mail" type="varchar" length="250" jt="12" />
+			<column name="receive_bought_notify" type="boolean" jt="-7" />
+			<column name="receive_report" type="boolean" jt="-7" />
+			<index name="pk_instructors_user_id" unique="PRIMARY_KEY" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_instructors_users" to_schema="vlearn" to_table="users" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="learn_unit" prior="section_unit" >
+			<comment><![CDATA[+ type:
+ - 1: lesson
+ - 2: question
+ - 3: live section
++ estimate_time:
+ - lesson, question: estimate length
+ - live section: establish time]]></comment>
+			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="section_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="type" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="estimate_time" prior="estiamte_time" type="timestamp" jt="93" />
+			<column name="video_url" type="varchar" length="200" jt="12" />
+			<column name="content" type="long varchar" jt="-1" />
+			<index name="pk_learn_unit_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_learn_unit_sections" to_schema="vlearn" to_table="sections" >
+				<fk_column name="section_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="sections" prior="tbl" generator_rows="225" >
+			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="course_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="pk_sections_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_sections_courses" to_schema="vlearn" to_table="courses" >
+				<fk_column name="course_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="student_unit" prior="tbl" >
+			<comment><![CDATA[check if student watch video or answer question, time stamp watching and score]]></comment>
+			<column name="student_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="unit_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="is_touch" type="boolean" jt="-7" mandatory="y" />
+			<column name="touch_value" type="varchar" length="125" jt="12" />
+			<fk name="fk_student_unit_users" to_schema="vlearn" to_table="users" >
+				<fk_column name="student_id" pk="id" />
+			</fk>
+			<fk name="fk_student_unit_learn_unit" to_schema="vlearn" to_table="learn_unit" >
+				<fk_column name="unit_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="students" prior="stu" generator_rows="150" >
+			<column name="user_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="receive_mail" type="varchar" length="250" jt="12" />
+			<column name="receive_flower_new_course" type="boolean" jt="-7" />
+			<column name="receive_notificate" type="boolean" jt="-7" />
+			<column name="receive_course_change" type="boolean" jt="-7" />
+			<index name="pk_students_user_id" unique="PRIMARY_KEY" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_students_users" to_schema="vlearn" to_table="users" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+		</table>
+		<table name="topics" prior="tbl" generator_rows="150" >
+			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="request_id" type="int" jt="4" unsigned="y" />
+			<column name="commit_id" type="int" jt="4" unsigned="y" />
+			<column name="parent_id" type="int" jt="4" unsigned="y" />
+			<index name="pk_topics_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_topics_parent" to_schema="vlearn" to_table="topics" >
+				<fk_column name="parent_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="user_topic" prior="topic" generator_rows="225" >
+			<column name="user_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="topic_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<index name="pk_user_topic" unique="PRIMARY_KEY" >
+				<column name="user_id" />
+				<column name="topic_id" />
+			</index>
+			<fk name="fk_user_topic_users" to_schema="vlearn" to_table="users" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<fk name="fk_user_topic_topics" to_schema="vlearn" to_table="topics" >
+				<fk_column name="topic_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="users" generator_rows="100" >
+			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
 			<column name="username" type="varchar" length="100" jt="12" />
 			<column name="email" type="varchar" length="100" jt="12" />
 			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="password" type="varchar" length="100" jt="12" />
+			<column name="confirmation_code" type="int" jt="4" />
+			<column name="email_verify_at" type="date" jt="91" />
+			<column name="avatar" type="varchar" length="300" jt="12" />
+			<column name="role" type="tinyint" jt="-6" />
 			<index name="pk_users_id" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -13,11 +195,17 @@
 		</table>
 	</schema>
 	<layout name="Default Layout" id="Layout_26ef" show_relation="columns" >
-		<entity schema="vlearn" name="users" color="C1D8EE" x="416" y="256" />
-		<callout x="48" y="48" pointer="Round" >
-			<comment><![CDATA[DbSchema is disconnected from the database.
-New designed tables will be saved to project file and later can be create in any database.
-Right-click the layout to create new tables. Drop this callout from its context menu.]]></comment>
-		</callout>
+		<entity schema="vlearn" name="answer" color="3986C1" x="224" y="688" />
+		<entity schema="vlearn" name="course_student" color="C1D8EE" x="336" y="320" />
+		<entity schema="vlearn" name="course_topic" color="C1D8EE" x="304" y="464" />
+		<entity schema="vlearn" name="courses" color="C1D8EE" x="96" y="272" />
+		<entity schema="vlearn" name="instructors" color="C1D8EE" x="48" y="48" />
+		<entity schema="vlearn" name="learn_unit" color="C1D8EE" x="448" y="624" />
+		<entity schema="vlearn" name="sections" color="C1D8EE" x="96" y="528" />
+		<entity schema="vlearn" name="student_unit" color="C1D8EE" x="720" y="208" />
+		<entity schema="vlearn" name="students" color="3986C1" x="512" y="48" />
+		<entity schema="vlearn" name="topics" color="C1D8EE" x="528" y="448" />
+		<entity schema="vlearn" name="user_topic" color="C1D8EE" x="560" y="272" />
+		<entity schema="vlearn" name="users" color="C1D8EE" x="288" y="48" />
 	</layout>
 </project>

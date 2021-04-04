@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -39,6 +40,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function user()
+    {
+        $role = $this->role;
+        switch ($role) {
+            case UserRole::Student:{
+                return $this->hasOne('App\Models\Student');
+            }
+            case UserRole::Instructor:{
+                return $this->hasOne('App\Models\Instructor');
+            }
+            case UserRole::Admin:{
+                return $this->hasOne('App\Models\Admin');
+            }
+            case UserRole::Mod:{
+                return $this->hasOne('App\Models\Mod');
+            }
+        }
+    }
     /**
      * Get all of the socialAccounts for the User
      *
