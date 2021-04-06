@@ -94,9 +94,28 @@ class User extends Authenticatable
     public function boughtCourses()
     {
         if ($this->role == UserRole::Student) {
-            return $this->belongsToMany(Course::class, 'course_student', 'student_id', 'course_id')->withPivot('rate', 'lesson_checkpoint');
+            return $this->belongsToMany(Course::class, 'course_student', 'student_id', 'course_id')->withPivot('rate', 'section_checkpoint');
         } else {
             return null;
         }
+    }
+
+
+    public function sections()
+    {
+        if ($this->role == UserRole::Student) {
+            return $this->belongsToMany(Section::class, 'section_student', 'student_id', 'section_id')->withPivot('lesson_checkpoint', 'highest_point');
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * The topics that belong to the User
+     *
+     */
+    public function topics()
+    {
+        return $this->belongsToMany(Topic::class, 'user_topic');
     }
 }

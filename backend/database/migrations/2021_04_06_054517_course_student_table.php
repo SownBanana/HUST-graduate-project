@@ -17,7 +17,7 @@ class CourseStudentTable extends Migration
             $table->integer('course_id');
             $table->integer('student_id');
             $table->float('rate')->default(0.0);
-            $table->integer('lesson_checkpoint')->nullable();
+            $table->integer('section_checkpoint')->nullable();
             $table->timestamps();
         });
     }
