@@ -30,4 +30,9 @@ class Course extends Model
     {
         return $this->belongsToMany(Topic::class, 'course_topic');
     }
+
+    public function room()
+    {
+        return $this->morphOne(Room::class, 'roomable');
+    }
 }

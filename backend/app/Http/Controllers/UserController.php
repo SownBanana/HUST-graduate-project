@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
+use App\Http\Controllers\Controller;
 use App\Http\Proxy\AuthenticateProxy;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;

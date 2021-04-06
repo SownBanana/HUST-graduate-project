@@ -20,7 +20,6 @@ class CreateLessonsTable extends Migration
             $table->integer('estimate_time');
             $table->string('video_url');
             $table->string('content');
-            $table->integer('room_id');
             $table->timestamps();
         });
     }

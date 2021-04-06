@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLiveLessonsTable extends Migration
+class CreateMentionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateLiveLessonsTable extends Migration
      */
     public function up()
     {
-        Schema::create('live_lessons', function (Blueprint $table) {
+        Schema::create('mentions', function (Blueprint $table) {
             $table->id();
-            $table->integer('section_id');
-            $table->string('name');
-            $table->dateTime('schedule_time');
+            $table->integer('message_id');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateLiveLessonsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('live_lessons');
+        Schema::dropIfExists('mentions');
     }
 }

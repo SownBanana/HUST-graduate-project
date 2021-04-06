@@ -14,4 +14,9 @@ class LiveLesson extends Model
     {
         return $this->belongsTo(Section::class);
     }
+
+    public function room()
+    {
+        return $this->morphOne(Room::class, 'roomable');
+    }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="VLearn" id="Project_cdd" database="MySql" >
 	<schema name="vlearn" >
-		<table name="answers" prior="answer" >
+		<table name="answers" prior="answer" generator_rows="505" >
 			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
 				<identity><![CDATA[AUTO_INCREMENT]]></identity>
 			</column>
@@ -16,10 +16,49 @@
 			</fk>
 			<options><![CDATA[engine=InnoDB]]></options>
 		</table>
+		<table name="asset_lesson" prior="tbl" generator_rows="505" >
+			<column name="asset_id" type="int" jt="4" unsigned="y" />
+			<column name="lesson_id" type="int" jt="4" unsigned="y" />
+			<fk name="fk_asset_lesson_assets" to_schema="vlearn" to_table="assets" >
+				<fk_column name="asset_id" pk="id" />
+			</fk>
+			<fk name="fk_asset_lesson_lessons" to_schema="vlearn" to_table="lessons" >
+				<fk_column name="lesson_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="asset_message" prior="tbl" generator_rows="225" >
+			<column name="asset_id" type="int" jt="4" unsigned="y" />
+			<column name="message_id" type="int" jt="4" unsigned="y" />
+			<fk name="fk_asset_message_assets" to_schema="vlearn" to_table="assets" >
+				<fk_column name="asset_id" pk="id" />
+			</fk>
+			<fk name="fk_asset_message_messages" to_schema="vlearn" to_table="messages" >
+				<fk_column name="message_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="assets" prior="tbl" generator_rows="150" >
+			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="owner_id" type="int" jt="4" unsigned="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="url" type="varchar" length="100" jt="12" />
+			<column name="update_at" type="date" jt="91" />
+			<column name="is_public" type="boolean" jt="-7" />
+			<index name="pk_assets_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_assets_users" to_schema="vlearn" to_table="users" >
+				<fk_column name="owner_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
 		<table name="course_student" prior="tbl" generator_rows="225" >
 			<column name="course_id" type="int" jt="4" mandatory="y" unsigned="y" />
 			<column name="student_id" type="int" jt="4" mandatory="y" unsigned="y" />
-			<column name="lesson_checkpoint" type="int" jt="4" unsigned="y" />
+			<column name="section_checkpoint" prior="lesson_checkpoint" type="int" jt="4" unsigned="y" />
 			<column name="rate" type="int" jt="4" />
 			<index name="pk_course_student" unique="PRIMARY_KEY" >
 				<column name="student_id" />
@@ -31,8 +70,11 @@
 			<fk name="fk_course_student_users" to_schema="vlearn" to_table="users" >
 				<fk_column name="student_id" pk="id" />
 			</fk>
-			<fk name="fk_course_student_learn_unit" to_schema="vlearn" to_table="lessons" >
-				<fk_column name="lesson_checkpoint" pk="id" />
+			<fk name="fk_course_student_sections" to_schema="vlearn" to_table="sections" >
+				<fk_column name="section_checkpoint" pk="id" />
+			</fk>
+			<fk name="fk_course_student_section_student" to_schema="vlearn" to_table="section_student" >
+				<fk_column name="section_checkpoint" pk="section_id" />
 			</fk>
 			<options><![CDATA[engine=InnoDB]]></options>
 		</table>
@@ -83,7 +125,7 @@
 			</fk>
 			<options><![CDATA[engine=InnoDB]]></options>
 		</table>
-		<table name="lessons" prior="lesson" >
+		<table name="lessons" prior="lesson" generator_rows="337" >
 			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
 				<identity><![CDATA[AUTO_INCREMENT]]></identity>
 			</column>
@@ -104,7 +146,7 @@
 			</fk>
 			<options><![CDATA[engine=InnoDB]]></options>
 		</table>
-		<table name="live_lessons" prior="live_less" >
+		<table name="live_lessons" prior="live_less" generator_rows="337" >
 			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
 				<identity><![CDATA[AUTO_INCREMENT]]></identity>
 			</column>
@@ -125,7 +167,22 @@
 			</fk>
 			<options><![CDATA[engine=InnoDB]]></options>
 		</table>
-		<table name="messages" prior="tbl" >
+		<table name="mentions" prior="tbl" generator_rows="225" >
+			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="message_id" type="int" jt="4" unsigned="y" />
+			<column name="user_id" type="int" jt="4" unsigned="y" />
+			<index name="pk_mentions_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_mentions_messages" to_schema="vlearn" to_table="messages" >
+				<fk_column name="message_id" pk="id" />
+			</fk>
+			<fk name="fk_mentions_users" to_schema="vlearn" to_table="users" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="messages" prior="tbl" generator_rows="150" >
 			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
 				<identity><![CDATA[AUTO_INCREMENT]]></identity>
 			</column>
@@ -141,7 +198,7 @@
 			</fk>
 			<options><![CDATA[engine=InnoDB]]></options>
 		</table>
-		<table name="questions" prior="question" >
+		<table name="questions" prior="question" generator_rows="337" >
 			<comment><![CDATA[+ type:
  - 1: lesson
  - 2: question
@@ -163,7 +220,7 @@
 			</fk>
 			<options><![CDATA[engine=InnoDB]]></options>
 		</table>
-		<table name="rooms" prior="room" >
+		<table name="rooms" prior="room" generator_rows="100" >
 			<comment><![CDATA[type:
 - 0: course_comment,
 - 1: lession chat
@@ -181,6 +238,29 @@
 			</index>
 			<options><![CDATA[engine=InnoDB]]></options>
 		</table>
+		<table name="section_student" prior="tbl" generator_rows="505" >
+			<column name="section_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="student_id" type="int" jt="4" mandatory="y" unsigned="y" />
+			<column name="lesson_checkpoint" type="int" jt="4" unsigned="y" />
+			<column name="highest_point" type="int" jt="4" />
+			<index name="pk_section_student" unique="PRIMARY_KEY" >
+				<column name="section_id" />
+				<column name="student_id" />
+			</index>
+			<index name="unq_section_student_section_id" unique="UNIQUE_KEY" >
+				<column name="section_id" />
+			</index>
+			<fk name="fk_section_student_sections" to_schema="vlearn" to_table="sections" >
+				<fk_column name="section_id" pk="id" />
+			</fk>
+			<fk name="fk_section_student_users" to_schema="vlearn" to_table="users" >
+				<fk_column name="student_id" pk="id" />
+			</fk>
+			<fk name="fk_section_student_lessons" to_schema="vlearn" to_table="lessons" >
+				<fk_column name="lesson_checkpoint" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
 		<table name="sections" prior="tbl" generator_rows="225" >
 			<column name="id" type="int" jt="4" mandatory="y" unsigned="y" >
 				<identity><![CDATA[AUTO_INCREMENT]]></identity>
@@ -195,7 +275,7 @@
 			</fk>
 			<options><![CDATA[engine=InnoDB]]></options>
 		</table>
-		<table name="student_lesson" prior="student_unit" >
+		<table name="student_lesson" prior="student_unit" generator_rows="505" >
 			<comment><![CDATA[check if student watch video or answer question, time stamp watching and score]]></comment>
 			<column name="student_id" type="int" jt="4" mandatory="y" unsigned="y" />
 			<column name="lesson_id" prior="unit_id" type="int" jt="4" mandatory="y" unsigned="y" />
@@ -238,7 +318,7 @@
 			</fk>
 			<options><![CDATA[engine=InnoDB]]></options>
 		</table>
-		<table name="user_room" prior="room" >
+		<table name="user_room" prior="room" generator_rows="150" >
 			<column name="user_id" type="int" jt="4" mandatory="y" unsigned="y" />
 			<column name="room_id" type="int" jt="4" mandatory="y" unsigned="y" />
 			<column name="status" type="int" length="1" jt="4" >
@@ -291,22 +371,60 @@
 		</table>
 	</schema>
 	<layout name="Default Layout" id="Layout_26ef" show_relation="columns" >
-		<entity schema="vlearn" name="answers" color="3986C1" x="48" y="848" />
-		<entity schema="vlearn" name="course_student" color="C1D8EE" x="432" y="320" />
-		<entity schema="vlearn" name="course_topic" color="C1D8EE" x="400" y="464" />
-		<entity schema="vlearn" name="courses" color="C1D8EE" x="192" y="256" />
-		<entity schema="vlearn" name="instructors" color="C1D8EE" x="64" y="48" />
-		<entity schema="vlearn" name="lessons" color="C1D8EE" x="448" y="672" />
-		<entity schema="vlearn" name="live_lessons" color="C1D8EE" x="208" y="688" />
-		<entity schema="vlearn" name="messages" color="C1D8EE" x="768" y="816" />
-		<entity schema="vlearn" name="questions" color="C1D8EE" x="48" y="688" />
-		<entity schema="vlearn" name="rooms" color="C1D8EE" x="752" y="624" />
-		<entity schema="vlearn" name="sections" color="C1D8EE" x="192" y="528" />
-		<entity schema="vlearn" name="student_lesson" color="C1D8EE" x="816" y="208" />
-		<entity schema="vlearn" name="students" color="3986C1" x="608" y="48" />
-		<entity schema="vlearn" name="topics" color="C1D8EE" x="624" y="448" />
-		<entity schema="vlearn" name="user_room" color="C1D8EE" x="816" y="480" />
-		<entity schema="vlearn" name="user_topic" color="C1D8EE" x="656" y="272" />
-		<entity schema="vlearn" name="users" color="C1D8EE" x="384" y="48" />
+		<entity schema="vlearn" name="answers" color="F4DDBE" x="1216" y="1104" />
+		<entity schema="vlearn" name="asset_lesson" color="F4DDBE" x="2176" y="80" />
+		<entity schema="vlearn" name="asset_message" color="F4DDBE" x="2176" y="320" />
+		<entity schema="vlearn" name="assets" color="F4DDBE" x="1968" y="80" />
+		<entity schema="vlearn" name="course_student" color="BED3F4" x="416" y="80" />
+		<entity schema="vlearn" name="course_topic" color="BED3F4" x="976" y="576" />
+		<entity schema="vlearn" name="courses" color="BED3F4" x="960" y="96" />
+		<entity schema="vlearn" name="instructors" color="C7F4BE" x="48" y="912" />
+		<entity schema="vlearn" name="lessons" color="F4DDBE" x="1216" y="576" />
+		<entity schema="vlearn" name="live_lessons" color="F4DDBE" x="1488" y="864" />
+		<entity schema="vlearn" name="mentions" color="C7F4BE" x="1712" y="80" />
+		<entity schema="vlearn" name="messages" color="C7F4BE" x="1472" y="80" />
+		<entity schema="vlearn" name="questions" color="F4DDBE" x="1216" y="864" />
+		<entity schema="vlearn" name="rooms" color="C7F4BE" x="1216" y="80" />
+		<entity schema="vlearn" name="section_student" color="BED3F4" x="656" y="320" />
+		<entity schema="vlearn" name="sections" color="BED3F4" x="720" y="96" />
+		<entity schema="vlearn" name="student_lesson" color="F4DDBE" x="1488" y="576" />
+		<entity schema="vlearn" name="students" color="C7F4BE" x="352" y="912" />
+		<entity schema="vlearn" name="topics" color="BED3F4" x="752" y="576" />
+		<entity schema="vlearn" name="user_room" color="C7F4BE" x="1216" y="320" />
+		<entity schema="vlearn" name="user_topic" color="BED3F4" x="976" y="800" />
+		<entity schema="vlearn" name="users" color="C7F4BE" x="416" y="576" />
+		<group name="settings" color="EEF7EC" >
+			<entity schema="vlearn" name="instructors" />
+			<entity schema="vlearn" name="students" />
+		</group>
+		<group name="topics" color="C4E0F9" >
+			<entity schema="vlearn" name="course_topic" />
+			<entity schema="vlearn" name="user_topic" />
+			<entity schema="vlearn" name="topics" />
+		</group>
+		<group name="assets" color="C4E0F9" >
+			<entity schema="vlearn" name="asset_lesson" />
+			<entity schema="vlearn" name="assets" />
+			<entity schema="vlearn" name="asset_message" />
+		</group>
+		<group name="lessons" color="F7F2EC" >
+			<entity schema="vlearn" name="lessons" />
+			<entity schema="vlearn" name="student_lesson" />
+			<entity schema="vlearn" name="live_lessons" />
+			<entity schema="vlearn" name="questions" />
+			<entity schema="vlearn" name="answers" />
+		</group>
+		<group name="message" color="C4E0F9" >
+			<entity schema="vlearn" name="user_room" />
+			<entity schema="vlearn" name="mentions" />
+			<entity schema="vlearn" name="rooms" />
+			<entity schema="vlearn" name="messages" />
+		</group>
+		<group name="sections" color="ECF0F7" >
+			<entity schema="vlearn" name="sections" />
+			<entity schema="vlearn" name="courses" />
+			<entity schema="vlearn" name="section_student" />
+			<entity schema="vlearn" name="course_student" />
+		</group>
 	</layout>
 </project>

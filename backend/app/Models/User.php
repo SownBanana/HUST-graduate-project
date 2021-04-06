@@ -118,4 +118,34 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Topic::class, 'user_topic');
     }
+
+    /**
+     * The rooms that belong to the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class);
+    }
+
+    /**
+     * Get all of the isMention for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function beMentioned()
+    {
+        return $this->hasMany(Mention::class);
+    }
+
+    /**
+     * Get all of the messages for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
 }
