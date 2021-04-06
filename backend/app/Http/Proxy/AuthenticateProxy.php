@@ -93,7 +93,7 @@ class AuthenticateProxy
         // ]);
 
         $response = $this->apiConsumer->post('/oauth/token', $data);
-        dump(Config::get('oauth.personal_grant_client.client_id'));
+        // dump(Config::get('oauth.personal_grant_client.client_id'));
         // dd($response);
         if (!$response->isSuccessful()) {
             throw new Exception();

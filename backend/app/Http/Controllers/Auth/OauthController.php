@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\DB;
 use App\Models\SocialAccount;
 use App\Models\User;
 use App\Http\Proxy\AuthenticateProxy;
+use App\Models\Instructor;
+use App\Models\Student;
 use App\Traits\PassportToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -83,6 +86,15 @@ class OauthController extends Controller
             ->whereSocialId($request->social_id)
             ->first();
         $user = User::create($input);
+        if ($request->role == UserRole::Instructor) {
+            $title = new Instructor;
+        } else {
+            $title = new Student;
+        }
+        # Send verify email by mails redis queue
+        $title->user()->associate($user);
+        $title->receive_email = $user->email;
+        $title->save();
         $socialAccount->user()->associate($user);
         $socialAccount->save();
         return response($this->authProxy->attemptSocial($request->social, $request->social_id));

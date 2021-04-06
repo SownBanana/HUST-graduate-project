@@ -7,9 +7,12 @@ use App\Http\Proxy\AuthenticateProxy;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Jobs\SendVerifyEmail;
+use App\Models\Instructor;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
@@ -33,8 +36,16 @@ class UserController extends Controller
         $input['password'] = Hash::make($input['password']);
         $input['confirmation_code'] = $confirmation_code;
         $user = User::create($input);
+        if ($request->role == UserRole::Instructor) {
+            $title = new Instructor;
+        } else {
+            $title = new Student;
+        }
         # Send verify email by mails redis queue
         dispatch(new SendVerifyEmail($user))->onQueue('mails');
+        $title->user()->associate($user);
+        $title->receive_email = $user->email;
+        $title->save();
         $data['confirmation_code'] = $user->confirmation_code;
         $success['username'] =  $user->username;
         return response()->json(['success'=>$success], 201);
@@ -59,7 +70,10 @@ class UserController extends Controller
             if ($user->email_verified_at == null) {
                 return response()->json(['status'=>'notConfirm','email'=>$user->email], 401);
             }
-            return response($this->authProxy->attemptLogin($login_info, $request->password));
+            $response = $this->authProxy->attemptLogin($login_info, $request->password);
+            $response['user'] = $user->toArray();
+            // dump($response);
+            return response($response);
         } else {
             if ($isEmail) {
                 if (User::where('email', $login_info)->first() == null) {
@@ -106,7 +120,7 @@ class UserController extends Controller
             $user->confirmation_code = null;
             $user->email_verified_at = now();
             $user->save();
-            return Redirect::to('http://localhost:3000');
+            return Redirect::to(Config::get('app.react_url', 'localhost'));
         } else {
             abort(404, 'Link xác thực hết hạn');
         }

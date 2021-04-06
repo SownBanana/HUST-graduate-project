@@ -17,8 +17,8 @@ class CreateInstructorsTable extends Migration
             $table->integer('user_id')->primary();
             $table->string("introduce");
             $table->string("receive_email");
-            $table->boolean("receive_bought_notification");
-            $table->string("receive_report");
+            $table->boolean("receive_bought_notification")->default(false);
+            $table->boolean("receive_report")->default(false);
             $table->timestamps();
         });
     }
