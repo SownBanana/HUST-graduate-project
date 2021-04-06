@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Course;
 use App\Enums\UserRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -77,6 +78,25 @@ class User extends Authenticatable
         } else {
             # they sent their username instead
             return $this->where('username', $username)->first();
+        }
+    }
+
+    public function ownerCourses()
+    {
+        if ($this->role == UserRole::Instructor) {
+            return $this->hasMany(Course::class, 'instructor_id');
+        } else {
+            return null;
+        }
+    }
+
+
+    public function boughtCourses()
+    {
+        if ($this->role == UserRole::Student) {
+            return $this->belongsToMany(Course::class, 'course_student', 'student_id', 'course_id')->withPivot('rate', 'lesson_checkpoint');
+        } else {
+            return null;
         }
     }
 }
