@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
+    /**
+     * Allow all attribute are mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
+    
     public function instructor()
     {
         return $this->belongsTo(User::class, 'instructor_id');
