@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
+
     /**
      * Allow all attribute are mass assignable.
      *
