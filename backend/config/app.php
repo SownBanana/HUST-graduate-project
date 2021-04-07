@@ -53,6 +53,8 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    
+    'react_url' => env('APP_REACT_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -175,6 +177,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
+        App\Providers\SocialAuthServiceProvider::class,
 
         // Fake api client
         Optimus\ApiConsumer\Provider\LaravelServiceProvider::class,

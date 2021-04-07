@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Exception;
 // use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
 class AuthenticateProxy
@@ -40,6 +41,19 @@ class AuthenticateProxy
             'password' => $password
         ]);
     }
+    /**
+     * Attempt to create an access token using user credentials
+     *
+     * @param string $social_provider
+     * @param string $social_id
+     */
+    public function attemptSocial($social_provider, $social_id)
+    {
+        return $this->proxy('social', [
+            'social_provider' => $social_provider,
+            'social_id' => $social_id
+        ]);
+    }
 
     /**
      * Attempt to refresh the access token used a refresh token that
@@ -65,8 +79,10 @@ class AuthenticateProxy
     public function proxy($grantType, array $data = [])
     {
         $data = array_merge($data, [
-            'client_id'     => env('OAUTH_CLIENT_ID'),
-            'client_secret' => env('OAUTH_CLIENT_SECRET'),
+            // 'client_id'     => env('OAUTH2_CLIENT_ID'),
+            // 'client_secret' => env('OAUTH2_CLIENT_SECRET'),
+            'client_id'     => Config::get('oauth.personal_grant_client.client_id'),
+            'client_secret' => Config::get('oauth.personal_grant_client.client_secret'),
             'grant_type'    => $grantType
         ]);
 
@@ -77,8 +93,8 @@ class AuthenticateProxy
         // ]);
 
         $response = $this->apiConsumer->post('/oauth/token', $data);
-        // var_dump(env('OAUTH_CLIENT_ID'));
-        // var_dump($response);
+        // dump(Config::get('oauth.personal_grant_client.client_id'));
+        // dd($response);
         if (!$response->isSuccessful()) {
             throw new Exception();
         }

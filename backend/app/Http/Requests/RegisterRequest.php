@@ -25,9 +25,9 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name'=>'bail|required|string|min:2|',
-            'username'=>'bail|required|string|min:2|unique:users',
+            'username'=>'bail|required|string|min:2|regex:/^\S*$/u|unique:users',
             'email'=>'bail|required|email|unique:users',
-            'password'=>'bail|required|string|min:6',
+            'password'=>'bail|required|string|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
         ];
     }
 }

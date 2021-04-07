@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
+use App\Http\Controllers\Controller;
 use App\Http\Proxy\AuthenticateProxy;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Jobs\SendVerifyEmail;
-use App\User;
+use App\Models\Instructor;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
@@ -33,20 +37,25 @@ class UserController extends Controller
         $input['password'] = Hash::make($input['password']);
         $input['confirmation_code'] = $confirmation_code;
         $user = User::create($input);
+        if ($request->role == UserRole::Instructor) {
+            $title = new Instructor;
+        } else {
+            $title = new Student;
+        }
         # Send verify email by mails redis queue
         dispatch(new SendVerifyEmail($user))->onQueue('mails');
+        $title->user()->associate($user);
+        $title->receive_email = $user->email;
+        $title->save();
         $data['confirmation_code'] = $user->confirmation_code;
         $success['username'] =  $user->username;
         return response()->json(['success'=>$success], 201);
     }
 
-    public function client_proxy(Request $request)
-    {
-    }
-
     public function login(LoginRequest $request)
     {
         $login_info = $request->login;
+        // var_dump(User::where('email', $login_info)->first() != null);
         $isEmail = filter_var($login_info, FILTER_VALIDATE_EMAIL);
         if ($isEmail) {
             # user sent their email
@@ -60,28 +69,51 @@ class UserController extends Controller
             $user = Auth::user();
             # Check if user verify email
             if ($user->email_verified_at == null) {
-                return response()->json(['status'=>'failed','message'=>'Bạn chưa xác thực tài khoản của mình'], 401);
+                return response()->json(['status'=>'notConfirm','email'=>$user->email], 401);
             }
-            return response($this->authProxy->attemptLogin($login_info, $request->password));
+            $response = $this->authProxy->attemptLogin($login_info, $request->password);
+            $response['user'] = $user->toArray();
+            // dump($response);
+            return response($response);
         } else {
             if ($isEmail) {
-                if (!User::where('email', $login_info)) {
+                if (User::where('email', $login_info)->first() == null) {
                     $mess = 'Email chưa được sử dụng';
+                    $type = 'login';
                 } else {
                     $mess = 'Mật khẩu không chính xác';
+                    $type = 'password';
                 }
             } else {
-                if (!User::where('username', $login_info)) {
+                if (User::where('username', $login_info)->first() == null) {
                     $mess = 'Tên đăng nhập không tồn tại';
+                    $type = 'login';
                 } else {
                     $mess = 'Mật khẩu không chính xác';
+                    $type = 'password';
                 }
             }
-            return response()->json(['status'=>'failed', 'message'=>$mess], 401);
+            return response()->json(['status'=>'failed', 'type'=>$type, 'message'=>$mess], 401);
         }
     }
 
-
+    public function resendConfirm(Request $request)
+    {
+        $login_info = $request->email;
+        if (filter_var($login_info, FILTER_VALIDATE_EMAIL)) {
+            $user = User::where('email', $login_info)->first();
+        } else {
+            $user = User::where('username', $login_info)->first();
+        }
+        if ($user) {
+            $confirmation_code = time().uniqid(true);
+            $user->confirmation_code = $confirmation_code;
+            $user->save();
+            dispatch(new SendVerifyEmail($user))->onQueue('mails');
+            return response()->json(['status'=>'success','mss'=>'Đã gửi email xác thực cho '.$user->email]);
+        }
+        return response()->json(['status'=>'error', 'mss'=>'Không tìm thấy thông tin đăng nhập '.$login_info]);
+    }
     public function verify($code)
     {
         $user = User::where('confirmation_code', $code)->first();
@@ -89,7 +121,7 @@ class UserController extends Controller
             $user->confirmation_code = null;
             $user->email_verified_at = now();
             $user->save();
-            return Redirect::to('http://localhost');
+            return Redirect::to(Config::get('app.react_url', 'localhost'));
         } else {
             abort(404, 'Link xác thực hết hạn');
         }
@@ -111,5 +143,24 @@ class UserController extends Controller
     {
         $user = Auth::user();
         return response()->json(['success' => $user], 200);
+    }
+
+    public function getUserFromLoginInfor($login_info)
+    {
+        if (filter_var($login_info, FILTER_VALIDATE_EMAIL)) {
+            $user = User::where('email', $login_info)->first();
+        } else {
+            $user = User::where('username', $login_info)->first();
+        }
+        return $user;
+    }
+
+    public function checkLoginAvailable(Request $request)
+    {
+        $login_info = $request->login;
+        if ($user = $this->getUserFromLoginInfor($login_info)) {
+            return response()->json(['status'=>"existed"]);
+        }
+        return response()->json(['status'=>"available"]);
     }
 }
