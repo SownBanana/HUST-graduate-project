@@ -81,8 +81,8 @@ class AuthenticateProxy
         $data = array_merge($data, [
             // 'client_id'     => env('OAUTH2_CLIENT_ID'),
             // 'client_secret' => env('OAUTH2_CLIENT_SECRET'),
-            'client_id'     => Config::get('oauth.personal_grant_client.client_id'),
-            'client_secret' => Config::get('oauth.personal_grant_client.client_secret'),
+            'client_id'     => Config::get('oauth.password_access_client.client_id'),
+            'client_secret' => Config::get('oauth.password_access_client.client_secret'),
             'grant_type'    => $grantType
         ]);
 
@@ -93,7 +93,7 @@ class AuthenticateProxy
         // ]);
 
         $response = $this->apiConsumer->post('/oauth/token', $data);
-        // dump(Config::get('oauth.personal_grant_client.client_id'));
+        dump(Config::get('oauth.personal_grant_client.client_id'));
         // dd($response);
         if (!$response->isSuccessful()) {
             throw new Exception();
