@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
+use App\Events\PrivateMessageSend;
 use App\Http\Controllers\Controller;
 use App\Http\Proxy\AuthenticateProxy;
 use App\Http\Requests\LoginRequest;
@@ -153,6 +154,10 @@ class UserController extends Controller
     public function check_passport()
     {
         $user = Auth::user();
+        $data['from'] = $user->id;
+        $data['to'] = 1;
+        $data['message'] = "test message";
+        broadcast(new PrivateMessageSend($data));
         return response()->json(['success' => $user], 200);
     }
 
