@@ -139,6 +139,17 @@ class UserController extends Controller
         return response(null, 204);
     }
 
+    /**
+ * @OA\Get(
+ *      path="/api/check-passport",
+ *      tags={"Check passport (Check Auth)"},
+ *      @OA\Response(
+ *         response=200,
+ *         description="Return your user model.",
+ *     ),
+ *      @OA\Response(response="401", description="You aren't login yet")
+ * )
+ */
     public function check_passport()
     {
         $user = Auth::user();
