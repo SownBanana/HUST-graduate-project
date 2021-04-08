@@ -18,6 +18,10 @@ abstract class BaseRepository implements RepositoryInterface
     //lấy model tương ứng
     abstract public function getModel();
 
+    protected function _getModel()
+    {
+        return $this->model;
+    }
     /**
      * Set model
      */
@@ -36,6 +40,12 @@ abstract class BaseRepository implements RepositoryInterface
     public function find($id)
     {
         $result = $this->model->find($id);
+
+        return $result;
+    }
+    public function findOrFail($id)
+    {
+        $result = $this->model->findOrFail($id);
 
         return $result;
     }
