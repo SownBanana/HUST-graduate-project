@@ -42,7 +42,9 @@ class OauthController extends Controller
 
         if ($socialAccount) {
             if ($user = $socialAccount->user) {
-                return response($this->authProxy->attemptSocial($social, $socialProvider->getId()));
+                $response = $this->authProxy->attemptSocial($social, $socialProvider->getId());
+                $response['user'] = $user->toArray();
+                return response($response);
             }
         } else {
             $socialAccount = SocialAccount::create(
@@ -79,6 +81,7 @@ class OauthController extends Controller
     public function createAccountWithSocialProvider(Request $request)
     {
         $input = $request->all();
+        // dump($input);
         if ($request->isUsePassword) {
             $input['password'] = Hash::make($input['password']);
         }
@@ -97,7 +100,10 @@ class OauthController extends Controller
         $title->save();
         $socialAccount->user()->associate($user);
         $socialAccount->save();
-        return response($this->authProxy->attemptSocial($request->social, $request->social_id));
+        $user->touchVerifyEmail();
+        $response = $this->authProxy->attemptSocial($request->social, $request->social_id);
+        $response['user'] = $user->toArray();
+        return response($response);
     }
     public function attachUserWithSocialProvider(Request $request)
     {

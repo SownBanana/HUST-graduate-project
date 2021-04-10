@@ -120,8 +120,7 @@ class UserController extends Controller
         $user = User::where('confirmation_code', $code)->first();
         if ($user) {
             $user->confirmation_code = null;
-            $user->email_verified_at = now();
-            $user->save();
+            $user->touchVerifyEmail();
             return Redirect::to(Config::get('app.react_url', 'localhost'));
         } else {
             abort(404, 'Link xác thực hết hạn');
@@ -155,8 +154,8 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $data['from'] = $user->id;
-        $data['to'] = 1;
-        $data['message'] = "test message";
+        $data['to'] = 22;
+        $data['message'] = "test message e213";
         broadcast(new PrivateMessageSend($data));
         return response()->json(['success' => $user], 200);
     }

@@ -2,7 +2,9 @@
 
 namespace App\Events;
 
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -33,8 +35,10 @@ class PrivateMessageSend implements ShouldBroadcast
     public function broadcastOn()
     {
         return new PrivateChannel('App.PrivateMessage.'.$this->data['to']);
+        // return new PresenceChannel('App.PrivateMessage.'.$this->data['to']);
+        // return new Channel('App.Global');
     }
-
+    
     public function broadcastWith()
     {
         return [

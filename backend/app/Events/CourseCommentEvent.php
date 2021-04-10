@@ -34,7 +34,7 @@ class CourseCommentEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('App.CourseComment.'.$this->data['course_id']);
+        return new PresenceChannel('App.CourseComment.'.$this->data['course_id']);
     }
 
     public function broadcastWith()

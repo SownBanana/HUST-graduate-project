@@ -10,7 +10,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Models\SocialAccount;
 
-
 class User extends Authenticatable
 {
     use Notifiable, HasApiTokens;
@@ -41,6 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function touchVerifyEmail()
+    {
+        $this->email_verified_at = now();
+        return $this->save();
+    }
 
     public function title()
     {
