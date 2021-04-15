@@ -15,10 +15,10 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->integer('user_id')->primary();
-            $table->string("receive_email");
-            $table->boolean("receive_flower_new_course")->default(false);
-            $table->boolean("receive_notification")->default(false);
-            $table->boolean("receive_course_change")->default(false);
+            $table->string("receive_email")->nullable()->default(true);
+            $table->boolean("receive_flower_new_course")->nullable()->default(false);
+            $table->boolean("receive_notification")->nullable()->default(false);
+            $table->boolean("receive_course_change")->nullable()->default(false);
             $table->timestamps();
         });
     }

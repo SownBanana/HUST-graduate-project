@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
+use App\Events\PrivateMessageSend;
 use App\Http\Controllers\Controller;
 use App\Http\Proxy\AuthenticateProxy;
 use App\Http\Requests\LoginRequest;
@@ -119,8 +120,7 @@ class UserController extends Controller
         $user = User::where('confirmation_code', $code)->first();
         if ($user) {
             $user->confirmation_code = null;
-            $user->email_verified_at = now();
-            $user->save();
+            $user->touchVerifyEmail();
             return Redirect::to(Config::get('app.react_url', 'localhost'));
         } else {
             abort(404, 'Link xác thực hết hạn');
@@ -139,9 +139,24 @@ class UserController extends Controller
         return response(null, 204);
     }
 
+    /**
+ * @OA\Get(
+ *      path="/api/check-passport",
+ *      tags={"Check passport (Check Auth)"},
+ *      @OA\Response(
+ *         response=200,
+ *         description="Return your user model.",
+ *     ),
+ *      @OA\Response(response="401", description="You aren't login yet")
+ * )
+ */
     public function check_passport()
     {
         $user = Auth::user();
+        $data['from'] = $user->id;
+        $data['to'] = 22;
+        $data['message'] = "test message e213";
+        broadcast(new PrivateMessageSend($data));
         return response()->json(['success' => $user], 200);
     }
 

@@ -15,10 +15,10 @@ class CreateInstructorsTable extends Migration
     {
         Schema::create('instructors', function (Blueprint $table) {
             $table->integer('user_id')->primary();
-            $table->string("introduce");
-            $table->string("receive_email");
-            $table->boolean("receive_bought_notification")->default(false);
-            $table->boolean("receive_report")->default(false);
+            $table->string("introduce")->nullable();
+            $table->string("receive_email")->nullable();
+            $table->boolean("receive_bought_notification")->nullable()->default(false);
+            $table->boolean("receive_report")->nullable()->default(false);
             $table->timestamps();
         });
     }

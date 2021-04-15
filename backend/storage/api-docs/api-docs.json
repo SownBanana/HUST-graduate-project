@@ -1,0 +1,25 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My First API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/check-passport": {
+            "get": {
+                "tags": [
+                    "Check passport (Check Auth)"
+                ],
+                "operationId": "App\\Http\\Controllers\\UserController::check_passport",
+                "responses": {
+                    "200": {
+                        "description": "Return your user model."
+                    },
+                    "401": {
+                        "description": "You aren't login yet"
+                    }
+                }
+            }
+        }
+    }
+}

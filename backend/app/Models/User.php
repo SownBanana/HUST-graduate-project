@@ -41,6 +41,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function touchVerifyEmail()
+    {
+        $this->email_verified_at = now();
+        return $this->save();
+    }
+
     public function title()
     {
         $role = $this->role;
