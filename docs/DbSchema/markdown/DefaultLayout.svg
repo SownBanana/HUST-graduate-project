@@ -1,0 +1,934 @@
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'   width='1776' height='1326' viewBox='0 0 1776 1326' >
+  <script type='text/ecmascript'>
+  <![CDATA[
+  function hghl(el) { for ( var i in el ){ var elem = document.getElementById(el[i]); if ( elem != null ) elem.setAttribute('class','highlight');  }  }
+  function uhghl(el) { for ( var i in el ){ var elem = document.getElementById(el[i]); if ( elem != null ) elem.setAttribute('class','scene'); }  } 
+  ]]>
+  </script> 
+
+<style type='text/css'>
+  text                { fill:#000000; font-family: System, 'Trebuchet MS', Dialog; font-size:14.083333015441895px; }
+  a text:hover        { fill:#0d196f; text-shadow: 0px 0px 6px #d0ce00; font-size:13px; font-weight: bold;}
+  text.highlight      { fill:#0d196f; text-shadow: 0px 0px 4px #eac533; font-size:13px; font-weight: bold;}
+  text.white          { fill:#ffffff; }
+  text.colType        { fill:#b3b3b3; }
+  text.relName        { fill:#9c9a9a; }
+  text.legendTitle    { fill:#d65c68; font-weight:bold; }
+  text.legendSubTitle { fill:#717171; font-size:11px; }
+  path                { stroke:#857f70; stroke-width:1.15; fill:none;}
+  path.virtual        { stroke:#a67822; }
+  path.logo           { fill:#fbeac0;fill-opacity:1;stroke-width:0.3;stroke:#222222; }
+  path.dotted         { stroke-dasharray:4,2; }
+  path.scene          { stroke-width:10; opacity:0;}
+  path.highlight      { stroke-width:3; stroke:#0054c5; opacity:0.8;}
+  rect.entity         { fill:#ffffff; stroke:#777; stroke-width:1;shape-rendering:crispEdges; filter:url(#shadow); }
+  line.delim          { stroke-width:1; shape-rendering:crispEdges; }
+  text.callout        { fill:#000000; font-family: System, 'Trebuchet MS', Dialog; font-size:15.166666984558105px; }
+  rect.callout        { fill:url(#calloutGradient); stroke:#bebdbd; stroke-width:0.5; }
+  rect.grp            { stroke:#a1a1a1; stroke-width:3; opacity:0.25; }
+  path.st0            { fill:none;stroke-width:0.6;stroke:#e1e6eb; }
+</style>
+<defs>
+  <radialGradient id='layoutBgB' cx='100%' cy='100%' r='100%'  >
+    <stop offset='0%' stop-color='#e9eaec' />
+    <stop offset='100%' stop-color='#f5f6f8' />
+  </radialGradient>
+  <pattern id="layoutBgA" width="60" height="34.64" patternUnits="userSpaceOnUse">
+    <path class='st0' d='M 0 17.32 L 10 0 L 30 0 L 40 17.326 L 30 34.64 L 10 34.64 Z' />
+    <path class='st0' d='M 40 17.32 L 60 17.32 Z' />
+  </pattern>
+  <!-- https://norbat.de/svg-pattern-3d-webmuster/ -->
+  <linearGradient id='groupUnderTitleLine' x1='0%' y1='0%' x2='100%' y2='0%' >
+    <stop offset='0%' stop-color='#999999' stop-opacity='0.7'/>
+    <stop offset='100%' stop-color='#999999' stop-opacity='0' />
+  </linearGradient>
+  <radialGradient id='calloutGradient' cx='25%' cy='20%' r='80%' fx='10%' fy='10%'>
+    <stop offset='0%' stop-color='#ffffff' />
+    <stop offset='100%' stop-color='#f8f6d1' />
+  </radialGradient>
+  <filter id="shadow" width="120%" height="120%">
+    <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#333" flood-opacity="0.2" />
+  </filter>
+  <!--
+  <filter id='shadow2' width='120%' height='120%'>
+    <feOffset result='offOut' in='SourceGraphic' dx='0' dy='0' />
+    <feColorMatrix result='matrixOut' in='offOut'
+                   values='0.5 0 0 0 0 0 0.5 0 0 0 0 0 0.5 0 0 0 0 0 0.5 0' />
+    <feGaussianBlur result='blurOut' in='matrixOut' stdDeviation='3' />
+    <feBlend in='SourceGraphic' in2='blurOut' />
+  </filter>
+  -->
+  <filter id='fkShadow' height='130%'>
+    <feGaussianBlur in='SourceAlpha' stdDeviation='1.5'/> <!-- stdDeviation is how much to blur -->
+    <feOffset dx='1.2' dy='1.2' result='offsetblur'/> <!-- how much to offset -->
+    <feMerge>
+      <feMergeNode/> <!-- this contains the offset blurred image -->
+      <feMergeNode in='SourceGraphic'/> <!-- this contains the element that the filter is applied to -->
+    </feMerge>
+  </filter>
+  <radialGradient id='legendGradient' cx='5%' cy='5%' r='100%' >
+    <stop offset='0%' stop-color='#e4eeff' stop-opacity='1'/>
+    <stop offset='100%' stop-color='#c3d2ea' stop-opacity='1' />
+  </radialGradient>
+  <symbol id='calloutArrowDown' >
+    <path d='M 0,0 L 8,12 L 16,0 z' style='fill:#f8f6d1;stroke:none; filter: url(#shadow);' />
+    <path d='M 0,0 L 8,12 L 16,0' style='stroke:#bebdbd; stroke-width:0.5;' />
+  </symbol>
+  <symbol id='calloutArrowUp' >
+    <path d='M 0,16 L 8,4 L 16,16 z' style='fill:#ffffff; stroke:none; filter: url(#shadow);' />
+    <path d='M 0,16 L 8,4 L 16,16' style='stroke:#bebdbd; stroke-width:0.5;' />
+  </symbol>
+  <symbol id='pk' >
+    <g transform='scale(0.99)'>
+      <path style='fill:#f0d938;stroke:#906b25;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;'
+            d='M 9.3678877,3.5695485 C 9.1030218,3.2729386 9.0796382,2.7628519 9.3396185,2.4517097 9.5449651,2.1956495 9.9040386,2.0980533 10.199638,2.2169415 10.533525,2.3415459 10.775153,2.706942 10.750675,3.0842709 10.737029,3.3980003 10.541153,3.699122 10.258248,3.8066067 9.966649,3.9250429 9.6169668,3.8418805 9.4008073,3.6062324 9.3894892,3.5943518 9.3785264,3.582104 9.3678886,3.5695487 z M 11.226617,6.9916004 C 11.888137,6.3548946 12.293488,5.4172188 12.311087,4.442353 12.378144,2.7379364 11.248678,1.0541269 9.7322318,0.44767357 8.3887112,-0.1280313 6.7865012,0.26822889 5.8918395,1.4007929 5.080823,2.3839145 4.9336815,3.8452096 5.3635544,5.101615 L 4.3670905,5.315913 C 4.0664984,5.3682645 4.0967703,5.6316724 4.2574957,5.8208829 L 4.9124,6.5655244 4.1543436,7.2512357 3.2136002,7.2163506 3.1674775,8.5586827 2.0406832,8.5086512 1.5965306,8.9299953 1.5471661,10.179833 0.75616674,10.195223 0.2112857,10.758575 0.15354288,11.735988 0.07199052,12.765553 c 0.36440953,0.238225 0.79006967,0.195492 1.44938278,-0.02675 L 6.3033562,8.1282037 6.8217102,8.6765688 C 6.9985465,8.8799427 7.3003699,8.7497574 7.358381,8.5016252 L 7.4938877,7.5084164 c 0.8537488,0.3985387 1.8303125,0.4711541 2.6851793,0.1427713 0.393927,-0.1407258 0.746858,-0.3701772 1.04755,-0.6595873 z'/>
+      <path d='M 6.8014948,6.3102123 0.15369063,13.024481 0.21560535,12.141962 6.0062342,6.2683782 z'
+            style='fill:#ffe5a5;fill-opacity:1;stroke:#906b25;stroke-width:0.06912433;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:3.00300009'/>
+    </g>
+  </symbol>
+  <symbol id='idx1' >
+    <g transform='scale(0.99)'>
+      <rect width='4' height='4' x='7' y='1' style='fill:#ffff3f;stroke:#b48333;stroke-width:0.6;' ry='0.83'/>
+      <rect width='4' height='4' x='1' y='7' style='fill:#ffff3f;stroke:#b48333;stroke-width:0.6;' ry='0.832'/>
+      <rect width='4' height='4' x='7' y='7' style='fill:#ffff3f;stroke:#b48333;stroke-width:0.6;' ry='0.832'/>
+    </g>
+  </symbol>
+  <symbol id='idx2' >
+    <g transform='scale(0.99)'>
+      <rect width='4' height='3' x='6' y='1' style='fill:#7fc8e9;stroke:#2f6f8c;stroke-width:0.6;' ry='0.83'/>
+      <rect width='7' height='3' x='3' y='6' style='fill:#7fc8e9;stroke:#2f6f8c;stroke-width:0.6;' ry='0.832'/>
+    </g>
+  </symbol>
+  <symbol id='unq' >
+    <g transform='scale(0.99)'>
+      <rect style='fill:none;stroke:#7e4d31;stroke-width:0.71934468;stroke-linecap:round;stroke-linejoin:round;'
+            width='2.29' height='8.43' x='7.48' y='-0.76' ry='1.14' transform='matrix(0.701,0.713,-0.727,0.685,0,0)' />
+      <path style='fill:white;stroke:#858585;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='m 26.04,8.64 a 4.13,4.13 0 1 1 -8.26,0 4.13,4.13 0 1 1 8.26,0 z'
+            transform='matrix(1.025,0,0,0.987,-14.690,-3.862)' />
+      <text x='5.8' y='7.4' style='font-size:7px;fill:#8a8a8a;'>1</text>
+    </g>
+  </symbol>
+  <symbol id='idx' >
+    <g transform='scale(0.99)'>
+      <rect style='fill:none;stroke:#7e4d31;stroke-width:0.71934468;stroke-linecap:round;stroke-linejoin:round;'
+            width='2.29' height='8.43' x='7.48' y='-0.76' ry='1.14' transform='matrix(0.701,0.713,-0.727,0.685,0,0)' />
+      <path style='fill:white;stroke:#858585;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='m 26.04,8.64 a 4.13,4.13 0 1 1 -8.26,0 4.13,4.13 0 1 1 8.26,0 z'
+            transform='matrix(1.025,0,0,0.987,-14.690,-3.862)' />
+    </g>
+  </symbol>
+  <symbol id='fk' >
+    <g transform='scale(0.87)'>
+      <path style='fill:#6a88cd;stroke:#5a72a8;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 12.48,0.33 7.07,0.89 9.067,2.974 0.329,11.731 1.073,12.597 9.811,3.841 11.77,5.78 z' />
+    </g>
+  </symbol>
+  <symbol id='ref' >
+    <g transform='scale(0.87)'>
+      <path style='fill:#f0d938;stroke:#906b25;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 0.10,12.70 5.31,12.15 3.40,10.06 11.82,1.32 11.11,0.45 2.68,9.19 0.80,7.24 z'/>
+    </g>
+  </symbol>
+  <symbol id='flag0' >
+    <g transform='scale(0.92)'>
+      <path style='fill:#b7d0f6;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 0.12,12.67 0.16,7.22 C 2.59,7.22 4.13,8.78 9.22,4.22 5.68,4.98 2.53,4.50 0.09,1.80 z'/>
+    </g>
+  </symbol>
+  <symbol id='flag1' >
+    <g transform='scale(0.92)'>
+      <path style='fill:#f4a393;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 0.12,12.67 0.16,7.22 C 2.59,7.22 4.13,8.78 9.22,4.22 5.68,4.98 2.53,4.50 0.09,1.80 z'/>
+    </g>
+  </symbol>
+  <symbol id='flag2' >
+    <g transform='scale(0.92)'>
+      <path style='fill:#77ec8b;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 0.12,12.67 0.16,7.22 C 2.59,7.22 4.13,8.78 9.22,4.22 5.68,4.98 2.53,4.50 0.09,1.80 z'/>
+    </g>
+  </symbol>
+  <symbol id='nn' >
+    <path style='stroke:#9b3e50;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+          d='M 0,0 3,3 M 0,3 3,0 z'/>
+  </symbol>
+  <symbol id='view' >
+    <g transform='scale(0.99)'>
+      <line x1='12' y1='6' x2='19' y2='0' stroke='black' stroke-width='0.5' />
+      <line x1='0' y1='6' x2='7' y2='0' stroke='black' stroke-width='0.5' />
+      <circle cx='3' cy='6' r='3' fill='#f9ebbc' stroke='black' stroke-width='0.5'/>
+      <circle cx='10' cy='6' r='3' fill='#f9ebbc' stroke='black' stroke-width='0.5'/>
+    </g>
+  </symbol>
+</defs>
+
+<defs>  <marker id='arrow01' viewBox='0 0 16.00 8.00' refX='8.00' refY='4.00' markerWidth='16.00' markerHeight='8.00' orient='auto'>
+    <path d='M 8.000,4.000 L 16.000,4.000 L 8.000,0.000 L 16.000,4.000 L 8.000,8.000' />
+  </marker>
+  <marker id='arrow1' viewBox='0 0 16.00 8.00' refX='8.00' refY='4.00' markerWidth='16.00' markerHeight='8.00' orient='auto'>
+    <path d='M 8.000,4.000 L 16.000,4.000 L 8.000,0.000 L 16.000,4.000 L 8.000,8.000' />
+  </marker>
+  <marker id='foot01' viewBox='0 0 16.00 8.00' refX='8.00' refY='4.00' markerWidth='16.00' markerHeight='8.00' orient='auto'>
+    <path d='M 0.00,4.00 L 16.00,4.00 z' />
+    <circle cx='12.00' cy='4.00' r='2.67' style='fill:white;stroke:#5e554d;' />
+    <path d='M 4.00,0.00 L 4.00, 8.00 z' />
+  </marker>
+  <marker id='foot0p' viewBox='0 0 16.00 8.00' refX='8.00' refY='4.00' markerWidth='16.00' markerHeight='8.00' orient='auto'>
+    <path d='M 0.00,4.00 L 16.00,4.00 z' />
+    <circle cx='12.00' cy='4.00' r='2.67' style='fill:white;stroke:#5e554d;' />
+    <path d='M 0.00,0.00 L 8.00,4.00 L 0.00,8.00' />
+  </marker>
+  <marker id='foot1' viewBox='0 0 16.00 8.00' refX='8.00' refY='4.00' markerWidth='16.00' markerHeight='8.00' orient='auto'>
+    <path d='M 0.00,4.00 L 16.00,4.00 z' />
+    <path d='M 8.00,0.00 L 8.00, 8.00 z' />
+    <path d='M 4.00,0.00 L 4.00, 8.00 z' />
+  </marker>
+  <marker id='foot1p' viewBox='0 0 16.00 8.00' refX='8.00' refY='4.00' markerWidth='16.00' markerHeight='8.00' orient='auto'>
+    <path d='M 0.00,4.00 L 16.00,4.00 z' />
+    <path d='M 8.00,0.00 L 8.00, 8.00 z' />
+    <path d='M 0.00,0.00 L 8.00,4.00 L 0.00,8.00' />
+  </marker>
+  <linearGradient id='tbg_F4DDBE' x1='0%' y1='0%' x2='0%' y2='100%' >
+     <stop offset='0%' stop-color='#FEF2E3' /> 
+     <stop offset='40%' stop-color='#FFEACE' /> 
+     <stop offset='100%' stop-color='#E5CFB3' /> 
+  </linearGradient>
+  <linearGradient id='tbg_BED3F4' x1='0%' y1='0%' x2='0%' y2='100%' >
+     <stop offset='0%' stop-color='#E3EDFE' /> 
+     <stop offset='40%' stop-color='#CEE1FF' /> 
+     <stop offset='100%' stop-color='#B3C6E5' /> 
+  </linearGradient>
+  <linearGradient id='tbg_C7F4BE' x1='0%' y1='0%' x2='0%' y2='100%' >
+     <stop offset='0%' stop-color='#E7FEE3' /> 
+     <stop offset='40%' stop-color='#D6FFCE' /> 
+     <stop offset='100%' stop-color='#BBE5B3' /> 
+  </linearGradient>
+</defs>
+
+<!-- == Desktop == -->
+<rect x='1' y='1' width='1774' height='1324' rx='8' ry='8' style='fill:url(#layoutBgA); stroke:#6a8093; stroke-width:0.5;' />
+<rect x='1' y='1' width='1774' height='1324' rx='8' ry='8' style='fill:url(#layoutBgTr);' />
+
+<!-- == Legend == -->
+<g transform='translate(10,10)'>
+  <rect x='10' y='10' width='230' height='56' rx='6' ry='6' style='fill:url(#legendGradient);filter:url(#shadow);'/> 
+  <text x='20' y='25' class='legendTitle' >VLearn</text> 
+  <a xlink:href='https://dbschema.com'><text x='20' y='39' class='legendSubTitle'><tspan>(c) DbSchema</tspan></text></a> 
+  <text x='20' y='53' class='legendSubTitle'><tspan>Hover columns to read the comments.</tspan></text> 
+</g>
+
+<g transform='translate(0,110)'>
+<!-- == Group 'settings' == -->
+<rect class='grp' style='fill:#E5FCE1;stroke:#A5C79E' x='464' y='893' width='576' height='178' />
+<text x='476' y='909'>settings</text>
+<rect style='fill:url(#groupUnderTitleLine); stroke-width:2;' x='476' y='913' width='552' height='2' />
+
+<!-- == Group 'assets' == -->
+<rect class='grp' style='fill:#E1EFFC;stroke:#9EB3C7' x='32' y='637' width='368' height='370' />
+<text x='44' y='653'>assets</text>
+<rect style='fill:url(#groupUnderTitleLine); stroke-width:2;' x='44' y='657' width='344' height='2' />
+
+<!-- == Group 'topics' == -->
+<rect class='grp' style='fill:#E1EFFC;stroke:#9EB3C7' x='880' y='445' width='368' height='354' />
+<text x='892' y='461'>topics</text>
+<rect style='fill:url(#groupUnderTitleLine); stroke-width:2;' x='892' y='465' width='344' height='2' />
+
+<!-- == Group 'message' == -->
+<rect class='grp' style='fill:#E1EFFC;stroke:#9EB3C7' x='1152' y='845' width='400' height='306' />
+<text x='1164' y='861'>message</text>
+<rect style='fill:url(#groupUnderTitleLine); stroke-width:2;' x='1164' y='865' width='376' height='2' />
+
+<!-- == Group 'lessons' == -->
+<rect class='grp' style='fill:#FCEFE1;stroke:#C7B49E' x='1328' y='77' width='416' height='610' />
+<text x='1340' y='93'>lessons</text>
+<rect style='fill:url(#groupUnderTitleLine); stroke-width:2;' x='1340' y='97' width='392' height='2' />
+
+<!-- == Group 'sections' == -->
+<rect class='grp' style='fill:#E1EAFC;stroke:#9EACC7' x='272' y='45' width='768' height='386' />
+<text x='284' y='61'>sections</text>
+<rect style='fill:url(#groupUnderTitleLine); stroke-width:2;' x='284' y='65' width='744' height='2' />
+
+<!-- == Fk 'answers_fk_answer_learn_unit' == -->
+<path id='answers_fk_answer_learn_unit'  onmouseover="hghl(['answers_fk_answer_learn_unit','vlearn.answers.question_id','vlearn.questions.id'])" onmouseout="uhghl(['answers_fk_answer_learn_unit','vlearn.answers.question_id','vlearn.questions.id'])" transform='translate(8,0)' class='scene' d='M 1536,560L 1448,560Q 1440,560 1440,552L 1440,464' >
+	<title>Fk fk_answer_learn_unit
+answers ref questions ( question_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1536,560L 1448,560Q 1440,560 1440,552L 1440,464' ><title>Fk fk_answer_learn_unit
+answers ref questions ( question_id -&gt; id )</title></path>
+<text x='1466' y='555' transform='rotate(0 1466,555)' class='relName'>question_id</text>
+<!-- == Fk 'asset_lesson_fk_asset_lesson_assets' == -->
+<path id='asset_lesson_fk_asset_lesson_assets'  onmouseover="hghl(['asset_lesson_fk_asset_lesson_assets','vlearn.asset_lesson.asset_id','vlearn.assets.id'])" onmouseout="uhghl(['asset_lesson_fk_asset_lesson_assets','vlearn.asset_lesson.asset_id','vlearn.assets.id'])" transform='translate(8,0)' class='scene' d='M 240,688L 160,688' >
+	<title>Fk fk_asset_lesson_assets
+asset_lesson ref assets ( asset_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 240,688L 160,688' ><title>Fk fk_asset_lesson_assets
+asset_lesson ref assets ( asset_id -&gt; id )</title></path>
+<text x='193' y='683' transform='rotate(0 193,683)' class='relName'>asset_id</text>
+<!-- == Fk 'asset_lesson_fk_asset_lesson_lessons' == -->
+<path id='asset_lesson_fk_asset_lesson_lessons'  onmouseover="hghl(['asset_lesson_fk_asset_lesson_lessons','vlearn.asset_lesson.lesson_id','vlearn.lessons.id'])" onmouseout="uhghl(['asset_lesson_fk_asset_lesson_lessons','vlearn.asset_lesson.lesson_id','vlearn.lessons.id'])" transform='translate(8,0)' class='scene' d='M 352,656L 352,440Q 352,432 360,432L 1304,432Q 1312,432 1312,424L 1312,232Q 1312,224 1320,224L 1328,224' >
+	<title>Fk fk_asset_lesson_lessons
+asset_lesson ref lessons ( lesson_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 352,656L 352,440Q 352,432 360,432L 1304,432Q 1312,432 1312,424L 1312,232Q 1312,224 1320,224L 1328,224' ><title>Fk fk_asset_lesson_lessons
+asset_lesson ref lessons ( lesson_id -&gt; id )</title></path>
+<text x='355' y='654' transform='rotate(270 355,654)' class='relName'>lesson_id</text>
+<!-- == Fk 'asset_message_fk_asset_message_assets' == -->
+<path id='asset_message_fk_asset_message_assets'  onmouseover="hghl(['asset_message_fk_asset_message_assets','vlearn.asset_message.asset_id','vlearn.assets.id'])" onmouseout="uhghl(['asset_message_fk_asset_message_assets','vlearn.asset_message.asset_id','vlearn.assets.id'])" transform='translate(8,0)' class='scene' d='M 240,912L 152,912Q 144,912 144,904L 144,816' >
+	<title>Fk fk_asset_message_assets
+asset_message ref assets ( asset_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 240,912L 152,912Q 144,912 144,904L 144,816' ><title>Fk fk_asset_message_assets
+asset_message ref assets ( asset_id -&gt; id )</title></path>
+<text x='193' y='907' transform='rotate(0 193,907)' class='relName'>asset_id</text>
+<!-- == Fk 'asset_message_fk_asset_message_messages' == -->
+<path id='asset_message_fk_asset_message_messages'  onmouseover="hghl(['asset_message_fk_asset_message_messages','vlearn.asset_message.message_id','vlearn.messages.id'])" onmouseout="uhghl(['asset_message_fk_asset_message_messages','vlearn.asset_message.message_id','vlearn.messages.id'])" transform='translate(8,0)' class='scene' d='M 368,896L 368,856Q 368,848 376,848L 1432,848Q 1440,848 1440,856L 1440,864' >
+	<title>Fk fk_asset_message_messages
+asset_message ref messages ( message_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 368,896L 368,856Q 368,848 376,848L 1432,848Q 1440,848 1440,856L 1440,864' ><title>Fk fk_asset_message_messages
+asset_message ref messages ( message_id -&gt; id )</title></path>
+<text x='371' y='894' transform='rotate(270 371,894)' class='relName'>message_id</text>
+<!-- == Fk 'assets_fk_assets_users' == -->
+<path id='assets_fk_assets_users'  onmouseover="hghl(['assets_fk_assets_users','vlearn.assets.owner_id','vlearn.users.id'])" onmouseout="uhghl(['assets_fk_assets_users','vlearn.assets.owner_id','vlearn.users.id'])" transform='translate(8,0)' class='scene' d='M 144,656L 144,648Q 144,640 152,640L 560,640' >
+	<title>Fk fk_assets_users
+assets ref users ( owner_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 144,656L 144,648Q 144,640 152,640L 560,640' ><title>Fk fk_assets_users
+assets ref users ( owner_id -&gt; id )</title></path>
+<text x='147' y='654' transform='rotate(270 147,654)' class='relName'>owner_id</text>
+<!-- == Fk 'course_student_fk_course_student_courses' == -->
+<path id='course_student_fk_course_student_courses'  onmouseover="hghl(['course_student_fk_course_student_courses','vlearn.course_student.course_id','vlearn.courses.id'])" onmouseout="uhghl(['course_student_fk_course_student_courses','vlearn.course_student.course_id','vlearn.courses.id'])" transform='translate(8,0)' class='scene' d='M 832,96L 720,96' >
+	<title>Fk fk_course_student_courses
+course_student ref courses ( course_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 832,96L 720,96' ><title>Fk fk_course_student_courses
+course_student ref courses ( course_id -&gt; id )</title></path>
+<text x='776' y='91' transform='rotate(0 776,91)' class='relName'>course_id</text>
+<!-- == Fk 'course_student_fk_course_student_users' == -->
+<path id='course_student_fk_course_student_users'  onmouseover="hghl(['course_student_fk_course_student_users','vlearn.course_student.student_id','vlearn.users.id'])" onmouseout="uhghl(['course_student_fk_course_student_users','vlearn.course_student.student_id','vlearn.users.id'])" transform='translate(8,0)' class='scene' d='M 864,192L 864,472Q 864,480 856,480L 744,480Q 736,480 736,488L 736,496' >
+	<title>Fk fk_course_student_users
+course_student ref users ( student_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 864,192L 864,472Q 864,480 856,480L 744,480Q 736,480 736,488L 736,496' ><title>Fk fk_course_student_users
+course_student ref users ( student_id -&gt; id )</title></path>
+<text x='877' y='194' transform='rotate(90 877,194)' class='relName'>student_id</text>
+<!-- == Fk 'course_student_fk_course_student_sections' == -->
+<path id='course_student_fk_course_student_sections'  onmouseover="hghl(['course_student_fk_course_student_sections','vlearn.course_student.section_checkpoint','vlearn.sections.id'])" onmouseout="uhghl(['course_student_fk_course_student_sections','vlearn.course_student.section_checkpoint','vlearn.sections.id'])" transform='translate(8,0)' class='scene' d='M 832,80L 744,80Q 736,80 736,72L 736,56Q 736,48 728,48L 456,48Q 448,48 448,56L 448,64' >
+	<title>Fk fk_course_student_sections
+course_student ref sections ( section_checkpoint -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 832,80L 744,80Q 736,80 736,72L 736,56Q 736,48 728,48L 456,48Q 448,48 448,56L 448,64' ><title>Fk fk_course_student_sections
+course_student ref sections ( section_checkpoint -&gt; id )</title></path>
+<text x='708' y='75' transform='rotate(0 708,75)' class='relName'>section_checkpoint</text>
+<!-- == Fk 'course_student_fk_course_student_section_student' == -->
+<path id='course_student_fk_course_student_section_student'  onmouseover="hghl(['course_student_fk_course_student_section_student','vlearn.course_student.section_checkpoint','vlearn.section_student.section_id'])" onmouseout="uhghl(['course_student_fk_course_student_section_student','vlearn.course_student.section_checkpoint','vlearn.section_student.section_id'])" transform='translate(8,0)' class='scene' d='M 832,160L 744,160Q 736,160 736,168L 736,312Q 736,320 728,320L 464,320' >
+	<title>Fk fk_course_student_section_student
+course_student ref section_student ( section_checkpoint -&gt; section_id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 832,160L 744,160Q 736,160 736,168L 736,312Q 736,320 728,320L 464,320' ><title>Fk fk_course_student_section_student
+course_student ref section_student ( section_checkpoint -&gt; section_id )</title></path>
+<text x='708' y='155' transform='rotate(0 708,155)' class='relName'>section_checkpoint</text>
+<!-- == Fk 'course_topic_fk_course_topic_courses' == -->
+<path id='course_topic_fk_course_topic_courses'  onmouseover="hghl(['course_topic_fk_course_topic_courses','vlearn.course_topic.course_id','vlearn.courses.id'])" onmouseout="uhghl(['course_topic_fk_course_topic_courses','vlearn.course_topic.course_id','vlearn.courses.id'])" transform='translate(8,0)' class='scene' d='M 1104,480L 1048,480Q 1040,480 1040,472L 1040,232Q 1040,224 1032,224L 712,224Q 704,224 704,216L 704,208' >
+	<title>Fk fk_course_topic_courses
+course_topic ref courses ( course_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1104,480L 1048,480Q 1040,480 1040,472L 1040,232Q 1040,224 1032,224L 712,224Q 704,224 704,216L 704,208' ><title>Fk fk_course_topic_courses
+course_topic ref courses ( course_id -&gt; id )</title></path>
+<text x='1048' y='475' transform='rotate(0 1048,475)' class='relName'>course_id</text>
+<!-- == Fk 'course_topic_fk_course_topic_topics' == -->
+<path id='course_topic_fk_course_topic_topics'  onmouseover="hghl(['course_topic_fk_course_topic_topics','vlearn.course_topic.topic_id','vlearn.topics.id'])" onmouseout="uhghl(['course_topic_fk_course_topic_topics','vlearn.course_topic.topic_id','vlearn.topics.id'])" transform='translate(8,0)' class='scene' d='M 1104,496L 1024,496' >
+	<title>Fk fk_course_topic_topics
+course_topic ref topics ( topic_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1104,496L 1024,496' ><title>Fk fk_course_topic_topics
+course_topic ref topics ( topic_id -&gt; id )</title></path>
+<text x='1060' y='491' transform='rotate(0 1060,491)' class='relName'>topic_id</text>
+<!-- == Fk 'courses_fk_courses_instructor' == -->
+<path id='courses_fk_courses_instructor'  onmouseover="hghl(['courses_fk_courses_instructor','vlearn.courses.instructor_id','vlearn.users.id'])" onmouseout="uhghl(['courses_fk_courses_instructor','vlearn.courses.instructor_id','vlearn.users.id'])" transform='translate(8,0)' class='scene' d='M 608,208L 608,496' >
+	<title>Fk fk_courses_instructor
+courses ref users ( instructor_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 608,208L 608,496' ><title>Fk fk_courses_instructor
+courses ref users ( instructor_id -&gt; id )</title></path>
+<text x='621' y='210' transform='rotate(90 621,210)' class='relName'>instructor_id</text>
+<!-- == Fk 'instructors_fk_instructors_users' == -->
+<path id='instructors_fk_instructors_users'  onmouseover="hghl(['instructors_fk_instructors_users','vlearn.instructors.user_id','vlearn.users.id'])" onmouseout="uhghl(['instructors_fk_instructors_users','vlearn.instructors.user_id','vlearn.users.id'])" transform='translate(8,0)' class='scene' d='M 592,912L 592,704' >
+	<title>Fk fk_instructors_users
+instructors ref users ( user_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1)' marker-end='url(#arrow1)'    d='M 592,912L 592,704' ><title>Fk fk_instructors_users
+instructors ref users ( user_id -&gt; id )</title></path>
+<text x='595' y='910' transform='rotate(270 595,910)' class='relName'>user_id</text>
+<!-- == Fk 'lessons_fk_lessons_sections' == -->
+<path id='lessons_fk_lessons_sections'  onmouseover="hghl(['lessons_fk_lessons_sections','vlearn.lessons.section_id','vlearn.sections.id'])" onmouseout="uhghl(['lessons_fk_lessons_sections','vlearn.lessons.section_id','vlearn.sections.id'])" transform='translate(8,0)' class='scene' d='M 1328,112L 1048,112Q 1040,112 1040,104L 1040,24Q 1040,16 1032,16L 424,16Q 416,16 416,24L 416,64' >
+	<title>Fk fk_lessons_sections
+lessons ref sections ( section_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1328,112L 1048,112Q 1040,112 1040,104L 1040,24Q 1040,16 1032,16L 424,16Q 416,16 416,24L 416,64' ><title>Fk fk_lessons_sections
+lessons ref sections ( section_id -&gt; id )</title></path>
+<text x='1268' y='107' transform='rotate(0 1268,107)' class='relName'>section_id</text>
+<!-- == Fk 'live_lessons_fk_live_lessons_sections' == -->
+<path id='live_lessons_fk_live_lessons_sections'  onmouseover="hghl(['live_lessons_fk_live_lessons_sections','vlearn.live_lessons.section_id','vlearn.sections.id'])" onmouseout="uhghl(['live_lessons_fk_live_lessons_sections','vlearn.live_lessons.section_id','vlearn.sections.id'])" transform='translate(8,0)' class='scene' d='M 1568,112L 1512,112Q 1504,112 1504,104L 1504,40Q 1504,32 1496,32L 440,32Q 432,32 432,40L 432,64' >
+	<title>Fk fk_live_lessons_sections
+live_lessons ref sections ( section_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 1568,112L 1512,112Q 1504,112 1504,104L 1504,40Q 1504,32 1496,32L 440,32Q 432,32 432,40L 432,64' ><title>Fk fk_live_lessons_sections
+live_lessons ref sections ( section_id -&gt; id )</title></path>
+<text x='1508' y='107' transform='rotate(0 1508,107)' class='relName'>section_id</text>
+<!-- == Fk 'mentions_fk_mentions_messages' == -->
+<path id='mentions_fk_mentions_messages'  onmouseover="hghl(['mentions_fk_mentions_messages','vlearn.mentions.message_id','vlearn.messages.id'])" onmouseout="uhghl(['mentions_fk_mentions_messages','vlearn.mentions.message_id','vlearn.messages.id'])" transform='translate(8,0)' class='scene' d='M 1536,1040L 1544,1040Q 1552,1040 1552,1032L 1552,1000Q 1552,992 1544,992L 1536,992' >
+	<title>Fk fk_mentions_messages
+mentions ref messages ( message_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 1536,1040L 1544,1040Q 1552,1040 1552,1032L 1552,1000Q 1552,992 1544,992L 1536,992' ><title>Fk fk_mentions_messages
+mentions ref messages ( message_id -&gt; id )</title></path>
+<text x='1546' y='1035' transform='rotate(0 1546,1035)' class='relName'>message_id</text>
+<!-- == Fk 'mentions_fk_mentions_users' == -->
+<path id='mentions_fk_mentions_users'  onmouseover="hghl(['mentions_fk_mentions_users','vlearn.mentions.user_id','vlearn.users.id'])" onmouseout="uhghl(['mentions_fk_mentions_users','vlearn.mentions.user_id','vlearn.users.id'])" transform='translate(8,0)' class='scene' d='M 1392,1024L 1352,1024Q 1344,1024 1344,1016L 1344,680Q 1344,672 1336,672L 752,672' >
+	<title>Fk fk_mentions_users
+mentions ref users ( user_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 1392,1024L 1352,1024Q 1344,1024 1344,1016L 1344,680Q 1344,672 1336,672L 752,672' ><title>Fk fk_mentions_users
+mentions ref users ( user_id -&gt; id )</title></path>
+<text x='1352' y='1019' transform='rotate(0 1352,1019)' class='relName'>user_id</text>
+<!-- == Fk 'messages_fk_messages_rooms' == -->
+<path id='messages_fk_messages_rooms'  onmouseover="hghl(['messages_fk_messages_rooms','vlearn.messages.room_id','vlearn.rooms.id'])" onmouseout="uhghl(['messages_fk_messages_rooms','vlearn.messages.room_id','vlearn.rooms.id'])" transform='translate(8,0)' class='scene' d='M 1408,896L 1328,896' >
+	<title>Fk fk_messages_rooms
+messages ref rooms ( room_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 1408,896L 1328,896' ><title>Fk fk_messages_rooms
+messages ref rooms ( room_id -&gt; id )</title></path>
+<text x='1362' y='891' transform='rotate(0 1362,891)' class='relName'>room_id</text>
+<!-- == Fk 'questions_fk_learn_unit_sections' == -->
+<path id='questions_fk_learn_unit_sections'  onmouseover="hghl(['questions_fk_learn_unit_sections','vlearn.questions.section_id','vlearn.sections.id'])" onmouseout="uhghl(['questions_fk_learn_unit_sections','vlearn.questions.section_id','vlearn.sections.id'])" transform='translate(8,0)' class='scene' d='M 1328,352L 488,352Q 480,352 480,344L 480,168Q 480,160 472,160L 464,160' >
+	<title>Fk fk_learn_unit_sections
+questions ref sections ( section_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1328,352L 488,352Q 480,352 480,344L 480,168Q 480,160 472,160L 464,160' ><title>Fk fk_learn_unit_sections
+questions ref sections ( section_id -&gt; id )</title></path>
+<text x='1268' y='347' transform='rotate(0 1268,347)' class='relName'>section_id</text>
+<!-- == Fk 'rooms_fk_rooms_courses' == -->
+<path id='rooms_fk_rooms_courses'  onmouseover="hghl(['rooms_fk_rooms_courses','vlearn.rooms.roomable_id','vlearn.courses.id'])" onmouseout="uhghl(['rooms_fk_rooms_courses','vlearn.rooms.roomable_id','vlearn.courses.id'])" transform='translate(8,0)' class='scene' d='M 1152,880L 776,880Q 768,880 768,872L 768,200Q 768,192 760,192L 720,192' >
+	<title>Fk fk_rooms_courses
+rooms ref courses ( roomable_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 1152,880L 776,880Q 768,880 768,872L 768,200Q 768,192 760,192L 720,192' ><title>Fk fk_rooms_courses
+rooms ref courses ( roomable_id -&gt; id )</title></path>
+<text x='1076' y='875' transform='rotate(0 1076,875)' class='relName'>roomable_id</text>
+<!-- == Fk 'rooms_fk_rooms_lessons' == -->
+<path id='rooms_fk_rooms_lessons'  onmouseover="hghl(['rooms_fk_rooms_lessons','vlearn.rooms.roomable_id','vlearn.lessons.id'])" onmouseout="uhghl(['rooms_fk_rooms_lessons','vlearn.rooms.roomable_id','vlearn.lessons.id'])" transform='translate(8,0)' class='scene' d='M 1296,864L 1296,216Q 1296,208 1304,208L 1328,208' >
+	<title>Fk fk_rooms_lessons
+rooms ref lessons ( roomable_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 1296,864L 1296,216Q 1296,208 1304,208L 1328,208' ><title>Fk fk_rooms_lessons
+rooms ref lessons ( roomable_id -&gt; id )</title></path>
+<text x='1299' y='862' transform='rotate(270 1299,862)' class='relName'>roomable_id</text>
+<!-- == Fk 'rooms_fk_rooms_live_lessons' == -->
+<path id='rooms_fk_rooms_live_lessons'  onmouseover="hghl(['rooms_fk_rooms_live_lessons','vlearn.rooms.roomable_id','vlearn.live_lessons.id'])" onmouseout="uhghl(['rooms_fk_rooms_live_lessons','vlearn.rooms.roomable_id','vlearn.live_lessons.id'])" transform='translate(8,0)' class='scene' d='M 1280,864L 1280,88Q 1280,80 1288,80L 1592,80Q 1600,80 1600,88L 1600,96' >
+	<title>Fk fk_rooms_live_lessons
+rooms ref live_lessons ( roomable_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 1280,864L 1280,88Q 1280,80 1288,80L 1592,80Q 1600,80 1600,88L 1600,96' ><title>Fk fk_rooms_live_lessons
+rooms ref live_lessons ( roomable_id -&gt; id )</title></path>
+<text x='1283' y='862' transform='rotate(270 1283,862)' class='relName'>roomable_id</text>
+<!-- == Fk 'section_student_fk_section_student_sections' == -->
+<path id='section_student_fk_section_student_sections'  onmouseover="hghl(['section_student_fk_section_student_sections','vlearn.section_student.section_id','vlearn.sections.id'])" onmouseout="uhghl(['section_student_fk_section_student_sections','vlearn.section_student.section_id','vlearn.sections.id'])" transform='translate(8,0)' class='scene' d='M 368,288L 368,176' >
+	<title>Fk fk_section_student_sections
+section_student ref sections ( section_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1)' marker-end='url(#arrow1)'    d='M 368,288L 368,176' ><title>Fk fk_section_student_sections
+section_student ref sections ( section_id -&gt; id )</title></path>
+<text x='371' y='286' transform='rotate(270 371,286)' class='relName'>section_id</text>
+<!-- == Fk 'section_student_fk_section_student_users' == -->
+<path id='section_student_fk_section_student_users'  onmouseover="hghl(['section_student_fk_section_student_users','vlearn.section_student.student_id','vlearn.users.id'])" onmouseout="uhghl(['section_student_fk_section_student_users','vlearn.section_student.student_id','vlearn.users.id'])" transform='translate(8,0)' class='scene' d='M 448,416L 448,504Q 448,512 456,512L 560,512' >
+	<title>Fk fk_section_student_users
+section_student ref users ( student_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 448,416L 448,504Q 448,512 456,512L 560,512' ><title>Fk fk_section_student_users
+section_student ref users ( student_id -&gt; id )</title></path>
+<text x='461' y='418' transform='rotate(90 461,418)' class='relName'>student_id</text>
+<!-- == Fk 'section_student_fk_section_student_lessons' == -->
+<path id='section_student_fk_section_student_lessons'  onmouseover="hghl(['section_student_fk_section_student_lessons','vlearn.section_student.lesson_checkpoint','vlearn.lessons.id'])" onmouseout="uhghl(['section_student_fk_section_student_lessons','vlearn.section_student.lesson_checkpoint','vlearn.lessons.id'])" transform='translate(8,0)' class='scene' d='M 448,288L 448,280Q 448,272 456,272L 1352,272Q 1360,272 1360,264L 1360,256' >
+	<title>Fk fk_section_student_lessons
+section_student ref lessons ( lesson_checkpoint -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 448,288L 448,280Q 448,272 456,272L 1352,272Q 1360,272 1360,264L 1360,256' ><title>Fk fk_section_student_lessons
+section_student ref lessons ( lesson_checkpoint -&gt; id )</title></path>
+<text x='451' y='286' transform='rotate(270 451,286)' class='relName'>lesson_checkpoint</text>
+<!-- == Fk 'sections_fk_sections_courses' == -->
+<path id='sections_fk_sections_courses'  onmouseover="hghl(['sections_fk_sections_courses','vlearn.sections.course_id','vlearn.courses.id'])" onmouseout="uhghl(['sections_fk_sections_courses','vlearn.sections.course_id','vlearn.courses.id'])" transform='translate(8,0)' class='scene' d='M 464,96L 576,96' >
+	<title>Fk fk_sections_courses
+sections ref courses ( course_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 464,96L 576,96' ><title>Fk fk_sections_courses
+sections ref courses ( course_id -&gt; id )</title></path>
+<text x='474' y='91' transform='rotate(0 474,91)' class='relName'>course_id</text>
+<!-- == Fk 'student_lesson_fk_student_lesson_users' == -->
+<path id='student_lesson_fk_student_lesson_users'  onmouseover="hghl(['student_lesson_fk_student_lesson_users','vlearn.student_lesson.student_id','vlearn.users.id'])" onmouseout="uhghl(['student_lesson_fk_student_lesson_users','vlearn.student_lesson.student_id','vlearn.users.id'])" transform='translate(8,0)' class='scene' d='M 1600,464L 1600,520Q 1600,528 1592,528L 1480,528Q 1472,528 1472,536L 1472,616Q 1472,624 1464,624L 752,624' >
+	<title>Fk fk_student_lesson_users
+student_lesson ref users ( student_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1600,464L 1600,520Q 1600,528 1592,528L 1480,528Q 1472,528 1472,536L 1472,616Q 1472,624 1464,624L 752,624' ><title>Fk fk_student_lesson_users
+student_lesson ref users ( student_id -&gt; id )</title></path>
+<text x='1613' y='466' transform='rotate(90 1613,466)' class='relName'>student_id</text>
+<!-- == Fk 'student_lesson_fk_student_lessons' == -->
+<path id='student_lesson_fk_student_lessons'  onmouseover="hghl(['student_lesson_fk_student_lessons','vlearn.student_lesson.lesson_id','vlearn.lessons.id'])" onmouseout="uhghl(['student_lesson_fk_student_lessons','vlearn.student_lesson.lesson_id','vlearn.lessons.id'])" transform='translate(8,0)' class='scene' d='M 1568,352L 1480,352Q 1472,352 1472,344L 1472,256' >
+	<title>Fk fk_student_lessons
+student_lesson ref lessons ( lesson_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1568,352L 1480,352Q 1472,352 1472,344L 1472,256' ><title>Fk fk_student_lessons
+student_lesson ref lessons ( lesson_id -&gt; id )</title></path>
+<text x='1514' y='347' transform='rotate(0 1514,347)' class='relName'>lesson_id</text>
+<!-- == Fk 'students_fk_students_users' == -->
+<path id='students_fk_students_users'  onmouseover="hghl(['students_fk_students_users','vlearn.students.user_id','vlearn.users.id'])" onmouseout="uhghl(['students_fk_students_users','vlearn.students.user_id','vlearn.users.id'])" transform='translate(8,0)' class='scene' d='M 768,928L 744,928Q 736,928 736,920L 736,704' >
+	<title>Fk fk_students_users
+students ref users ( user_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1)' marker-end='url(#arrow1)'    d='M 768,928L 744,928Q 736,928 736,920L 736,704' ><title>Fk fk_students_users
+students ref users ( user_id -&gt; id )</title></path>
+<text x='728' y='923' transform='rotate(0 728,923)' class='relName'>user_id</text>
+<!-- == Fk 'topics_fk_topics_parent' == -->
+<path id='topics_fk_topics_parent'  onmouseover="hghl(['topics_fk_topics_parent','vlearn.topics.parent_id','vlearn.topics.id'])" onmouseout="uhghl(['topics_fk_topics_parent','vlearn.topics.parent_id','vlearn.topics.id'])" transform='translate(8,0)' class='scene' d='M 1024,592L 1032,592Q 1040,592 1040,600L 1040,632Q 1040,640 1032,640L 1000,640Q 992,640 992,632L 992,608' >
+	<title>Fk fk_topics_parent
+topics ref topics ( parent_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot0p)' marker-end='url(#arrow1)'  class='dotted '  d='M 1024,592L 1032,592Q 1040,592 1040,600L 1040,632Q 1040,640 1032,640L 1000,640Q 992,640 992,632L 992,608' ><title>Fk fk_topics_parent
+topics ref topics ( parent_id -&gt; id )</title></path>
+<text x='1034' y='587' transform='rotate(0 1034,587)' class='relName'>parent_id</text>
+<!-- == Fk 'user_room_fk_user_room_rooms' == -->
+<path id='user_room_fk_user_room_rooms'  onmouseover="hghl(['user_room_fk_user_room_rooms','vlearn.user_room.room_id','vlearn.rooms.id'])" onmouseout="uhghl(['user_room_fk_user_room_rooms','vlearn.user_room.room_id','vlearn.rooms.id'])" transform='translate(8,0)' class='scene' d='M 1216,1024L 1216,1008' >
+	<title>Fk fk_user_room_rooms
+user_room ref rooms ( room_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1216,1024L 1216,1008' ><title>Fk fk_user_room_rooms
+user_room ref rooms ( room_id -&gt; id )</title></path>
+<text x='1219' y='1022' transform='rotate(270 1219,1022)' class='relName'>room_id</text>
+<!-- == Fk 'user_room_fk_user_room_users' == -->
+<path id='user_room_fk_user_room_users'  onmouseover="hghl(['user_room_fk_user_room_users','vlearn.user_room.user_id','vlearn.users.id'])" onmouseout="uhghl(['user_room_fk_user_room_users','vlearn.user_room.user_id','vlearn.users.id'])" transform='translate(8,0)' class='scene' d='M 1184,1072L 728,1072Q 720,1072 720,1064L 720,704' >
+	<title>Fk fk_user_room_users
+user_room ref users ( user_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1184,1072L 728,1072Q 720,1072 720,1064L 720,704' ><title>Fk fk_user_room_users
+user_room ref users ( user_id -&gt; id )</title></path>
+<text x='1144' y='1067' transform='rotate(0 1144,1067)' class='relName'>user_id</text>
+<!-- == Fk 'user_topic_fk_user_topic_users' == -->
+<path id='user_topic_fk_user_topic_users'  onmouseover="hghl(['user_topic_fk_user_topic_users','vlearn.user_topic.user_id','vlearn.users.id'])" onmouseout="uhghl(['user_topic_fk_user_topic_users','vlearn.user_topic.user_id','vlearn.users.id'])" transform='translate(8,0)' class='scene' d='M 1104,720L 712,720Q 704,720 704,712L 704,704' >
+	<title>Fk fk_user_topic_users
+user_topic ref users ( user_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1104,720L 712,720Q 704,720 704,712L 704,704' ><title>Fk fk_user_topic_users
+user_topic ref users ( user_id -&gt; id )</title></path>
+<text x='1064' y='715' transform='rotate(0 1064,715)' class='relName'>user_id</text>
+<!-- == Fk 'user_topic_fk_user_topic_topics' == -->
+<path id='user_topic_fk_user_topic_topics'  onmouseover="hghl(['user_topic_fk_user_topic_topics','vlearn.user_topic.topic_id','vlearn.topics.id'])" onmouseout="uhghl(['user_topic_fk_user_topic_topics','vlearn.user_topic.topic_id','vlearn.topics.id'])" transform='translate(8,0)' class='scene' d='M 1104,704L 1016,704Q 1008,704 1008,696L 1008,608' >
+	<title>Fk fk_user_topic_topics
+user_topic ref topics ( topic_id -&gt; id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1104,704L 1016,704Q 1008,704 1008,696L 1008,608' ><title>Fk fk_user_topic_topics
+user_topic ref topics ( topic_id -&gt; id )</title></path>
+<text x='1060' y='699' transform='rotate(0 1060,699)' class='relName'>topic_id</text>
+<!-- == Table 'answers' == -->
+<rect class='entity' style='stroke:none;' x='1552' y='552' width='128' height='112' rx='8' ry='8' />
+<path d='M 1552 580 L 1552 560 Q 1552 552 1560 552 L 1672 552 Q 1680 552 1680 560 L 1680 580 L1552 580 ' style='fill:url(#tbg_F4DDBE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1552' y='552' width='128' height='112' rx='8' ry='8' style='fill:none;stroke:#E8DBCB'/>
+<a xlink:href='#vlearn.answers'><text x='1583' y='571' >answers</text><title>Table vlearn.answers</title></a>
+  <use id='nn' x='1554' y='589' xlink:href='#nn'/><use id='pk' x='1554' y='588' xlink:href='#pk'><title>Pk pk_answer_id ( id ) </title></use><a xlink:href='#vlearn.answers_id'><text id='vlearn.answers.id' x='1571' y='599'>id</text><title>id
+* int</title></a>
+<text x='1677' y='596' text-anchor='end' class='colType'>#</text>  <use id='nn' x='1554' y='605' xlink:href='#nn'/><a xlink:href='#vlearn.answers_question_id'><text id='vlearn.answers.question_id' x='1571' y='615' onmouseover="hghl(['answers_fk_answer_learn_unit','vlearn.questions.id'])" onmouseout="uhghl(['answers_fk_answer_learn_unit','vlearn.questions.id'])">question_id</text><title>question_id
+* int</title></a>
+<a xlink:href='#vlearn.answers.question_id'><use id='fk' x='1668' y='604' xlink:href='#fk'/><title>References questions ( question_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.answers_content'><text id='vlearn.answers.content' x='1571' y='631'>content</text><title>content
+varchar(250)</title></a>
+<text x='1677' y='628' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.answers_is_true'><text id='vlearn.answers.is_true' x='1571' y='647'>is_true</text><title>is_true
+boolean</title></a>
+<text x='1677' y='644' text-anchor='end' class='colType'>b</text>
+<!-- == Table 'asset_lesson' == -->
+<rect class='entity' style='stroke:none;' x='256' y='664' width='112' height='80' rx='8' ry='8' />
+<path d='M 256 692 L 256 672 Q 256 664 264 664 L 360 664 Q 368 664 368 672 L 368 692 L256 692 ' style='fill:url(#tbg_F4DDBE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='256' y='664' width='112' height='80' rx='8' ry='8' style='fill:none;stroke:#E8DBCB'/>
+<a xlink:href='#vlearn.asset_lesson'><text x='263' y='683' >asset_lesson</text><title>Table vlearn.asset_lesson</title></a>
+  <a xlink:href='#vlearn.asset_lesson_asset_id'><text id='vlearn.asset_lesson.asset_id' x='275' y='711' onmouseover="hghl(['asset_lesson_fk_asset_lesson_assets','vlearn.assets.id'])" onmouseout="uhghl(['asset_lesson_fk_asset_lesson_assets','vlearn.assets.id'])">asset_id</text><title>asset_id
+int</title></a>
+<a xlink:href='#vlearn.asset_lesson.asset_id'><use id='fk' x='356' y='700' xlink:href='#fk'/><title>References assets ( asset_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.asset_lesson_lesson_id'><text id='vlearn.asset_lesson.lesson_id' x='275' y='727' onmouseover="hghl(['asset_lesson_fk_asset_lesson_lessons','vlearn.lessons.id'])" onmouseout="uhghl(['asset_lesson_fk_asset_lesson_lessons','vlearn.lessons.id'])">lesson_id</text><title>lesson_id
+int</title></a>
+<a xlink:href='#vlearn.asset_lesson.lesson_id'><use id='fk' x='356' y='716' xlink:href='#fk'/><title>References lessons ( lesson_id -&gt; id ) </title></a>
+
+<!-- == Table 'asset_message' == -->
+<rect class='entity' style='stroke:none;' x='256' y='904' width='128' height='80' rx='8' ry='8' />
+<path d='M 256 932 L 256 912 Q 256 904 264 904 L 376 904 Q 384 904 384 912 L 384 932 L256 932 ' style='fill:url(#tbg_F4DDBE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='256' y='904' width='128' height='80' rx='8' ry='8' style='fill:none;stroke:#E8DBCB'/>
+<a xlink:href='#vlearn.asset_message'><text x='262' y='923' >asset_message</text><title>Table vlearn.asset_message</title></a>
+  <a xlink:href='#vlearn.asset_message_asset_id'><text id='vlearn.asset_message.asset_id' x='275' y='951' onmouseover="hghl(['asset_message_fk_asset_message_assets','vlearn.assets.id'])" onmouseout="uhghl(['asset_message_fk_asset_message_assets','vlearn.assets.id'])">asset_id</text><title>asset_id
+int</title></a>
+<a xlink:href='#vlearn.asset_message.asset_id'><use id='fk' x='372' y='940' xlink:href='#fk'/><title>References assets ( asset_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.asset_message_message_id'><text id='vlearn.asset_message.message_id' x='275' y='967' onmouseover="hghl(['asset_message_fk_asset_message_messages','vlearn.messages.id'])" onmouseout="uhghl(['asset_message_fk_asset_message_messages','vlearn.messages.id'])">message_id</text><title>message_id
+int</title></a>
+<a xlink:href='#vlearn.asset_message.message_id'><use id='fk' x='372' y='956' xlink:href='#fk'/><title>References messages ( message_id -&gt; id ) </title></a>
+
+<!-- == Table 'assets' == -->
+<rect class='entity' style='stroke:none;' x='48' y='664' width='112' height='144' rx='8' ry='8' />
+<path d='M 48 692 L 48 672 Q 48 664 56 664 L 152 664 Q 160 664 160 672 L 160 692 L48 692 ' style='fill:url(#tbg_F4DDBE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='48' y='664' width='112' height='144' rx='8' ry='8' style='fill:none;stroke:#E8DBCB'/>
+<a xlink:href='#vlearn.assets'><text x='78' y='683' >assets</text><title>Table vlearn.assets</title></a>
+  <use id='nn' x='50' y='701' xlink:href='#nn'/><use id='pk' x='50' y='700' xlink:href='#pk'><title>Pk pk_assets_id ( id ) </title></use><a xlink:href='#vlearn.assets_id'><text id='vlearn.assets.id' x='67' y='711' onmouseover="hghl(['asset_lesson_fk_asset_lesson_assets','vlearn.asset_lesson.asset_id','asset_message_fk_asset_message_assets','vlearn.asset_message.asset_id'])" onmouseout="uhghl(['asset_lesson_fk_asset_lesson_assets','vlearn.asset_lesson.asset_id','asset_message_fk_asset_message_assets','vlearn.asset_message.asset_id'])">id</text><title>id
+* int</title></a>
+<a xlink:href='#vlearn.assets.id'><use id='ref' x='148' y='700' xlink:href='#ref'/><title>Referred by asset_lesson ( asset_id -&gt; id ) 
+Referred by asset_message ( asset_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.assets_owner_id'><text id='vlearn.assets.owner_id' x='67' y='727' onmouseover="hghl(['assets_fk_assets_users','vlearn.users.id'])" onmouseout="uhghl(['assets_fk_assets_users','vlearn.users.id'])">owner_id</text><title>owner_id
+int</title></a>
+<a xlink:href='#vlearn.assets.owner_id'><use id='fk' x='148' y='716' xlink:href='#fk'/><title>References users ( owner_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.assets_name'><text id='vlearn.assets.name' x='67' y='743'>name</text><title>name
+varchar(100)</title></a>
+<text x='157' y='740' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.assets_url'><text id='vlearn.assets.url' x='67' y='759'>url</text><title>url
+varchar(100)</title></a>
+<text x='157' y='756' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.assets_update_at'><text id='vlearn.assets.update_at' x='67' y='775'>update_at</text><title>update_at
+date</title></a>
+<text x='157' y='772' text-anchor='end' class='colType'>d</text>  <a xlink:href='#vlearn.assets_is_public'><text id='vlearn.assets.is_public' x='67' y='791'>is_public</text><title>is_public
+boolean</title></a>
+<text x='157' y='788' text-anchor='end' class='colType'>b</text>
+<!-- == Table 'course_student' == -->
+<rect class='entity' style='stroke:none;' x='848' y='72' width='176' height='112' rx='8' ry='8' />
+<path d='M 848 100 L 848 80 Q 848 72 856 72 L 1016 72 Q 1024 72 1024 80 L 1024 100 L848 100 ' style='fill:url(#tbg_BED3F4);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='848' y='72' width='176' height='112' rx='8' ry='8' style='fill:none;stroke:#CBD6E8'/>
+<a xlink:href='#vlearn.course_student'><text x='878' y='91' >course_student</text><title>Table vlearn.course_student</title></a>
+  <use id='nn' x='850' y='109' xlink:href='#nn'/><use id='pk' x='850' y='108' xlink:href='#pk'><title>Pk pk_course_student ( student_id, course_id ) </title></use><a xlink:href='#vlearn.course_student_course_id'><text id='vlearn.course_student.course_id' x='867' y='119' onmouseover="hghl(['course_student_fk_course_student_courses','vlearn.courses.id'])" onmouseout="uhghl(['course_student_fk_course_student_courses','vlearn.courses.id'])">course_id</text><title>course_id
+* int</title></a>
+<a xlink:href='#vlearn.course_student.course_id'><use id='fk' x='1012' y='108' xlink:href='#fk'/><title>References courses ( course_id -&gt; id ) </title></a>
+  <use id='nn' x='850' y='125' xlink:href='#nn'/><use id='pk' x='850' y='124' xlink:href='#pk'><title>Pk pk_course_student ( student_id, course_id ) </title></use><a xlink:href='#vlearn.course_student_student_id'><text id='vlearn.course_student.student_id' x='867' y='135' onmouseover="hghl(['course_student_fk_course_student_users','vlearn.users.id'])" onmouseout="uhghl(['course_student_fk_course_student_users','vlearn.users.id'])">student_id</text><title>student_id
+* int</title></a>
+<a xlink:href='#vlearn.course_student.student_id'><use id='fk' x='1012' y='124' xlink:href='#fk'/><title>References users ( student_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.course_student_section_checkpoint'><text id='vlearn.course_student.section_checkpoint' x='867' y='151' onmouseover="hghl(['course_student_fk_course_student_sections','vlearn.sections.id','course_student_fk_course_student_section_student','vlearn.section_student.section_id'])" onmouseout="uhghl(['course_student_fk_course_student_sections','vlearn.sections.id','course_student_fk_course_student_section_student','vlearn.section_student.section_id'])">section_checkpoint</text><title>section_checkpoint
+int</title></a>
+<a xlink:href='#vlearn.course_student.section_checkpoint'><use id='fk' x='1012' y='140' xlink:href='#fk'/><title>References sections ( section_checkpoint -&gt; id ) 
+References section_student ( section_checkpoint -&gt; section_id ) </title></a>
+  <a xlink:href='#vlearn.course_student_rate'><text id='vlearn.course_student.rate' x='867' y='167'>rate</text><title>rate
+int</title></a>
+<text x='1021' y='164' text-anchor='end' class='colType'>#</text>
+<!-- == Table 'course_topic' == -->
+<rect class='entity' style='stroke:none;' x='1120' y='472' width='112' height='80' rx='8' ry='8' />
+<path d='M 1120 500 L 1120 480 Q 1120 472 1128 472 L 1224 472 Q 1232 472 1232 480 L 1232 500 L1120 500 ' style='fill:url(#tbg_BED3F4);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1120' y='472' width='112' height='80' rx='8' ry='8' style='fill:none;stroke:#CBD6E8'/>
+<a xlink:href='#vlearn.course_topic'><text x='1128' y='491' >course_topic</text><title>Table vlearn.course_topic</title></a>
+  <use id='nn' x='1122' y='509' xlink:href='#nn'/><use id='pk' x='1122' y='508' xlink:href='#pk'><title>Pk pk_course_topic ( course_id, topic_id ) </title></use><a xlink:href='#vlearn.course_topic_course_id'><text id='vlearn.course_topic.course_id' x='1139' y='519' onmouseover="hghl(['course_topic_fk_course_topic_courses','vlearn.courses.id'])" onmouseout="uhghl(['course_topic_fk_course_topic_courses','vlearn.courses.id'])">course_id</text><title>course_id
+* int</title></a>
+<a xlink:href='#vlearn.course_topic.course_id'><use id='fk' x='1220' y='508' xlink:href='#fk'/><title>References courses ( course_id -&gt; id ) </title></a>
+  <use id='nn' x='1122' y='525' xlink:href='#nn'/><use id='pk' x='1122' y='524' xlink:href='#pk'><title>Pk pk_course_topic ( course_id, topic_id ) </title></use><a xlink:href='#vlearn.course_topic_topic_id'><text id='vlearn.course_topic.topic_id' x='1139' y='535' onmouseover="hghl(['course_topic_fk_course_topic_topics','vlearn.topics.id'])" onmouseout="uhghl(['course_topic_fk_course_topic_topics','vlearn.topics.id'])">topic_id</text><title>topic_id
+* int</title></a>
+<a xlink:href='#vlearn.course_topic.topic_id'><use id='fk' x='1220' y='524' xlink:href='#fk'/><title>References topics ( topic_id -&gt; id ) </title></a>
+
+<!-- == Table 'courses' == -->
+<rect class='entity' style='stroke:none;' x='592' y='72' width='128' height='128' rx='8' ry='8' />
+<path d='M 592 100 L 592 80 Q 592 72 600 72 L 712 72 Q 720 72 720 80 L 720 100 L592 100 ' style='fill:url(#tbg_BED3F4);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='592' y='72' width='128' height='128' rx='8' ry='8' style='fill:none;stroke:#CBD6E8'/>
+<a xlink:href='#vlearn.courses'><text x='625' y='91' >courses</text><title>Table vlearn.courses</title></a>
+  <use id='nn' x='594' y='109' xlink:href='#nn'/><use id='pk' x='594' y='108' xlink:href='#pk'><title>Pk pk_courses_id ( id ) </title></use><a xlink:href='#vlearn.courses_id'><text id='vlearn.courses.id' x='611' y='119' onmouseover="hghl(['course_student_fk_course_student_courses','vlearn.course_student.course_id','course_topic_fk_course_topic_courses','vlearn.course_topic.course_id','rooms_fk_rooms_courses','vlearn.rooms.roomable_id','sections_fk_sections_courses','vlearn.sections.course_id'])" onmouseout="uhghl(['course_student_fk_course_student_courses','vlearn.course_student.course_id','course_topic_fk_course_topic_courses','vlearn.course_topic.course_id','rooms_fk_rooms_courses','vlearn.rooms.roomable_id','sections_fk_sections_courses','vlearn.sections.course_id'])">id</text><title>id
+* int</title></a>
+<a xlink:href='#vlearn.courses.id'><use id='ref' x='708' y='108' xlink:href='#ref'/><title>Referred by course_student ( course_id -&gt; id ) 
+Referred by course_topic ( course_id -&gt; id ) 
+Referred by rooms ( roomable_id -&gt; id ) 
+Referred by sections ( course_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.courses_instructor_id'><text id='vlearn.courses.instructor_id' x='611' y='135' onmouseover="hghl(['courses_fk_courses_instructor','vlearn.users.id'])" onmouseout="uhghl(['courses_fk_courses_instructor','vlearn.users.id'])">instructor_id</text><title>instructor_id
+int</title></a>
+<a xlink:href='#vlearn.courses.instructor_id'><use id='fk' x='708' y='124' xlink:href='#fk'/><title>References users ( instructor_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.courses_title'><text id='vlearn.courses.title' x='611' y='151'>title</text><title>title
+varchar(125)</title></a>
+<text x='717' y='148' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.courses_introduce'><text id='vlearn.courses.introduce' x='611' y='167'>introduce</text><title>introduce
+varchar(125)</title></a>
+<text x='717' y='164' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.courses_price'><text id='vlearn.courses.price' x='611' y='183'>price</text><title>price
+int</title></a>
+<text x='717' y='180' text-anchor='end' class='colType'>#</text>
+<!-- == Table 'instructors' == -->
+<rect class='entity' style='stroke:none;' x='480' y='920' width='208' height='128' rx='8' ry='8' />
+<path d='M 480 948 L 480 928 Q 480 920 488 920 L 680 920 Q 688 920 688 928 L 688 948 L480 948 ' style='fill:url(#tbg_C7F4BE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='480' y='920' width='208' height='128' rx='8' ry='8' style='fill:none;stroke:#CFE8CB'/>
+<a xlink:href='#vlearn.instructors'><text x='542' y='939' >instructors</text><title>Table vlearn.instructors</title></a>
+  <use id='nn' x='482' y='957' xlink:href='#nn'/><use id='pk' x='482' y='956' xlink:href='#pk'><title>Pk pk_instructors_user_id ( user_id ) </title></use><a xlink:href='#vlearn.instructors_user_id'><text id='vlearn.instructors.user_id' x='499' y='967' onmouseover="hghl(['instructors_fk_instructors_users','vlearn.users.id'])" onmouseout="uhghl(['instructors_fk_instructors_users','vlearn.users.id'])">user_id</text><title>user_id
+* int</title></a>
+<a xlink:href='#vlearn.instructors.user_id'><use id='fk' x='676' y='956' xlink:href='#fk'/><title>References users ( user_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.instructors_introduce'><text id='vlearn.instructors.introduce' x='499' y='983'>introduce</text><title>introduce
+varchar(1000)</title></a>
+<text x='685' y='980' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.instructors_receive_mail'><text id='vlearn.instructors.receive_mail' x='499' y='999'>receive_mail</text><title>receive_mail
+varchar(250)</title></a>
+<text x='685' y='996' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.instructors_receive_bought_notify'><text id='vlearn.instructors.receive_bought_notify' x='499' y='1015'>receive_bought_notify</text><title>receive_bought_notify
+boolean</title></a>
+<text x='685' y='1012' text-anchor='end' class='colType'>b</text>  <a xlink:href='#vlearn.instructors_receive_report'><text id='vlearn.instructors.receive_report' x='499' y='1031'>receive_report</text><title>receive_report
+boolean</title></a>
+<text x='685' y='1028' text-anchor='end' class='colType'>b</text>
+<!-- == Table 'lessons' == -->
+<rect class='entity' style='stroke:none;' x='1344' y='104' width='144' height='144' rx='8' ry='8' />
+<path d='M 1344 132 L 1344 112 Q 1344 104 1352 104 L 1480 104 Q 1488 104 1488 112 L 1488 132 L1344 132 ' style='fill:url(#tbg_F4DDBE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1344' y='104' width='144' height='144' rx='8' ry='8' style='fill:none;stroke:#E8DBCB'/>
+<a xlink:href='#vlearn.lessons'><text x='1386' y='123' >lessons</text><title>Table vlearn.lessons</title></a>
+  <use id='nn' x='1346' y='141' xlink:href='#nn'/><use id='pk' x='1346' y='140' xlink:href='#pk'><title>Pk pk_lessons_id ( id ) </title></use><a xlink:href='#vlearn.lessons_id'><text id='vlearn.lessons.id' x='1363' y='151' onmouseover="hghl(['asset_lesson_fk_asset_lesson_lessons','vlearn.asset_lesson.lesson_id','rooms_fk_rooms_lessons','vlearn.rooms.roomable_id','section_student_fk_section_student_lessons','vlearn.section_student.lesson_checkpoint','student_lesson_fk_student_lessons','vlearn.student_lesson.lesson_id'])" onmouseout="uhghl(['asset_lesson_fk_asset_lesson_lessons','vlearn.asset_lesson.lesson_id','rooms_fk_rooms_lessons','vlearn.rooms.roomable_id','section_student_fk_section_student_lessons','vlearn.section_student.lesson_checkpoint','student_lesson_fk_student_lessons','vlearn.student_lesson.lesson_id'])">id</text><title>id
+* int</title></a>
+<a xlink:href='#vlearn.lessons.id'><use id='ref' x='1476' y='140' xlink:href='#ref'/><title>Referred by asset_lesson ( lesson_id -&gt; id ) 
+Referred by rooms ( roomable_id -&gt; id ) 
+Referred by section_student ( lesson_checkpoint -&gt; id ) 
+Referred by student_lesson ( lesson_id -&gt; id ) </title></a>
+  <use id='nn' x='1346' y='157' xlink:href='#nn'/><a xlink:href='#vlearn.lessons_section_id'><text id='vlearn.lessons.section_id' x='1363' y='167' onmouseover="hghl(['lessons_fk_lessons_sections','vlearn.sections.id'])" onmouseout="uhghl(['lessons_fk_lessons_sections','vlearn.sections.id'])">section_id</text><title>section_id
+* int</title></a>
+<a xlink:href='#vlearn.lessons.section_id'><use id='fk' x='1476' y='156' xlink:href='#fk'/><title>References sections ( section_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.lessons_name'><text id='vlearn.lessons.name' x='1363' y='183'>name</text><title>name
+varchar(100)</title></a>
+<text x='1485' y='180' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.lessons_estimate_time'><text id='vlearn.lessons.estimate_time' x='1363' y='199'>estimate_time</text><title>estimate_time
+bigint</title></a>
+<text x='1485' y='196' text-anchor='end' class='colType'>#</text>  <a xlink:href='#vlearn.lessons_video_url'><text id='vlearn.lessons.video_url' x='1363' y='215'>video_url</text><title>video_url
+varchar(100)</title></a>
+<text x='1485' y='212' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.lessons_content'><text id='vlearn.lessons.content' x='1363' y='231'>content</text><title>content
+varchar(1000)</title></a>
+<text x='1485' y='228' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'live_lessons' == -->
+<rect class='entity' style='stroke:none;' x='1584' y='104' width='144' height='112' rx='8' ry='8' />
+<path d='M 1584 132 L 1584 112 Q 1584 104 1592 104 L 1720 104 Q 1728 104 1728 112 L 1728 132 L1584 132 ' style='fill:url(#tbg_F4DDBE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1584' y='104' width='144' height='112' rx='8' ry='8' style='fill:none;stroke:#E8DBCB'/>
+<a xlink:href='#vlearn.live_lessons'><text x='1610' y='123' >live_lessons</text><title>Table vlearn.live_lessons</title></a>
+  <use id='nn' x='1586' y='141' xlink:href='#nn'/><use id='pk' x='1586' y='140' xlink:href='#pk'><title>Pk pk_live_lessons_id ( id ) </title></use><a xlink:href='#vlearn.live_lessons_id'><text id='vlearn.live_lessons.id' x='1603' y='151' onmouseover="hghl(['rooms_fk_rooms_live_lessons','vlearn.rooms.roomable_id'])" onmouseout="uhghl(['rooms_fk_rooms_live_lessons','vlearn.rooms.roomable_id'])">id</text><title>id
+* int</title></a>
+<a xlink:href='#vlearn.live_lessons.id'><use id='ref' x='1716' y='140' xlink:href='#ref'/><title>Referred by rooms ( roomable_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.live_lessons_section_id'><text id='vlearn.live_lessons.section_id' x='1603' y='167' onmouseover="hghl(['live_lessons_fk_live_lessons_sections','vlearn.sections.id'])" onmouseout="uhghl(['live_lessons_fk_live_lessons_sections','vlearn.sections.id'])">section_id</text><title>section_id
+int</title></a>
+<a xlink:href='#vlearn.live_lessons.section_id'><use id='fk' x='1716' y='156' xlink:href='#fk'/><title>References sections ( section_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.live_lessons_name'><text id='vlearn.live_lessons.name' x='1603' y='183'>name</text><title>name
+varchar(100)</title></a>
+<text x='1725' y='180' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.live_lessons_schedule_time'><text id='vlearn.live_lessons.schedule_time' x='1603' y='199'>schedule_time</text><title>schedule_time
+bigint
+timestamp</title></a>
+<text x='1725' y='196' text-anchor='end' class='colType'>#</text>
+<!-- == Table 'mentions' == -->
+<rect class='entity' style='stroke:none;' x='1408' y='1016' width='128' height='96' rx='8' ry='8' />
+<path d='M 1408 1044 L 1408 1024 Q 1408 1016 1416 1016 L 1528 1016 Q 1536 1016 1536 1024 L 1536 1044 L1408 1044 ' style='fill:url(#tbg_C7F4BE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1408' y='1016' width='128' height='96' rx='8' ry='8' style='fill:none;stroke:#CFE8CB'/>
+<a xlink:href='#vlearn.mentions'><text x='1435' y='1035' >mentions</text><title>Table vlearn.mentions</title></a>
+  <use id='nn' x='1410' y='1053' xlink:href='#nn'/><use id='pk' x='1410' y='1052' xlink:href='#pk'><title>Pk pk_mentions_id ( id ) </title></use><a xlink:href='#vlearn.mentions_id'><text id='vlearn.mentions.id' x='1427' y='1063'>id</text><title>id
+* int</title></a>
+<text x='1533' y='1060' text-anchor='end' class='colType'>#</text>  <a xlink:href='#vlearn.mentions_message_id'><text id='vlearn.mentions.message_id' x='1427' y='1079' onmouseover="hghl(['mentions_fk_mentions_messages','vlearn.messages.id'])" onmouseout="uhghl(['mentions_fk_mentions_messages','vlearn.messages.id'])">message_id</text><title>message_id
+int</title></a>
+<a xlink:href='#vlearn.mentions.message_id'><use id='fk' x='1524' y='1068' xlink:href='#fk'/><title>References messages ( message_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.mentions_user_id'><text id='vlearn.mentions.user_id' x='1427' y='1095' onmouseover="hghl(['mentions_fk_mentions_users','vlearn.users.id'])" onmouseout="uhghl(['mentions_fk_mentions_users','vlearn.users.id'])">user_id</text><title>user_id
+int</title></a>
+<a xlink:href='#vlearn.mentions.user_id'><use id='fk' x='1524' y='1084' xlink:href='#fk'/><title>References users ( user_id -&gt; id ) </title></a>
+
+<!-- == Table 'messages' == -->
+<rect class='entity' style='stroke:none;' x='1424' y='872' width='112' height='128' rx='8' ry='8' />
+<path d='M 1424 900 L 1424 880 Q 1424 872 1432 872 L 1528 872 Q 1536 872 1536 880 L 1536 900 L1424 900 ' style='fill:url(#tbg_C7F4BE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1424' y='872' width='112' height='128' rx='8' ry='8' style='fill:none;stroke:#CFE8CB'/>
+<a xlink:href='#vlearn.messages'><text x='1441' y='891' >messages</text><title>Table vlearn.messages</title></a>
+  <use id='nn' x='1426' y='909' xlink:href='#nn'/><use id='pk' x='1426' y='908' xlink:href='#pk'><title>Pk pk_messages_id ( id ) </title></use><a xlink:href='#vlearn.messages_id'><text id='vlearn.messages.id' x='1443' y='919' onmouseover="hghl(['asset_message_fk_asset_message_messages','vlearn.asset_message.message_id','mentions_fk_mentions_messages','vlearn.mentions.message_id'])" onmouseout="uhghl(['asset_message_fk_asset_message_messages','vlearn.asset_message.message_id','mentions_fk_mentions_messages','vlearn.mentions.message_id'])">id</text><title>id
+* int</title></a>
+<a xlink:href='#vlearn.messages.id'><use id='ref' x='1524' y='908' xlink:href='#ref'/><title>Referred by asset_message ( message_id -&gt; id ) 
+Referred by mentions ( message_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.messages_sender_id'><text id='vlearn.messages.sender_id' x='1443' y='935'>sender_id</text><title>sender_id
+int</title></a>
+<text x='1533' y='932' text-anchor='end' class='colType'>#</text>  <a xlink:href='#vlearn.messages_room_id'><text id='vlearn.messages.room_id' x='1443' y='951' onmouseover="hghl(['messages_fk_messages_rooms','vlearn.rooms.id'])" onmouseout="uhghl(['messages_fk_messages_rooms','vlearn.rooms.id'])">room_id</text><title>room_id
+int</title></a>
+<a xlink:href='#vlearn.messages.room_id'><use id='fk' x='1524' y='940' xlink:href='#fk'/><title>References rooms ( room_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.messages_content'><text id='vlearn.messages.content' x='1443' y='967'>content</text><title>content
+long varchar</title></a>
+<text x='1533' y='964' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.messages_create_at'><text id='vlearn.messages.create_at' x='1443' y='983'>create_at</text><title>create_at
+datetime</title></a>
+<text x='1533' y='980' text-anchor='end' class='colType'>d</text>
+<!-- == Table 'questions' == -->
+<rect class='entity' style='stroke:none;' x='1344' y='344' width='112' height='112' rx='8' ry='8' />
+<path d='M 1344 372 L 1344 352 Q 1344 344 1352 344 L 1448 344 Q 1456 344 1456 352 L 1456 372 L1344 372 ' style='fill:url(#tbg_F4DDBE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1344' y='344' width='112' height='112' rx='8' ry='8' style='fill:none;stroke:#E8DBCB'/>
+<a xlink:href='#vlearn.questions'><text x='1362' y='363' >questions</text><title>Table vlearn.questions
++ type:
+ - 1: lesson
+ - 2: question
+ - 3: live section
++ estimate_time:
+ - lesson, question: estimate length
+ - live section: establish time</title></a>
+  <use id='nn' x='1346' y='381' xlink:href='#nn'/><use id='pk' x='1346' y='380' xlink:href='#pk'><title>Pk pk_learn_unit_id ( id ) </title></use><a xlink:href='#vlearn.questions_id'><text id='vlearn.questions.id' x='1363' y='391' onmouseover="hghl(['answers_fk_answer_learn_unit','vlearn.answers.question_id'])" onmouseout="uhghl(['answers_fk_answer_learn_unit','vlearn.answers.question_id'])">id</text><title>id
+* int</title></a>
+<a xlink:href='#vlearn.questions.id'><use id='ref' x='1444' y='380' xlink:href='#ref'/><title>Referred by answers ( question_id -&gt; id ) </title></a>
+  <use id='nn' x='1346' y='397' xlink:href='#nn'/><a xlink:href='#vlearn.questions_section_id'><text id='vlearn.questions.section_id' x='1363' y='407' onmouseover="hghl(['questions_fk_learn_unit_sections','vlearn.sections.id'])" onmouseout="uhghl(['questions_fk_learn_unit_sections','vlearn.sections.id'])">section_id</text><title>section_id
+* int</title></a>
+<a xlink:href='#vlearn.questions.section_id'><use id='fk' x='1444' y='396' xlink:href='#fk'/><title>References sections ( section_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.questions_question'><text id='vlearn.questions.question' x='1363' y='423'>question</text><title>question
+varchar(100)</title></a>
+<text x='1453' y='420' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1346' y='429' xlink:href='#nn'/><a xlink:href='#vlearn.questions_type'><text id='vlearn.questions.type' x='1363' y='439'>type</text><title>type
+* int</title></a>
+<text x='1453' y='436' text-anchor='end' class='colType'>#</text>
+<!-- == Table 'rooms' == -->
+<rect class='entity' style='stroke:none;' x='1168' y='872' width='160' height='128' rx='8' ry='8' />
+<path d='M 1168 900 L 1168 880 Q 1168 872 1176 872 L 1320 872 Q 1328 872 1328 880 L 1328 900 L1168 900 ' style='fill:url(#tbg_C7F4BE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1168' y='872' width='160' height='128' rx='8' ry='8' style='fill:none;stroke:#CFE8CB'/>
+<a xlink:href='#vlearn.rooms'><text x='1222' y='891' >rooms</text><title>Table vlearn.rooms
+type:
+- 0: course_comment,
+- 1: lession chat
+- 2: live chat
+- 3: private chat - refer null
+- 4: group chat - refer null</title></a>
+  <use id='nn' x='1170' y='909' xlink:href='#nn'/><use id='pk' x='1170' y='908' xlink:href='#pk'><title>Pk pk_rooms_id ( id ) </title></use><a xlink:href='#vlearn.rooms_id'><text id='vlearn.rooms.id' x='1187' y='919' onmouseover="hghl(['messages_fk_messages_rooms','vlearn.messages.room_id','user_room_fk_user_room_rooms','vlearn.user_room.room_id'])" onmouseout="uhghl(['messages_fk_messages_rooms','vlearn.messages.room_id','user_room_fk_user_room_rooms','vlearn.user_room.room_id'])">id</text><title>id
+* int</title></a>
+<a xlink:href='#vlearn.rooms.id'><use id='ref' x='1316' y='908' xlink:href='#ref'/><title>Referred by messages ( room_id -&gt; id ) 
+Referred by user_room ( room_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.rooms_name'><text id='vlearn.rooms.name' x='1187' y='935'>name</text><title>name
+varchar(100)</title></a>
+<text x='1325' y='932' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.rooms_room_code'><text id='vlearn.rooms.room_code' x='1187' y='951'>room_code</text><title>room_code
+varchar(200)</title></a>
+<text x='1325' y='948' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.rooms_roomable_type'><text id='vlearn.rooms.roomable_type' x='1187' y='967'>roomable_type</text><title>roomable_type
+varchar(100)</title></a>
+<text x='1325' y='964' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.rooms_roomable_id'><text id='vlearn.rooms.roomable_id' x='1187' y='983' onmouseover="hghl(['rooms_fk_rooms_courses','vlearn.courses.id','rooms_fk_rooms_lessons','vlearn.lessons.id','rooms_fk_rooms_live_lessons','vlearn.live_lessons.id'])" onmouseout="uhghl(['rooms_fk_rooms_courses','vlearn.courses.id','rooms_fk_rooms_lessons','vlearn.lessons.id','rooms_fk_rooms_live_lessons','vlearn.live_lessons.id'])">roomable_id</text><title>roomable_id
+int</title></a>
+<a xlink:href='#vlearn.rooms.roomable_id'><use id='fk' x='1316' y='972' xlink:href='#fk'/><title>References courses ( roomable_id -&gt; id ) 
+References lessons ( roomable_id -&gt; id ) 
+References live_lessons ( roomable_id -&gt; id ) </title></a>
+
+<!-- == Table 'section_student' == -->
+<rect class='entity' style='stroke:none;' x='288' y='296' width='176' height='112' rx='8' ry='8' />
+<path d='M 288 324 L 288 304 Q 288 296 296 296 L 456 296 Q 464 296 464 304 L 464 324 L288 324 ' style='fill:url(#tbg_BED3F4);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='288' y='296' width='176' height='112' rx='8' ry='8' style='fill:none;stroke:#CBD6E8'/>
+<a xlink:href='#vlearn.section_student'><text x='316' y='315' >section_student</text><title>Table vlearn.section_student</title></a>
+  <use id='nn' x='290' y='333' xlink:href='#nn'/><use id='pk' x='290' y='332' xlink:href='#pk'><title>Pk pk_section_student ( section_id, student_id ) Unq unq_section_student_section_id ( section_id ) </title></use><a xlink:href='#vlearn.section_student_section_id'><text id='vlearn.section_student.section_id' x='307' y='343' onmouseover="hghl(['section_student_fk_section_student_sections','vlearn.sections.id','course_student_fk_course_student_section_student','vlearn.course_student.section_checkpoint'])" onmouseout="uhghl(['section_student_fk_section_student_sections','vlearn.sections.id','course_student_fk_course_student_section_student','vlearn.course_student.section_checkpoint'])">section_id</text><title>section_id
+* int</title></a>
+<a xlink:href='#vlearn.section_student.section_id'><use id='fk' x='452' y='332' xlink:href='#fk'/><title>References sections ( section_id -&gt; id ) 
+Referred by course_student ( section_checkpoint -&gt; section_id ) </title></a>
+  <use id='nn' x='290' y='349' xlink:href='#nn'/><use id='pk' x='290' y='348' xlink:href='#pk'><title>Pk pk_section_student ( section_id, student_id ) </title></use><a xlink:href='#vlearn.section_student_student_id'><text id='vlearn.section_student.student_id' x='307' y='359' onmouseover="hghl(['section_student_fk_section_student_users','vlearn.users.id'])" onmouseout="uhghl(['section_student_fk_section_student_users','vlearn.users.id'])">student_id</text><title>student_id
+* int</title></a>
+<a xlink:href='#vlearn.section_student.student_id'><use id='fk' x='452' y='348' xlink:href='#fk'/><title>References users ( student_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.section_student_lesson_checkpoint'><text id='vlearn.section_student.lesson_checkpoint' x='307' y='375' onmouseover="hghl(['section_student_fk_section_student_lessons','vlearn.lessons.id'])" onmouseout="uhghl(['section_student_fk_section_student_lessons','vlearn.lessons.id'])">lesson_checkpoint</text><title>lesson_checkpoint
+int</title></a>
+<a xlink:href='#vlearn.section_student.lesson_checkpoint'><use id='fk' x='452' y='364' xlink:href='#fk'/><title>References lessons ( lesson_checkpoint -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.section_student_highest_point'><text id='vlearn.section_student.highest_point' x='307' y='391'>highest_point</text><title>highest_point
+int</title></a>
+<text x='461' y='388' text-anchor='end' class='colType'>#</text>
+<!-- == Table 'sections' == -->
+<rect class='entity' style='stroke:none;' x='352' y='72' width='112' height='96' rx='8' ry='8' />
+<path d='M 352 100 L 352 80 Q 352 72 360 72 L 456 72 Q 464 72 464 80 L 464 100 L352 100 ' style='fill:url(#tbg_BED3F4);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='352' y='72' width='112' height='96' rx='8' ry='8' style='fill:none;stroke:#CBD6E8'/>
+<a xlink:href='#vlearn.sections'><text x='375' y='91' >sections</text><title>Table vlearn.sections</title></a>
+  <use id='nn' x='354' y='109' xlink:href='#nn'/><use id='pk' x='354' y='108' xlink:href='#pk'><title>Pk pk_sections_id ( id ) </title></use><a xlink:href='#vlearn.sections_id'><text id='vlearn.sections.id' x='371' y='119' onmouseover="hghl(['course_student_fk_course_student_sections','vlearn.course_student.section_checkpoint','lessons_fk_lessons_sections','vlearn.lessons.section_id','live_lessons_fk_live_lessons_sections','vlearn.live_lessons.section_id','questions_fk_learn_unit_sections','vlearn.questions.section_id','section_student_fk_section_student_sections','vlearn.section_student.section_id'])" onmouseout="uhghl(['course_student_fk_course_student_sections','vlearn.course_student.section_checkpoint','lessons_fk_lessons_sections','vlearn.lessons.section_id','live_lessons_fk_live_lessons_sections','vlearn.live_lessons.section_id','questions_fk_learn_unit_sections','vlearn.questions.section_id','section_student_fk_section_student_sections','vlearn.section_student.section_id'])">id</text><title>id
+* int</title></a>
+<a xlink:href='#vlearn.sections.id'><use id='ref' x='452' y='108' xlink:href='#ref'/><title>Referred by course_student ( section_checkpoint -&gt; id ) 
+Referred by lessons ( section_id -&gt; id ) 
+Referred by live_lessons ( section_id -&gt; id ) 
+Referred by questions ( section_id -&gt; id ) 
+Referred by section_student ( section_id -&gt; id ) </title></a>
+  <use id='nn' x='354' y='125' xlink:href='#nn'/><a xlink:href='#vlearn.sections_course_id'><text id='vlearn.sections.course_id' x='371' y='135' onmouseover="hghl(['sections_fk_sections_courses','vlearn.courses.id'])" onmouseout="uhghl(['sections_fk_sections_courses','vlearn.courses.id'])">course_id</text><title>course_id
+* int</title></a>
+<a xlink:href='#vlearn.sections.course_id'><use id='fk' x='452' y='124' xlink:href='#fk'/><title>References courses ( course_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.sections_name'><text id='vlearn.sections.name' x='371' y='151'>name</text><title>name
+varchar(100)</title></a>
+<text x='461' y='148' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'student_lesson' == -->
+<rect class='entity' style='stroke:none;' x='1584' y='344' width='128' height='112' rx='8' ry='8' />
+<path d='M 1584 372 L 1584 352 Q 1584 344 1592 344 L 1704 344 Q 1712 344 1712 352 L 1712 372 L1584 372 ' style='fill:url(#tbg_F4DDBE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1584' y='344' width='128' height='112' rx='8' ry='8' style='fill:none;stroke:#E8DBCB'/>
+<a xlink:href='#vlearn.student_lesson'><text x='1591' y='363' >student_lesson</text><title>Table vlearn.student_lesson
+check if student watch video or answer question, time stamp watching and score</title></a>
+  <use id='nn' x='1586' y='381' xlink:href='#nn'/><a xlink:href='#vlearn.student_lesson_student_id'><text id='vlearn.student_lesson.student_id' x='1603' y='391' onmouseover="hghl(['student_lesson_fk_student_lesson_users','vlearn.users.id'])" onmouseout="uhghl(['student_lesson_fk_student_lesson_users','vlearn.users.id'])">student_id</text><title>student_id
+* int</title></a>
+<a xlink:href='#vlearn.student_lesson.student_id'><use id='fk' x='1700' y='380' xlink:href='#fk'/><title>References users ( student_id -&gt; id ) </title></a>
+  <use id='nn' x='1586' y='397' xlink:href='#nn'/><a xlink:href='#vlearn.student_lesson_lesson_id'><text id='vlearn.student_lesson.lesson_id' x='1603' y='407' onmouseover="hghl(['student_lesson_fk_student_lessons','vlearn.lessons.id'])" onmouseout="uhghl(['student_lesson_fk_student_lessons','vlearn.lessons.id'])">lesson_id</text><title>lesson_id
+* int</title></a>
+<a xlink:href='#vlearn.student_lesson.lesson_id'><use id='fk' x='1700' y='396' xlink:href='#fk'/><title>References lessons ( lesson_id -&gt; id ) </title></a>
+  <use id='nn' x='1586' y='413' xlink:href='#nn'/><a xlink:href='#vlearn.student_lesson_is_touch'><text id='vlearn.student_lesson.is_touch' x='1603' y='423'>is_touch</text><title>is_touch
+* boolean</title></a>
+<text x='1709' y='420' text-anchor='end' class='colType'>b</text>  <a xlink:href='#vlearn.student_lesson_touch_value'><text id='vlearn.student_lesson.touch_value' x='1603' y='439'>touch_value</text><title>touch_value
+varchar(125)</title></a>
+<text x='1709' y='436' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'students' == -->
+<rect class='entity' style='stroke:none;' x='784' y='920' width='240' height='128' rx='8' ry='8' />
+<path d='M 784 948 L 784 928 Q 784 920 792 920 L 1016 920 Q 1024 920 1024 928 L 1024 948 L784 948 ' style='fill:url(#tbg_C7F4BE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='784' y='920' width='240' height='128' rx='8' ry='8' style='fill:none;stroke:#CFE8CB'/>
+<a xlink:href='#vlearn.students'><text x='869' y='939' >students</text><title>Table vlearn.students</title></a>
+  <use id='nn' x='786' y='957' xlink:href='#nn'/><use id='pk' x='786' y='956' xlink:href='#pk'><title>Pk pk_students_user_id ( user_id ) </title></use><a xlink:href='#vlearn.students_user_id'><text id='vlearn.students.user_id' x='803' y='967' onmouseover="hghl(['students_fk_students_users','vlearn.users.id'])" onmouseout="uhghl(['students_fk_students_users','vlearn.users.id'])">user_id</text><title>user_id
+* int</title></a>
+<a xlink:href='#vlearn.students.user_id'><use id='fk' x='1012' y='956' xlink:href='#fk'/><title>References users ( user_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.students_receive_mail'><text id='vlearn.students.receive_mail' x='803' y='983'>receive_mail</text><title>receive_mail
+varchar(250)</title></a>
+<text x='1021' y='980' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.students_receive_flower_new_course'><text id='vlearn.students.receive_flower_new_course' x='803' y='999'>receive_flower_new_course</text><title>receive_flower_new_course
+boolean</title></a>
+<text x='1021' y='996' text-anchor='end' class='colType'>b</text>  <a xlink:href='#vlearn.students_receive_notificate'><text id='vlearn.students.receive_notificate' x='803' y='1015'>receive_notificate</text><title>receive_notificate
+boolean</title></a>
+<text x='1021' y='1012' text-anchor='end' class='colType'>b</text>  <a xlink:href='#vlearn.students_receive_course_change'><text id='vlearn.students.receive_course_change' x='803' y='1031'>receive_course_change</text><title>receive_course_change
+boolean</title></a>
+<text x='1021' y='1028' text-anchor='end' class='colType'>b</text>
+<!-- == Table 'topics' == -->
+<rect class='entity' style='stroke:none;' x='896' y='472' width='128' height='128' rx='8' ry='8' />
+<path d='M 896 500 L 896 480 Q 896 472 904 472 L 1016 472 Q 1024 472 1024 480 L 1024 500 L896 500 ' style='fill:url(#tbg_BED3F4);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='896' y='472' width='128' height='128' rx='8' ry='8' style='fill:none;stroke:#CBD6E8'/>
+<a xlink:href='#vlearn.topics'><text x='935' y='491' >topics</text><title>Table vlearn.topics</title></a>
+  <use id='nn' x='898' y='509' xlink:href='#nn'/><use id='pk' x='898' y='508' xlink:href='#pk'><title>Pk pk_topics_id ( id ) </title></use><a xlink:href='#vlearn.topics_id'><text id='vlearn.topics.id' x='915' y='519' onmouseover="hghl(['course_topic_fk_course_topic_topics','vlearn.course_topic.topic_id','topics_fk_topics_parent','vlearn.topics.parent_id','user_topic_fk_user_topic_topics','vlearn.user_topic.topic_id'])" onmouseout="uhghl(['course_topic_fk_course_topic_topics','vlearn.course_topic.topic_id','topics_fk_topics_parent','vlearn.topics.parent_id','user_topic_fk_user_topic_topics','vlearn.user_topic.topic_id'])">id</text><title>id
+* int</title></a>
+<a xlink:href='#vlearn.topics.id'><use id='ref' x='1012' y='508' xlink:href='#ref'/><title>Referred by course_topic ( topic_id -&gt; id ) 
+Referred by topics ( parent_id -&gt; id ) 
+Referred by user_topic ( topic_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.topics_name'><text id='vlearn.topics.name' x='915' y='535'>name</text><title>name
+varchar(100)</title></a>
+<text x='1021' y='532' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.topics_request_id'><text id='vlearn.topics.request_id' x='915' y='551'>request_id</text><title>request_id
+int</title></a>
+<text x='1021' y='548' text-anchor='end' class='colType'>#</text>  <a xlink:href='#vlearn.topics_commit_id'><text id='vlearn.topics.commit_id' x='915' y='567'>commit_id</text><title>commit_id
+int</title></a>
+<text x='1021' y='564' text-anchor='end' class='colType'>#</text>  <a xlink:href='#vlearn.topics_parent_id'><text id='vlearn.topics.parent_id' x='915' y='583' onmouseover="hghl(['topics_fk_topics_parent','vlearn.topics.id'])" onmouseout="uhghl(['topics_fk_topics_parent','vlearn.topics.id'])">parent_id</text><title>parent_id
+int</title></a>
+<a xlink:href='#vlearn.topics.parent_id'><use id='fk' x='1012' y='572' xlink:href='#fk'/><title>References topics ( parent_id -&gt; id ) </title></a>
+
+<!-- == Table 'user_room' == -->
+<rect class='entity' style='stroke:none;' x='1200' y='1032' width='96' height='96' rx='8' ry='8' />
+<path d='M 1200 1060 L 1200 1040 Q 1200 1032 1208 1032 L 1288 1032 Q 1296 1032 1296 1040 L 1296 1060 L1200 1060 ' style='fill:url(#tbg_C7F4BE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1200' y='1032' width='96' height='96' rx='8' ry='8' style='fill:none;stroke:#CFE8CB'/>
+<a xlink:href='#vlearn.user_room'><text x='1207' y='1051' >user_room</text><title>Table vlearn.user_room</title></a>
+  <use id='nn' x='1202' y='1069' xlink:href='#nn'/><use id='pk' x='1202' y='1068' xlink:href='#pk'><title>Pk pk_user_room ( user_id, room_id ) </title></use><a xlink:href='#vlearn.user_room_user_id'><text id='vlearn.user_room.user_id' x='1219' y='1079' onmouseover="hghl(['user_room_fk_user_room_users','vlearn.users.id'])" onmouseout="uhghl(['user_room_fk_user_room_users','vlearn.users.id'])">user_id</text><title>user_id
+* int</title></a>
+<a xlink:href='#vlearn.user_room.user_id'><use id='fk' x='1284' y='1068' xlink:href='#fk'/><title>References users ( user_id -&gt; id ) </title></a>
+  <use id='nn' x='1202' y='1085' xlink:href='#nn'/><use id='pk' x='1202' y='1084' xlink:href='#pk'><title>Pk pk_user_room ( user_id, room_id ) </title></use><a xlink:href='#vlearn.user_room_room_id'><text id='vlearn.user_room.room_id' x='1219' y='1095' onmouseover="hghl(['user_room_fk_user_room_rooms','vlearn.rooms.id'])" onmouseout="uhghl(['user_room_fk_user_room_rooms','vlearn.rooms.id'])">room_id</text><title>room_id
+* int</title></a>
+<a xlink:href='#vlearn.user_room.room_id'><use id='fk' x='1284' y='1084' xlink:href='#fk'/><title>References rooms ( room_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.user_room_status'><text id='vlearn.user_room.status' x='1219' y='1111'>status</text><title>status
+int
+1- normal
+0- mute</title></a>
+<text x='1293' y='1108' text-anchor='end' class='colType'>#</text>
+<!-- == Table 'user_topic' == -->
+<rect class='entity' style='stroke:none;' x='1120' y='696' width='96' height='80' rx='8' ry='8' />
+<path d='M 1120 724 L 1120 704 Q 1120 696 1128 696 L 1208 696 Q 1216 696 1216 704 L 1216 724 L1120 724 ' style='fill:url(#tbg_BED3F4);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='1120' y='696' width='96' height='80' rx='8' ry='8' style='fill:none;stroke:#CBD6E8'/>
+<a xlink:href='#vlearn.user_topic'><text x='1128' y='715' >user_topic</text><title>Table vlearn.user_topic</title></a>
+  <use id='nn' x='1122' y='733' xlink:href='#nn'/><use id='pk' x='1122' y='732' xlink:href='#pk'><title>Pk pk_user_topic ( user_id, topic_id ) </title></use><a xlink:href='#vlearn.user_topic_user_id'><text id='vlearn.user_topic.user_id' x='1139' y='743' onmouseover="hghl(['user_topic_fk_user_topic_users','vlearn.users.id'])" onmouseout="uhghl(['user_topic_fk_user_topic_users','vlearn.users.id'])">user_id</text><title>user_id
+* int</title></a>
+<a xlink:href='#vlearn.user_topic.user_id'><use id='fk' x='1204' y='732' xlink:href='#fk'/><title>References users ( user_id -&gt; id ) </title></a>
+  <use id='nn' x='1122' y='749' xlink:href='#nn'/><use id='pk' x='1122' y='748' xlink:href='#pk'><title>Pk pk_user_topic ( user_id, topic_id ) </title></use><a xlink:href='#vlearn.user_topic_topic_id'><text id='vlearn.user_topic.topic_id' x='1139' y='759' onmouseover="hghl(['user_topic_fk_user_topic_topics','vlearn.topics.id'])" onmouseout="uhghl(['user_topic_fk_user_topic_topics','vlearn.topics.id'])">topic_id</text><title>topic_id
+* int</title></a>
+<a xlink:href='#vlearn.user_topic.topic_id'><use id='fk' x='1204' y='748' xlink:href='#fk'/><title>References topics ( topic_id -&gt; id ) </title></a>
+
+<!-- == Table 'users' == -->
+<rect class='entity' style='stroke:none;' x='576' y='504' width='176' height='192' rx='8' ry='8' />
+<path d='M 576 532 L 576 512 Q 576 504 584 504 L 744 504 Q 752 504 752 512 L 752 532 L576 532 ' style='fill:url(#tbg_C7F4BE);stroke:1;stroke-opacity:0.1;' />
+<rect class='entity' x='576' y='504' width='176' height='192' rx='8' ry='8' style='fill:none;stroke:#CFE8CB'/>
+<a xlink:href='#vlearn.users'><text x='641' y='523' >users</text><title>Table vlearn.users</title></a>
+  <use id='nn' x='578' y='541' xlink:href='#nn'/><use id='pk' x='578' y='540' xlink:href='#pk'><title>Pk pk_users_id ( id ) </title></use><a xlink:href='#vlearn.users_id'><text id='vlearn.users.id' x='595' y='551' onmouseover="hghl(['assets_fk_assets_users','vlearn.assets.owner_id','course_student_fk_course_student_users','vlearn.course_student.student_id','courses_fk_courses_instructor','vlearn.courses.instructor_id','instructors_fk_instructors_users','vlearn.instructors.user_id','mentions_fk_mentions_users','vlearn.mentions.user_id','section_student_fk_section_student_users','vlearn.section_student.student_id','student_lesson_fk_student_lesson_users','vlearn.student_lesson.student_id','students_fk_students_users','vlearn.students.user_id','user_room_fk_user_room_users','vlearn.user_room.user_id','user_topic_fk_user_topic_users','vlearn.user_topic.user_id'])" onmouseout="uhghl(['assets_fk_assets_users','vlearn.assets.owner_id','course_student_fk_course_student_users','vlearn.course_student.student_id','courses_fk_courses_instructor','vlearn.courses.instructor_id','instructors_fk_instructors_users','vlearn.instructors.user_id','mentions_fk_mentions_users','vlearn.mentions.user_id','section_student_fk_section_student_users','vlearn.section_student.student_id','student_lesson_fk_student_lesson_users','vlearn.student_lesson.student_id','students_fk_students_users','vlearn.students.user_id','user_room_fk_user_room_users','vlearn.user_room.user_id','user_topic_fk_user_topic_users','vlearn.user_topic.user_id'])">id</text><title>id
+* int</title></a>
+<a xlink:href='#vlearn.users.id'><use id='ref' x='740' y='540' xlink:href='#ref'/><title>Referred by assets ( owner_id -&gt; id ) 
+Referred by course_student ( student_id -&gt; id ) 
+Referred by courses ( instructor_id -&gt; id ) 
+Referred by instructors ( user_id -&gt; id ) 
+Referred by mentions ( user_id -&gt; id ) 
+Referred by section_student ( student_id -&gt; id ) 
+Referred by student_lesson ( student_id -&gt; id ) 
+Referred by students ( user_id -&gt; id ) 
+Referred by user_room ( user_id -&gt; id ) 
+Referred by user_topic ( user_id -&gt; id ) </title></a>
+  <a xlink:href='#vlearn.users_username'><text id='vlearn.users.username' x='595' y='567'>username</text><title>username
+varchar(100)</title></a>
+<text x='749' y='564' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.users_email'><text id='vlearn.users.email' x='595' y='583'>email</text><title>email
+varchar(100)</title></a>
+<text x='749' y='580' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.users_name'><text id='vlearn.users.name' x='595' y='599'>name</text><title>name
+varchar(100)</title></a>
+<text x='749' y='596' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.users_password'><text id='vlearn.users.password' x='595' y='615'>password</text><title>password
+varchar(100)</title></a>
+<text x='749' y='612' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.users_confirmation_code'><text id='vlearn.users.confirmation_code' x='595' y='631'>confirmation_code</text><title>confirmation_code
+int</title></a>
+<text x='749' y='628' text-anchor='end' class='colType'>#</text>  <a xlink:href='#vlearn.users_email_verify_at'><text id='vlearn.users.email_verify_at' x='595' y='647'>email_verify_at</text><title>email_verify_at
+date</title></a>
+<text x='749' y='644' text-anchor='end' class='colType'>d</text>  <a xlink:href='#vlearn.users_avatar'><text id='vlearn.users.avatar' x='595' y='663'>avatar</text><title>avatar
+varchar(300)</title></a>
+<text x='749' y='660' text-anchor='end' class='colType'>t</text>  <a xlink:href='#vlearn.users_role'><text id='vlearn.users.role' x='595' y='679'>role</text><title>role
+tinyint</title></a>
+<text x='749' y='676' text-anchor='end' class='colType'>#</text>
+</g></svg>
