@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\CourseController;
 
+use App\Http\Controllers\Controller;
 use App\Repositories\Course\CourseRepository;
 use Illuminate\Http\Request;
 
-class CourseController extends Controller
+class CourseResourceController extends Controller
 {
     protected $courseRepository;
 
@@ -13,7 +14,6 @@ class CourseController extends Controller
     {
         $this->courseRepository = $courseRepository;
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -31,6 +31,7 @@ class CourseController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
