@@ -40,6 +40,7 @@ Route::post('/auth/create-social', 'Auth\OauthController@createAccountWithSocial
 Route::get('/auth/attach-social', 'Auth\OauthController@attachUserWithSocialProvider');
 // Route::get('/auth/{social}/url', [OauthController::class, 'loginUrl']);
 
+Route::post('/upload', 'FileUploadController');
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/check-passport', 'UserController@check_passport');
     Route::post('/logout', 'UserController@logout');
