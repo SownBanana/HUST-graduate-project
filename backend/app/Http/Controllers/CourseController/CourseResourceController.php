@@ -4,15 +4,33 @@ namespace App\Http\Controllers\CourseController;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Course\CourseRepository;
+use App\Repositories\Lesson\LessonRepository;
+use App\Repositories\LiveLesson\LiveLessonRepository;
+use App\Repositories\Question\QuestionRepository;
+use App\Repositories\Section\SectionRepository;
 use Illuminate\Http\Request;
 
 class CourseResourceController extends Controller
 {
     protected $courseRepository;
+    protected $sectionRepository;
+    protected $lessonRepository;
+    protected $questionRepository;
+    protected $liveLessonRepository;
 
-    public function __construct(CourseRepository $courseRepository)
+    public function __construct(
+        CourseRepository $courseRepository,
+        SectionRepository $sectionRepository,
+        LessonRepository $lessonRepository,
+        QuestionRepository $questionRepository,
+        LiveLessonRepository $liveLessonRepository,
+    )
     {
         $this->courseRepository = $courseRepository;
+        $this->sectionRepository = $sectionRepository;
+        $this->questionRepository = $questionRepository;
+        $this->lessonRepository = $lessonRepository;
+        $this->liveLessonRepository = $liveLessonRepository;
     }
     /**
      * Display a listing of the resource.
@@ -34,6 +52,11 @@ class CourseResourceController extends Controller
         //
     }
 
+    // public function getChildrenData($parentEloquent, $parentData, $childrenKey, $parentRelationName){
+    //     return array_map(function($child) use ($parentEloquent, $parentRelationName){
+    //         return [...$child, $parentRelationName => $parentEloquent->id];
+    //     }, $parentData[$childrenKey]);
+    // }
     /**
      * Store a newly created resource in storage.
      *
@@ -42,7 +65,32 @@ class CourseResourceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $courseData = $request->all();
+        $course = $this->courseRepository->create($courseData);
+        if(array_key_exists("sections", $courseData)){
+            $sectionsData = get_children_data_from_array($course, $courseData, 'sections', 'course_id');
+            // $sectionsData = array_map(function($section) use ($course){
+            //     return [...$section, 'course_id' => $course->id];
+            // }, $courseData['sections']);
+            $sections = $this->sectionRepository->createMany($sectionsData);
+            for ($i=0; $i < count($sections); $i++) { 
+                $section = $sections[$i];
+                $sectionData = $sectionsData[$i];
+                // if(array_key_exists("lessons", $sectionData)){
+                //     $lessonsData = array_map(function($lesson) use ($section){
+                //         return [...$lesson, 'section_id' => $section->id];
+                //     }, $sectionData['lessons']);
+                //     $lessons = $this->lessonRepository->createMany($lessonsData);
+                // }
+                $lessonsData = get_children_data_from_array($section, $sectionData, 'lessons', 'section_id');
+                $this->lessonRepository->createMany($lessonsData);
+                $questionData = get_children_data_from_array($section, $sectionData, 'questions', 'section_id');
+                $this->questionRepository->createMany($questionData);
+                $liveLessonData = get_children_data_from_array($section, $sectionData, 'live_lessons', 'section_id');
+                $this->liveLessonRepository->createMany($liveLessonData);
+            }
+
+        }
     }
 
     /**

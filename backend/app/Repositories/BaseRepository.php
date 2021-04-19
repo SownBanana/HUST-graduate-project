@@ -54,6 +54,10 @@ abstract class BaseRepository implements RepositoryInterface
     {
         return $this->model->create($attributes);
     }
+    public function createMany($attributes = [])
+    {
+        return $this->model->createMany($attributes);
+    }
 
     public function update($id, $attributes = [])
     {
