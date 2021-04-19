@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lesson extends Model
 {
+    /**
+    * Allow all attribute are mass assignable.
+    *
+    * @var array
+    */
+    protected $guarded = [];
+    
     public function section()
     {
         return $this->belongsTo(Section::class);
