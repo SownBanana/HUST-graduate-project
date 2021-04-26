@@ -34,4 +34,14 @@ class Message extends Model
     {
         return $this->belongsTo(User::class, 'sender_id');
     }
+
+    /**
+     * Get all of the assets for the Message
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function assets()
+    {
+        return $this->hasMany(Asset::class);
+    }
 }

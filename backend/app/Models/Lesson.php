@@ -22,4 +22,14 @@ class Lesson extends Model
     {
         return $this->morphOne(Room::class, 'roomable');
     }
+
+    /**
+     * Get all of the assets for the Message
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function assets()
+    {
+        return $this->hasMany(Asset::class);
+    }
 }
