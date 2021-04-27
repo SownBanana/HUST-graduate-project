@@ -17,4 +17,17 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
     {
         return $this->model->all()->take(5)->get();
     }
+
+    public function create($attributes = [])
+    {
+        
+        $course = $this->model->create($attributes);
+        // $course->sections()->createMany(
+        //     $attributes['sections']
+        // );
+        // foreach ($course->sections() as $section ) {
+        //     $section->le
+        // }
+        return $course;
+    }
 }
