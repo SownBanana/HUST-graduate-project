@@ -18,6 +18,7 @@ class CreateQuestionsTable extends Migration
             $table->integer('section_id');
             $table->string('question');
             $table->integer('type');
+            $table->integer('order');
             $table->timestamps();
         });
     }

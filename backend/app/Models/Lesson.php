@@ -7,12 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Lesson extends Model
 {
     /**
-    * Allow all attribute are mass assignable.
-    *
-    * @var array
-    */
-    protected $guarded = [];
-    
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'section_id',
+        'name',
+        'estimate_time',
+        'video_url',
+        'content',
+        'order',
+    ];
+
     public function section()
     {
         return $this->belongsTo(Section::class);

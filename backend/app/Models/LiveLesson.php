@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class LiveLesson extends Model
 {
     /**
-    * Allow all attribute are mass assignable.
-    *
-    * @var array
-    */
-    protected $guarded = [];
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'section_id',
+        'name',
+        'schedule_time',
+    ];
+
     /**
      * Get the section that owns the LiveLesson
      *

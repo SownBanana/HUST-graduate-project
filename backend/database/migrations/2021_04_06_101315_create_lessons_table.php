@@ -17,8 +17,9 @@ class CreateLessonsTable extends Migration
             $table->id();
             $table->integer('section_id');
             $table->string('name');
-            $table->integer('estimate_time');
-            $table->string('video_url');
+            $table->integer('estimate_time')->nullable();
+            $table->string('video_url')->nullable();
+            $table->integer('order');
             $table->string('content');
             $table->timestamps();
         });

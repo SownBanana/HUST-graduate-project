@@ -17,7 +17,7 @@ class CreateLiveLessonsTable extends Migration
             $table->id();
             $table->integer('section_id');
             $table->string('name');
-            $table->dateTime('schedule_time');
+            $table->dateTime('schedule_time')->nullable();
             $table->timestamps();
         });
     }

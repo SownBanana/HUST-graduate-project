@@ -7,11 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     /**
-    * Allow all attribute are mass assignable.
-    *
-    * @var array
-    */
-    protected $guarded = [];
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'section_id',
+        'question',
+        'type',
+        'order',
+    ];
+
     
     public function section()
     {
