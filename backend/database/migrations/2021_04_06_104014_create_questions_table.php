@@ -16,9 +16,11 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->integer('section_id');
+            $table->string('uuid')->nullable();
             $table->string('question')->nullable();
             $table->integer('type')->nullable();
             $table->integer('order')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -30,6 +32,7 @@ class CreateQuestionsTable extends Migration
      */
     public function down()
     {
+
         Schema::dropIfExists('questions');
     }
 }

@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Lesson extends Model
 {
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -18,6 +20,7 @@ class Lesson extends Model
         'video_url',
         'content',
         'order',
+        'uuid'
     ];
 
     public function section()

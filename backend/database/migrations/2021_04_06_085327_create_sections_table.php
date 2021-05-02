@@ -17,7 +17,9 @@ class CreateSectionsTable extends Migration
             $table->id();
             $table->integer('course_id');
             $table->integer('order')->nullable();
+            $table->string('uuid')->nullable();
             $table->string('name')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -29,6 +31,7 @@ class CreateSectionsTable extends Migration
      */
     public function down()
     {
+
         Schema::dropIfExists('sections');
     }
 }

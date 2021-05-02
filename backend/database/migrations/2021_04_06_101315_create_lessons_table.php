@@ -17,10 +17,12 @@ class CreateLessonsTable extends Migration
             $table->id();
             $table->integer('section_id');
             $table->string('name')->nullable();
+            $table->string('uuid')->nullable();
             $table->integer('estimate_time')->nullable();
             $table->string('video_url')->nullable();
             $table->integer('order')->nullable();
             $table->string('content')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

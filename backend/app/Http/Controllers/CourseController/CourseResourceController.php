@@ -49,9 +49,15 @@ class CourseResourceController extends Controller
                 $matchThese[$field] = $request->$field;
             }
         }
-
-        // return response()->json(['data'=>$this->courseRepository->where($matchThese)->paginate($request->perPage, $request->colums)], 200);
-        return response()->json(['data'=>Course::where($matchThese)->paginate(2, '*')], 200);
+        $perPage = 9;
+        $columns = array('*');
+        if ($request->has('perPage')) {
+            $perPage = $request->perPage;
+        }
+        if ($request->has('columns')) {
+            $columns = $request->columns;
+        }
+        return response()->json(['status'=>'success','data'=>$this->courseRepository->where($matchThese)->paginate($perPage, $columns)], 200);
     }
 
 
@@ -66,7 +72,7 @@ class CourseResourceController extends Controller
         $courseData = $request->course;
         // dump($courseData);
         
-        // DB::beginTransaction();
+        DB::beginTransaction();
         try {
             $courseData['instructor_id'] = Auth::user()->id;
             if (isset($courseData['id'])) {
@@ -118,9 +124,12 @@ class CourseResourceController extends Controller
                     }
                 }
             }
+            $this->sectionRepository->whereIn('id', $request->deleteSections)->delete();
+            $this->lessonRepository->whereIn('id', $request->deleteLessons)->delete();
+            DB::commit();
             return \response()->json(["status"=>"success", "course"=>$this->courseRepository->with(['sections', 'sections.lessons'])->find($course->id)]);
         } catch (Exception $e) {
-            // DB::rollBack();
+            DB::rollBack();
             throw $e;
         }
     }
@@ -134,7 +143,7 @@ class CourseResourceController extends Controller
     public function show($id)
     {
         $course = $this->courseRepository->findOrFail($id);
-        return response()->json(['data'=>$course], 200);
+        return response()->json(['status'=>'success','data'=>$course], 200);
     }
 
 

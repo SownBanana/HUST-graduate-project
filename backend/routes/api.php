@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
         'index', 'show'
     ]);
+    Route::get('/courses/fetch/{id}', 'CourseController\CourseFetchController');
 });
 
 // Admin user
