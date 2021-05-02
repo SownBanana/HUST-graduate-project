@@ -21,7 +21,7 @@ class CreateLessonsTable extends Migration
             $table->integer('estimate_time')->nullable();
             $table->string('video_url')->nullable();
             $table->integer('order')->nullable();
-            $table->string('content')->nullable();
+            $table->mediumText('content')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -130,7 +130,8 @@ class CourseResourceController extends Controller
             return \response()->json(["status"=>"success", "course"=>$this->courseRepository->with(['sections', 'sections.lessons'])->find($course->id)]);
         } catch (Exception $e) {
             DB::rollBack();
-            throw $e;
+            // throw $e;
+            return \response(["status"=>"error", "message"=>$e]);
         }
     }
 

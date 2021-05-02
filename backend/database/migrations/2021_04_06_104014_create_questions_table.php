@@ -17,7 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->id();
             $table->integer('section_id');
             $table->string('uuid')->nullable();
-            $table->string('question')->nullable();
+            $table->mediumText('question')->nullable();
             $table->integer('type')->nullable();
             $table->integer('order')->nullable();
             $table->softDeletes();
@@ -32,7 +32,6 @@ class CreateQuestionsTable extends Migration
      */
     public function down()
     {
-
         Schema::dropIfExists('questions');
     }
 }

@@ -31,7 +31,6 @@ class CreateLiveLessonsTable extends Migration
      */
     public function down()
     {
-
         Schema::dropIfExists('live_lessons');
     }
 }

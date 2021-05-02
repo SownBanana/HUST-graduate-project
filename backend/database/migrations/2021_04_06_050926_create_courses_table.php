@@ -20,7 +20,7 @@ class CreateCoursesTable extends Migration
             $table->integer('status')->default(CourseType::Draft)->nullable();
             $table->string('title')->nullable();
             $table->string('thumbnail_url')->nullable();
-            $table->string('introduce')->nullable();
+            $table->text('introduce')->nullable();
             $table->double('price')->default(0.0)->nullable();
             $table->timestamps();
         });
