@@ -42,24 +42,19 @@ class CourseResourceController extends Controller
      */
     public function index(Request $request)
     {
-        return response()->json(['data'=>$this->courseRepository->paginate($request->perPage, $request->colums)], 200);
+        $matchThese = [];
+        $matches = ['instructor_id', 'status'];
+        foreach ($matches as $field) {
+            if ($request->has($field)) {
+                $matchThese[$field] = $request->$field;
+            }
+        }
+
+        // return response()->json(['data'=>$this->courseRepository->where($matchThese)->paginate($request->perPage, $request->colums)], 200);
+        return response()->json(['data'=>Course::where($matchThese)->paginate(2, '*')], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    // public function getChildrenData($parentEloquent, $parentData, $childrenKey, $parentRelationName){
-    //     return array_map(function($child) use ($parentEloquent, $parentRelationName){
-    //         return [...$child, $parentRelationName => $parentEloquent->id];
-    //     }, $parentData[$childrenKey]);
-    // }
     /**
      * Store a newly created resource in storage.
      *
@@ -71,24 +66,61 @@ class CourseResourceController extends Controller
         $courseData = $request->course;
         // dump($courseData);
         
-        DB::beginTransaction();
+        // DB::beginTransaction();
         try {
             $courseData['instructor_id'] = Auth::user()->id;
-            $course = $this->courseRepository->create(shallow_copy_array($courseData));
+            if (isset($courseData['id'])) {
+                $course = $this->courseRepository->update($courseData['id'], shallow_copy_array($courseData));
+            } else {
+                $course = $this->courseRepository->create(shallow_copy_array($courseData));
+            }
 
             if (isset($courseData["sections"])) {
-                $sections = $course->sections()->createMany(shallow_copy_array_of_array($courseData["sections"]));
-                for ($i=0; $i < count($sections); $i++) {
-                    $section = $sections[$i];
-                    $sectionData = $courseData["sections"][$i];
-
-                    $section->lessons()->createMany(shallow_copy_array_of_array($sectionData['lessons']));
-                    // $section->questions()->createMany(shallow_copy_array_of_array($sectionData['questions']));
-                    // $section->liveLessons()->createMany(shallow_copy_array_of_array($sectionData['live_lessons']));
+                $newSectionsData = [];
+                $oldSectionsData = [];
+                if (isset($courseData['id'])) {
+                    foreach ($courseData["sections"] as $sectionData) {
+                        if (!isset($sectionData['id'])) {
+                            $newSectionsData[] = $sectionData;
+                        } else {
+                            $oldSectionsData[] = $sectionData;
+                        }
+                    }
+                } else {
+                    $newSectionsData = $courseData["sections"];
+                }
+                if (count($newSectionsData) > 0) {
+                    $sections = $course->sections()->createMany(shallow_copy_array_of_array($newSectionsData));
+                    for ($i=0; $i < count($sections); $i++) {
+                        $section = $sections[$i];
+                        $sectionData = $newSectionsData[$i];
+                        $section->lessons()->createMany($sectionData['lessons']);
+                        // $section->questions()->createMany(shallow_copy_array_of_array($sectionData['questions']));
+                        // $section->liveLessons()->createMany(shallow_copy_array_of_array($sectionData['live_lessons']));
+                    }
+                }
+                foreach ($oldSectionsData as $sectionData) {
+                    $section = $this->sectionRepository->update($sectionData['id'], shallow_copy_array($sectionData));
+                    if (isset($sectionData["lessons"])) {
+                        $newLessonsData = [];
+                        $oldLessonsData = [];
+                        foreach ($sectionData["lessons"] as $lessonData) {
+                            if (!isset($lessonData['id'])) {
+                                $newLessonsData[] = $lessonData;
+                            } else {
+                                $oldLessonsData[] = $lessonData;
+                            }
+                        }
+                    }
+                    $section->lessons()->createMany(shallow_copy_array_of_array($newLessonsData));
+                    foreach ($oldLessonsData as $lessonData) {
+                        $this->lessonRepository->update($lessonData['id'], $lessonData);
+                    }
                 }
             }
+            return \response()->json(["status"=>"success", "course"=>$this->courseRepository->with(['sections', 'sections.lessons'])->find($course->id)]);
         } catch (Exception $e) {
-            DB::rollBack();
+            // DB::rollBack();
             throw $e;
         }
     }
@@ -105,16 +137,6 @@ class CourseResourceController extends Controller
         return response()->json(['data'=>$course], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

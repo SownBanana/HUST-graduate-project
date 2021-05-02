@@ -37,6 +37,18 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->all();
     }
 
+    public function with($relations)
+    {
+        $result = $this->model->with($relations);
+
+        return $result;
+    }
+    public function where($params)
+    {
+        $result = $this->model->where($params);
+
+        return $result;
+    }
     public function find($id)
     {
         $result = $this->model->find($id);
@@ -50,6 +62,10 @@ abstract class BaseRepository implements RepositoryInterface
         return $result;
     }
 
+    public function firstOrCreate($attributes = [])
+    {
+        return $this->model->firstOrCreate($attributes);
+    }
     public function create($attributes = [])
     {
         return $this->model->create($attributes);

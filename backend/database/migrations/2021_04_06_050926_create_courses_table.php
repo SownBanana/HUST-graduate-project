@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CourseType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,10 +17,11 @@ class CreateCoursesTable extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->integer('instructor_id');
-            $table->string('title');
+            $table->integer('status')->default(CourseType::Draft)->nullable();
+            $table->string('title')->nullable();
             $table->string('thumbnail_url')->nullable();
-            $table->string('introduce');
-            $table->double('price')->default(0.0);
+            $table->string('introduce')->nullable();
+            $table->double('price')->default(0.0)->nullable();
             $table->timestamps();
         });
     }

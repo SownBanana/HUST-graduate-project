@@ -16,7 +16,7 @@ class CreateLiveLessonsTable extends Migration
         Schema::create('live_lessons', function (Blueprint $table) {
             $table->id();
             $table->integer('section_id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->dateTime('schedule_time')->nullable();
             $table->timestamps();
         });
