@@ -37,18 +37,18 @@ class Section extends Model
 
     public function lessons()
     {
-        return $this->hasMany(Lesson::class);
+        return $this->hasMany(Lesson::class)->orderBy('order');
     }
 
 
     public function questions()
     {
-        return $this->hasMany(Question::class);
+        return $this->hasMany(Question::class)->orderBy('order');
     }
 
     public function liveLessons()
     {
-        return $this->hasMany(LiveLesson::class);
+        return $this->hasMany(LiveLesson::class)->orderBy('order');
     }
 
     public function students()

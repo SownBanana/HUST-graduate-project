@@ -45,19 +45,27 @@ class CourseResourceController extends Controller
         $matchThese = [];
         $matches = ['instructor_id', 'status'];
         foreach ($matches as $field) {
-            if ($request->has($field)) {
+            if ($request->has($field) && $request->$field != 'vlearn_all_value') {
                 $matchThese[$field] = $request->$field;
             }
         }
+        $search = "";
+        if ($request->has('search')) {
+            $search = $request->search;
+        }
         $perPage = 9;
         $columns = array('*');
+        $time = "asc";
         if ($request->has('perPage')) {
             $perPage = $request->perPage;
         }
         if ($request->has('columns')) {
             $columns = $request->columns;
         }
-        return response()->json(['status'=>'success','data'=>$this->courseRepository->where($matchThese)->paginate($perPage, $columns)], 200);
+        if ($request->has('time')) {
+            $time = $request->time;
+        }
+        return response()->json(['status'=>'success','data'=>$this->courseRepository->where($matchThese)->where('title', 'LIKE', '%'.$search.'%')->orderBy('updated_at', $time)->paginate($perPage, $columns)], 200);
     }
 
 
