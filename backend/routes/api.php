@@ -43,6 +43,7 @@ Route::get('/auth/attach-social', 'Auth\OauthController@attachUserWithSocialProv
 // All logged in user
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/upload', 'AssetController\FileUploadController');
+    Route::get('/upload/presigned', 'AssetController\GetPresignedController');
     Route::get('/check-passport', 'UserController@check_passport');
     Route::post('/logout', 'UserController@logout');
     Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
