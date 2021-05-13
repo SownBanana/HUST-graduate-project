@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'sender_id',
+        'room_id',
+        'content'
+    ];
+    /**
      * Get the room that owns the Message
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -151,7 +151,7 @@ class CourseResourceController extends Controller
      */
     public function show($id)
     {
-        $course = $this->courseRepository->findOrFail($id);
+        $course = $this->courseRepository->with(['sections.lessons:section_id,id,name,estimate_time'])->findOrFail($id);
         return response()->json(['status'=>'success','data'=>$course], 200);
     }
 

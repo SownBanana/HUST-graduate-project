@@ -34,7 +34,7 @@ class PrivateMessageSend implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('App.PrivateMessage.'.$this->data['to']);
+        return new PrivateChannel('App.PrivateMessage.'.$this->data['id']);
         // return new PresenceChannel('App.PrivateMessage.'.$this->data['to']);
         // return new Channel('App.Global');
     }

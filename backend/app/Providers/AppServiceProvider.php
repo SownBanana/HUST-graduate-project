@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $models = array(
             'Course',
+            // 'Section'
         );
 
         foreach ($models as $model) {

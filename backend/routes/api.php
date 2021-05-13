@@ -40,16 +40,18 @@ Route::post('/auth/create-social', 'Auth\OauthController@createAccountWithSocial
 Route::get('/auth/attach-social', 'Auth\OauthController@attachUserWithSocialProvider');
 // Route::get('/auth/{social}/url', [OauthController::class, 'loginUrl']);
 
+Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
+    'index', 'show'
+]);
 // All logged in user
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/upload', 'AssetController\FileUploadController');
     Route::get('/upload/presigned', 'AssetController\GetPresignedController');
     Route::get('/check-passport', 'UserController@check_passport');
     Route::post('/logout', 'UserController@logout');
-    Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
-        'index', 'show'
-    ]);
     Route::get('/courses/fetch/{id}', 'CourseController\CourseFetchController');
+    Route::post('chats/private', 'Chat\SendPrivateChatController');
+    Route::apiResource('chats', 'Chat\ChatController');
 });
 
 // Admin user

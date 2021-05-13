@@ -154,7 +154,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $data['from'] = $user->id;
-        $data['to'] = 22;
+        $data['to'] = 23;
         $data['message'] = "test message e213";
         broadcast(new PrivateMessageSend($data));
         return response()->json(['success' => $user], 200);
