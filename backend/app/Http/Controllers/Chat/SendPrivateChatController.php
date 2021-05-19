@@ -59,7 +59,7 @@ class SendPrivateChatController extends Controller
             }
             $data['room_id'] = $room->id;
             $this->privateMessageRepository->createWithEvent($data, $data);
-            return response()->json(["status"=>"success", "room_id"=>$data('room_id')]);
+            return response()->json(["status"=>"success", "room_id"=>$data['room_id']]);
         } catch (Exception $e) {
             throw $e;
             return response()->json(["status"=>"error", "message"=>$e]);

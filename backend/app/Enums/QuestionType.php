@@ -9,10 +9,8 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class RoomType extends Enum
+final class QuestionType extends Enum
 {
-    const ChatRoom = 0;
-    const CourseComment = 1;
-    const LessonComment = 2;
-    const LiveLessonComment = 3;
+    const SingleSelect = 0;
+    const MultiSelect = 1;
 }

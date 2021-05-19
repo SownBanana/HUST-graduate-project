@@ -26,7 +26,7 @@ class ChatController extends Controller
      */
     public function index()
     {
-        $rooms = $this->roomRepository->with(['users','messages'])->get();
+        $rooms = $this->roomRepository->with(['users','messages'])->whereNull('roomable_id')->get();
         return response()->json(["status"=>"success","data"=>$rooms]);
     }
 

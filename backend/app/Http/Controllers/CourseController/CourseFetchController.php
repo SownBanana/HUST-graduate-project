@@ -48,7 +48,7 @@ class CourseFetchController extends Controller
                 # Admin not check
                 break;
         }
-        $course = $this->courseRepository->with(['sections', 'sections.lessons'])->findOrFail($id);
+        $course = $this->courseRepository->with(['topics','sections', 'sections.lessons', 'sections.questions.answers'])->findOrFail($id);
         return response()->json(['status'=>'success','data'=>$course], 200);
     }
 }

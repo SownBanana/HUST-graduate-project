@@ -70,7 +70,7 @@ class UserController extends Controller
             $user = Auth::user();
             # Check if user verify email
             if ($user->email_verified_at == null) {
-                return response()->json(['status'=>'notConfirm','email'=>$user->email], 401);
+                return response()->json(['status'=>'notConfirm','email'=>$user->email]);
             }
             $response = $this->authProxy->attemptLogin($login_info, $request->password);
             $response['user'] = $user->toArray();
@@ -94,7 +94,7 @@ class UserController extends Controller
                     $type = 'password';
                 }
             }
-            return response()->json(['status'=>'failed', 'type'=>$type, 'message'=>$mess], 401);
+            return response()->json(['status'=>'failed', 'type'=>$type, 'message'=>$mess]);
         }
     }
 
@@ -153,10 +153,6 @@ class UserController extends Controller
     public function check_passport()
     {
         $user = Auth::user();
-        $data['from'] = $user->id;
-        $data['to'] = 23;
-        $data['message'] = "test message e213";
-        broadcast(new PrivateMessageSend($data));
         return response()->json(['success' => $user], 200);
     }
 

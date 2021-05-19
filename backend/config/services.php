@@ -34,4 +34,15 @@ return [
         'client_secret' => env('GOOGLE_OAUTH_SECRET'),
         'redirect' => env('GOOGLE_OAUTH_REDIRECT_URL'),
     ],
+    'facebook' => [
+        'client_id' => env('FACEBOOK_OAUTH_ID'),
+        'client_secret' => env('FACEBOOK_OAUTH_SECRET'),
+        'redirect' => env('FACEBOOK_OAUTH_REDIRECT_URL'),
+        'scopes' => ['email', 'public_profile'],
+    ],
+    'github' => [
+        'client_id' => env('GITHUB_OAUTH_ID'),
+        'client_secret' => env('GITHUB_OAUTH_SECRET'),
+        'redirect' => env('GITHUB_OAUTH_REDIRECT_URL'),
+    ],
 ];

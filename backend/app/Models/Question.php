@@ -21,7 +21,16 @@ class Question extends Model
         'uuid'
     ];
 
-    
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($question) { // before delete() method call this
+            $question->answers()->delete();
+            // do the rest of the cleanup...
+        });
+    }
+
     public function section()
     {
         return $this->belongsTo(Section::class);

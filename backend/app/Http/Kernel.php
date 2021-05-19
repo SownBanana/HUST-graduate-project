@@ -73,5 +73,6 @@ class Kernel extends HttpKernel
         'checkAdmin'=>\App\Http\Middleware\AdminMiddleware::class,
         'checkInstructor'=>\App\Http\Middleware\InstructorMiddleware::class,
         'checkStudent'=>\App\Http\Middleware\StudentMiddleware::class,
+        'injectAuth'=>\App\Http\Middleware\InjectAuthMiddleware::class,
     ];
 }

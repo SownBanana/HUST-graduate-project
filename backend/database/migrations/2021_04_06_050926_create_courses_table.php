@@ -22,6 +22,8 @@ class CreateCoursesTable extends Migration
             $table->string('thumbnail_url')->nullable();
             $table->text('introduce')->nullable();
             $table->double('price')->default(0.0)->nullable();
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
             $table->timestamps();
         });
     }

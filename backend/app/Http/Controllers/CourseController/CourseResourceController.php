@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\CourseController;
 
+use App\Enums\CourseType;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Repositories\Answer\AnswerRepository;
 use App\Repositories\Course\CourseRepository;
 use App\Repositories\Lesson\LessonRepository;
 use App\Repositories\LiveLesson\LiveLessonRepository;
@@ -21,24 +23,27 @@ class CourseResourceController extends Controller
     protected $lessonRepository;
     protected $questionRepository;
     protected $liveLessonRepository;
+    protected $answerRepository;
 
     public function __construct(
         CourseRepository $courseRepository,
         SectionRepository $sectionRepository,
         LessonRepository $lessonRepository,
         QuestionRepository $questionRepository,
-        LiveLessonRepository $liveLessonRepository
+        LiveLessonRepository $liveLessonRepository,
+        AnswerRepository $answerRepository
     ) {
         $this->courseRepository = $courseRepository;
         $this->sectionRepository = $sectionRepository;
         $this->questionRepository = $questionRepository;
         $this->lessonRepository = $lessonRepository;
         $this->liveLessonRepository = $liveLessonRepository;
+        $this->answerRepository = $answerRepository;
     }
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -65,7 +70,12 @@ class CourseResourceController extends Controller
         if ($request->has('time')) {
             $time = $request->time;
         }
-        return response()->json(['status'=>'success','data'=>$this->courseRepository->where($matchThese)->where('title', 'LIKE', '%'.$search.'%')->orderBy('updated_at', $time)->paginate($perPage, $columns)], 200);
+        return response()->json(['status'=>'success','data'=>
+        $this->courseRepository
+        ->where($matchThese)->where('status', CourseType::Publish)
+        ->where('title', 'LIKE', '%'.$search.'%')
+        ->orderBy('updated_at', $time)
+        ->paginate($perPage, $columns)], 200);
     }
 
 
@@ -73,13 +83,13 @@ class CourseResourceController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $courseData = $request->course;
         // dump($courseData);
-        
+
         DB::beginTransaction();
         try {
             $courseData['instructor_id'] = Auth::user()->id;
@@ -108,16 +118,26 @@ class CourseResourceController extends Controller
                     for ($i=0; $i < count($sections); $i++) {
                         $section = $sections[$i];
                         $sectionData = $newSectionsData[$i];
-                        $section->lessons()->createMany($sectionData['lessons']);
-                        // $section->questions()->createMany(shallow_copy_array_of_array($sectionData['questions']));
+                        $lessons = $section->lessons()->createMany($sectionData['lessons']);
+                        foreach ($lessons as $lesson){
+                            $lesson->room()->create();
+                        }
+                        $section->questions()->createMany($sectionData['questions']);
+                        foreach ( $sectionData['questions'] as $questionData) {
+                            if(isset($questionData['answers'])){
+                                $this->answerRepository->createMany($questionData['answers']);
+                            }
+                        }
                         // $section->liveLessons()->createMany(shallow_copy_array_of_array($sectionData['live_lessons']));
                     }
                 }
                 foreach ($oldSectionsData as $sectionData) {
                     $section = $this->sectionRepository->update($sectionData['id'], shallow_copy_array($sectionData));
+                    $newLessonsData = [];
+                    $oldLessonsData = [];
+                    $newQuestionsData = [];
+                    $oldQuestionsData = [];
                     if (isset($sectionData["lessons"])) {
-                        $newLessonsData = [];
-                        $oldLessonsData = [];
                         foreach ($sectionData["lessons"] as $lessonData) {
                             if (!isset($lessonData['id'])) {
                                 $newLessonsData[] = $lessonData;
@@ -126,19 +146,58 @@ class CourseResourceController extends Controller
                             }
                         }
                     }
-                    $section->lessons()->createMany(shallow_copy_array_of_array($newLessonsData));
+                    if (isset($sectionData["questions"])) {
+                        foreach ($sectionData["questions"] as $questionData) {
+                            if (!isset($questionData['id'])) {
+                                $newQuestionsData[] = $questionData;
+                            } else {
+                                $oldQuestionsData[] = $questionData;
+                            }
+                        }
+                    }
+                    $lessons = $section->lessons()->createMany(shallow_copy_array_of_array($newLessonsData));
+                    foreach ($lessons as $lesson) {
+                        $lesson->room()->create();
+                    }
+                    $section->questions()->createMany(shallow_copy_array_of_array($newQuestionsData));
                     foreach ($oldLessonsData as $lessonData) {
                         $this->lessonRepository->update($lessonData['id'], $lessonData);
+                    }
+                    foreach ($oldQuestionsData as $questionData) {
+                        $question = $this->questionRepository->update($questionData['id'], $questionData);
+                        $newAnswersData = [];
+                        $oldAnswersData = [];
+                        if (isset($questionData["answers"])) {
+                            foreach ($questionData["answers"] as $answerData) {
+                                if (!isset($answerData['id'])) {
+                                    $newAnswersData[] = $answerData;
+                                } else {
+                                    $oldAnswersData[] = $answerData;
+                                }
+                            }
+                        }
+                        $question->answers()->createMany($newAnswersData);
+                        foreach ($oldAnswersData as $answerData) {
+                            $this->answerRepository->update($answerData['id'], $answerData);
+                        }
                     }
                 }
             }
             $this->sectionRepository->whereIn('id', $request->deleteSections)->delete();
             $this->lessonRepository->whereIn('id', $request->deleteLessons)->delete();
+            $this->questionRepository->whereIn('id', $request->deleteQuestions)->delete();
+            $this->answerRepository->whereIn('id', $request->deleteAnswers)->delete();
             DB::commit();
-            return \response()->json(["status"=>"success", "course"=>$this->courseRepository->with(['sections', 'sections.lessons'])->find($course->id)]);
+            return \response()
+                ->json([
+                    "status"=>"success",
+                    "course"=>$this->courseRepository
+                        ->with(['topics','sections', 'sections.lessons', 'sections.questions', 'sections.questions.answers'])
+                        ->find($course->id)
+                ]);
         } catch (Exception $e) {
             DB::rollBack();
-            // throw $e;
+//            throw $e;
             return \response(["status"=>"error", "message"=>$e]);
         }
     }
@@ -151,8 +210,30 @@ class CourseResourceController extends Controller
      */
     public function show($id)
     {
-        $course = $this->courseRepository->with(['sections.lessons:section_id,id,name,estimate_time'])->findOrFail($id);
-        return response()->json(['status'=>'success','data'=>$course], 200);
+        $course = $this->courseRepository
+        ->with([
+            'sections.lessons:section_id,id,name,estimate_time',
+            'instructor'
+            ])
+        ->findOrFail($id);
+        $bought = false;
+        $sectionCheckpoint = null;
+        $lessonCheckpoint = null;
+        $user = Auth::user();
+        try {       //remove when remigrate
+            if ($user) {
+                $bought = Auth::user()->boughtCourses->contains($course->id);
+                if ($bought) {
+                    $sectionCheckpoint = $user->boughtCourses
+                    ->find($course->id)->pivot->section_checkpoint;
+                    $lessonCheckpoint = $user->sections
+                    ->find($sectionCheckpoint)->pivot->lesson_checkpoint;
+                }
+            }
+        } catch (Exception $e) {
+        }
+        // $bought = Auth::user();
+        return response()->json(['status'=>'success','data'=>$course, 'bought'=>$bought, 'lessonCheckpoint'=>$lessonCheckpoint, 'sectionCheckpoint'=>$sectionCheckpoint], 200);
     }
 
 

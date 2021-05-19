@@ -37,10 +37,13 @@ Route::post('/check-login-available', 'UserController@checkLoginAvailable');
 Route::get('/auth/{social}/url', 'Auth\OauthController@loginUrl');
 Route::get('/auth/{social}/callback', 'Auth\OauthController@loginCallback');
 Route::post('/auth/create-social', 'Auth\OauthController@createAccountWithSocialProvider');
-Route::get('/auth/attach-social', 'Auth\OauthController@attachUserWithSocialProvider');
+Route::post('/auth/attach-social', 'Auth\OauthController@attachUserWithSocialProvider');
 // Route::get('/auth/{social}/url', [OauthController::class, 'loginUrl']);
 
-Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
+Route::apiResource('users', 'User\UserResourceController')->only([
+    'index', 'show'
+]);
+Route::apiResource('topics', 'Topic\TopicController')->only([
     'index', 'show'
 ]);
 // All logged in user
@@ -52,6 +55,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/courses/fetch/{id}', 'CourseController\CourseFetchController');
     Route::post('chats/private', 'Chat\SendPrivateChatController');
     Route::apiResource('chats', 'Chat\ChatController');
+    Route::apiResource('users', 'User\UserResourceController')->only([
+        'update'
+    ]);
+    Route::get('/fetch-my-data', 'User\FetchDataController');
 });
 
 // Admin user
@@ -63,7 +70,19 @@ Route::group(['middleware' => ['auth:api','checkInstructor']], function () {
     Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
         'store', 'update', 'destroy'
     ]);
+    Route::post('/attach-topic', 'Course\AttachTopicController');
+    Route::post('/detach-topic', 'Course\DetachTopicController');
 });
 // Student user
 Route::group(['middleware' => ['auth:api','checkStudent']], function () {
+    Route::get('/buy-course/{id}', 'CourseController\BuyCourseController');
+    Route::apiResource('lessons', 'Lesson\LessonController')->only([
+        'show'
+    ]);
+});
+
+Route::group(['middleware' => ['injectAuth:api']], function () {
+    Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
+        'index', 'show'
+    ]);
 });
