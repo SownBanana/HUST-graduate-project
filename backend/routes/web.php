@@ -23,3 +23,4 @@ Route::get('/', function () {
 // Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/verify/{code}', [UserController::class, 'verify'])->name('verify');
+Route::get('/reset/{code}', [UserController::class, 'reset'])->name('reset');

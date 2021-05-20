@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Proxy\AuthenticateProxy;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Jobs\SendResetPasswordEmail;
 use App\Jobs\SendVerifyEmail;
 use App\Models\Instructor;
 use App\Models\Student;
@@ -98,6 +99,37 @@ class UserController extends Controller
         }
     }
 
+    public function requestChangePassword(Request $request)
+    {
+        $login_info = $request->email;
+        if (filter_var($login_info, FILTER_VALIDATE_EMAIL)) {
+            $user = User::where('email', $login_info)->first();
+        } else {
+            $user = User::where('username', $login_info)->first();
+        }
+        if ($user) {
+            $confirmation_code = time().uniqid(true);
+            $user->confirmation_code = $confirmation_code;
+            $user->save();
+            dispatch(new SendResetPasswordEmail($user))->onQueue('mails');
+            return response()->json(['status'=>'success','mss'=>'Đã gửi email xác thực cho '.$user->email]);
+        }
+        return response()->json(['status'=>'error', 'mss'=>'Không tìm thấy thông tin đăng nhập '.$login_info]);
+    }
+    public function verifyReset(Request $request)
+    {
+        $user = User::where('confirmation_code', $request->code)->first();
+        if ($user) {
+            $user->confirmation_code = null;
+            $user->touchVerifyEmail();
+            $user->password = Hash::make($request->password);
+            $user->save();
+            return response()->json(['status'=>'success']);
+        } else {
+            abort(404, 'Link xác thực hết hạn');
+        }
+        return 404;
+    }
     public function resendConfirm(Request $request)
     {
         $login_info = $request->email;
@@ -125,6 +157,7 @@ class UserController extends Controller
         } else {
             abort(404, 'Link xác thực hết hạn');
         }
+        return 404;
     }
 
     public function refresh(Request $request)

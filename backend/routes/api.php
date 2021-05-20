@@ -31,6 +31,8 @@ Route::post('/register', 'UserController@register');
 Route::post('/login', 'UserController@login');
 Route::post('/auth/refresh', 'UserController@refresh');
 Route::post('/resend-confirm', 'UserController@resendConfirm');
+Route::post('/auth/reset-password', 'UserController@requestChangePassword');
+Route::post('/auth/verify-reset-password', 'UserController@verifyReset');
 Route::get('/check-alive', 'APIController@check_alive');
 Route::post('/check-login-available', 'UserController@checkLoginAvailable');
 
@@ -59,6 +61,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         'update'
     ]);
     Route::get('/fetch-my-data', 'User\FetchDataController');
+    Route::get('/user/{social}/attach-social', 'User\AttachSocialAccount');
+    Route::post('/user/detach-social', 'User\DetachSocialAccount');
 });
 
 // Admin user

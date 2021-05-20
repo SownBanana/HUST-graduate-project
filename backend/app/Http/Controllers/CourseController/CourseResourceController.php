@@ -72,7 +72,7 @@ class CourseResourceController extends Controller
         }
         return response()->json(['status'=>'success','data'=>
         $this->courseRepository
-        ->where($matchThese)->where('status', CourseType::Publish)
+        ->where($matchThese)
         ->where('title', 'LIKE', '%'.$search.'%')
         ->orderBy('updated_at', $time)
         ->paginate($perPage, $columns)], 200);
