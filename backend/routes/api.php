@@ -66,11 +66,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 // Admin user
-Route::group(['middleware' => ['auth:api','checkAdmin']], function () {
+Route::group(['middleware' => ['auth:api', 'checkAdmin']], function () {
 });
 
 // Instructor user
-Route::group(['middleware' => ['auth:api','checkInstructor']], function () {
+Route::group(['middleware' => ['auth:api', 'checkInstructor']], function () {
     Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
         'store', 'update', 'destroy'
     ]);
@@ -78,11 +78,13 @@ Route::group(['middleware' => ['auth:api','checkInstructor']], function () {
     Route::post('/detach-topic', 'Course\DetachTopicController');
 });
 // Student user
-Route::group(['middleware' => ['auth:api','checkStudent']], function () {
+Route::group(['middleware' => ['auth:api', 'checkStudent']], function () {
     Route::get('/buy-course/{id}', 'CourseController\BuyCourseController');
     Route::apiResource('lessons', 'Lesson\LessonController')->only([
         'show'
     ]);
+    Route::get('/sections/{section_id}/questions', 'Question\QuestionInSectionController');
+    Route::post('/calculate-point', 'Question\CalculatePointController');
 });
 
 Route::group(['middleware' => ['injectAuth:api']], function () {

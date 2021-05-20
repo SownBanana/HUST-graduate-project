@@ -19,6 +19,10 @@ class CreateSectionsTable extends Migration
             $table->integer('order')->nullable();
             $table->string('uuid')->nullable();
             $table->string('name')->nullable();
+            $table->integer('question_duration')->nullable();
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
+            $table->float('pass_point')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

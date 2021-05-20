@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class LiveLesson extends Model
 {
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -17,7 +18,8 @@ class LiveLesson extends Model
         'section_id',
         'name',
         'schedule_time',
-        'uuid'
+        'uuid',
+        'order'
     ];
 
     /**

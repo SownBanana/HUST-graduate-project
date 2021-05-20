@@ -70,10 +70,13 @@ class CourseResourceController extends Controller
         if ($request->has('time')) {
             $time = $request->time;
         }
+        $query = $this->courseRepository
+            ->where($matchThese);
+        if(!$request->filled('instructor_id')){
+            $query->where('status', CourseType::Publish);
+        }
         return response()->json(['status'=>'success','data'=>
-        $this->courseRepository
-        ->where($matchThese)
-        ->where('title', 'LIKE', '%'.$search.'%')
+        $query->where('title', 'LIKE', '%'.$search.'%')
         ->orderBy('updated_at', $time)
         ->paginate($perPage, $columns)], 200);
     }
@@ -206,14 +209,16 @@ class CourseResourceController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
         $course = $this->courseRepository
         ->with([
+            'instructor',
             'sections.lessons:section_id,id,name,estimate_time',
-            'instructor'
+            'sections.questions',
+            'sections.liveLessons',
             ])
         ->findOrFail($id);
         $bought = false;
@@ -233,7 +238,13 @@ class CourseResourceController extends Controller
         } catch (Exception $e) {
         }
         // $bought = Auth::user();
-        return response()->json(['status'=>'success','data'=>$course, 'bought'=>$bought, 'lessonCheckpoint'=>$lessonCheckpoint, 'sectionCheckpoint'=>$sectionCheckpoint], 200);
+        return response()->json([
+            'status'=>'success',
+            'data'=>$course,
+            'bought'=>$bought,
+            'lessonCheckpoint'=>$lessonCheckpoint,
+            'sectionCheckpoint'=>$sectionCheckpoint
+        ], 200);
     }
 
 

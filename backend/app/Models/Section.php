@@ -8,17 +8,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Section extends Model
 {
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-            'course_id',
-            'order',
-            'name',
-            'uuid'
+        'course_id',
+        'order',
+        'name',
+        'uuid',
+        'question_duration',
+        'start_time',
+        'end_time',
+        'pass_point'
     ];
+
     public static function boot()
     {
         parent::boot();
@@ -30,6 +36,7 @@ class Section extends Model
             // do the rest of the cleanup...
         });
     }
+
     public function course()
     {
         return $this->belongsTo(Course::class);

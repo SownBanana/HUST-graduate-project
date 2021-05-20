@@ -17,7 +17,7 @@ class CreateAnswersTable extends Migration
             $table->id();
             $table->string('uuid')->nullable();
             $table->integer('question_id');
-            $table->string('content')->nullable();
+            $table->text('content')->nullable();
             $table->boolean('is_true')->default(false);
             $table->softDeletes();
             $table->timestamps();
