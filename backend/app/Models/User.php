@@ -51,20 +51,21 @@ class User extends Authenticatable
     {
         $role = $this->role;
         switch ($role) {
-            case UserRole::Student:{
-                return $this->hasOne('App\Models\Student');
-            }
-            case UserRole::Instructor:{
+            case UserRole::Instructor:
+            {
                 return $this->hasOne('App\Models\Instructor');
             }
-            case UserRole::Admin:{
+            case UserRole::Admin:
+            {
                 return $this->hasOne('App\Models\Admin');
             }
-            case UserRole::Mod:{
-                return $this->hasOne('App\Models\Mod');
+            default:
+            {
+                return $this->hasOne('App\Models\Student');
             }
         }
     }
+
     /**
      * Get all of the socialAccounts for the User
      *
@@ -152,5 +153,17 @@ class User extends Authenticatable
     public function assets()
     {
         return $this->hasMany(Asset::class);
+    }
+
+    /**
+     * Scope a query to only include users of a given type.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfRole($query, $type)
+    {
+        return $query->where('role', $type);
     }
 }

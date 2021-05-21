@@ -16,7 +16,8 @@ class CalculatePointController extends Controller
         foreach ($resultQuestions as $resultQuestion) {
             if ($resultQuestion->id == $answer['question_id']) {
                 foreach ($resultQuestion->answers as $resultAnswer) {
-                    if ($resultAnswer->id == $answer['id'] && isset($answer['is_check'])) {
+                    if ($resultAnswer->id == $answer['id']) {
+                        if (!isset($answer['is_check'])) $answer['is_check'] = false;
                         if ($resultAnswer->is_true xor $answer['is_check']) {
                             return false;
                         }
@@ -72,7 +73,7 @@ class CalculatePointController extends Controller
                 }
                 if ($check) $point += 1;
             } else {
-                if ($this->checkSingleAnswer($resultQuestions, $question['id'], $question['answer_id'])) {
+                if (isset($question['answer_id']) && $this->checkSingleAnswer($resultQuestions, $question['id'], $question['answer_id'])) {
                     $point += 1;
                 }
             }
@@ -86,6 +87,7 @@ class CalculatePointController extends Controller
         return response()->json([
             "point" => $point,
             "total" => $total,
+            'fancy_point' => $fancyPoint,
 //            "pass_point" => $section->pass_point,
 //            "is_pass" => ($point / $total) > $section->pass_point,
             "last_highest_point" => $highestPoint
