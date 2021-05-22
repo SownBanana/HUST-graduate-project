@@ -22,7 +22,8 @@ class Section extends Model
         'question_duration',
         'start_time',
         'end_time',
-        'pass_point'
+        'pass_point',
+        'question_step'
     ];
 
     public static function boot()
@@ -60,6 +61,6 @@ class Section extends Model
 
     public function students()
     {
-        return $this->belongsToMany(Student::class, 'section_student', 'section_id', 'student_id')->withPivot('lesson_checkpoint', 'highest_point');
+        return $this->belongsToMany(Student::class, 'section_student', 'section_id', 'student_id')->withPivot('lesson_checkpoint', 'highest_point', 'updated_at');
     }
 }

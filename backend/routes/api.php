@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth:api', 'checkStudent']], function () {
     ]);
     Route::get('/sections/{section_id}/questions', 'Question\QuestionInSectionController');
     Route::post('/calculate-point', 'Question\CalculatePointController');
+    Route::post('/rate-course', 'Student\RateCourseController');
 });
 
 Route::group(['middleware' => ['injectAuth:api']], function () {

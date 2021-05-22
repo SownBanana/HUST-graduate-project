@@ -16,7 +16,8 @@ class CourseStudentTable extends Migration
         Schema::create('course_student', function (Blueprint $table) {
             $table->integer('course_id');
             $table->integer('student_id');
-            $table->float('rate')->default(0.0);
+            $table->float('rate')->nullable();
+            $table->string('comment')->nullable();
             $table->integer('section_checkpoint')->nullable();
             $table->timestamps();
         });

@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'role', 'confirmation_code'
+        'name', 'username', 'email', 'password', 'role', 'confirmation_code', 'avatar_url'
     ];
 
     /**
@@ -103,7 +103,7 @@ class User extends Authenticatable
 
     public function sections()
     {
-        return $this->belongsToMany(Section::class, 'section_student', 'student_id', 'section_id')->withPivot('lesson_checkpoint', 'highest_point');
+        return $this->belongsToMany(Section::class, 'section_student', 'student_id', 'section_id')->withPivot('lesson_checkpoint', 'highest_point', 'updated_at');
     }
 
     /**

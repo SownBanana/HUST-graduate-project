@@ -13,7 +13,7 @@ class Course extends Model
      * @var array
      */
     protected $guarded = [];
-    
+
     public function instructor()
     {
         return $this->belongsTo(User::class, 'instructor_id');
@@ -21,14 +21,13 @@ class Course extends Model
 
     public function students()
     {
-        return $this->belongsToMany(User::class, 'course_student', 'course_id', 'student_id')->withPivot('rate', 'section_checkpoint');
+        return $this->belongsToMany(User::class, 'course_student', 'course_id', 'student_id')->withPivot('rate', 'comment', 'section_checkpoint');
     }
 
 
     public function sections()
     {
-        return $this->hasMany(Section::class)->orderBy('order');
-        ;
+        return $this->hasMany(Section::class)->orderBy('order');;
     }
 
     /**

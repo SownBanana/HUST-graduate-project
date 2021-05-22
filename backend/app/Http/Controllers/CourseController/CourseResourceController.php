@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CourseController;
 
 use App\Enums\CourseType;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CourseResource;
 use App\Models\Course;
 use App\Repositories\Answer\AnswerRepository;
 use App\Repositories\Course\CourseRepository;
@@ -32,7 +33,8 @@ class CourseResourceController extends Controller
         QuestionRepository $questionRepository,
         LiveLessonRepository $liveLessonRepository,
         AnswerRepository $answerRepository
-    ) {
+    )
+    {
         $this->courseRepository = $courseRepository;
         $this->sectionRepository = $sectionRepository;
         $this->questionRepository = $questionRepository;
@@ -40,6 +42,7 @@ class CourseResourceController extends Controller
         $this->liveLessonRepository = $liveLessonRepository;
         $this->answerRepository = $answerRepository;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -71,21 +74,37 @@ class CourseResourceController extends Controller
             $time = $request->time;
         }
         $query = $this->courseRepository
+            ->with('instructor')
+            ->join('course_student', 'courses.id', '=', 'course_student.course_id')
+            ->groupBy('courses.id')
+            ->whereNotNull('course_student.rate')
+            ->join('users', 'courses.instructor_id', '=', 'users.id')
+            ->select(
+                'courses.id',
+                'courses.title',
+                'courses.introduce',
+                'courses.thumbnail_url'
+            )
+            ->selectRaw('
+            avg(rate) as rate_avg,
+            count(student_id) as total,
+            users.id as instructor_id
+            ')
             ->where($matchThese);
-        if(!$request->filled('instructor_id')){
+        if (!$request->filled('instructor_id')) {
             $query->where('status', CourseType::Publish);
         }
-        return response()->json(['status'=>'success','data'=>
-        $query->where('title', 'LIKE', '%'.$search.'%')
-        ->orderBy('updated_at', $time)
-        ->paginate($perPage, $columns)], 200);
+        return response()->json(['status' => 'success', 'data' =>
+            $query->where('title', 'LIKE', '%' . $search . '%')
+                ->orderBy('courses.updated_at', $time)
+                ->paginate($perPage, $columns)], 200);
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -118,16 +137,16 @@ class CourseResourceController extends Controller
                 }
                 if (count($newSectionsData) > 0) {
                     $sections = $course->sections()->createMany(shallow_copy_array_of_array($newSectionsData));
-                    for ($i=0; $i < count($sections); $i++) {
+                    for ($i = 0; $i < count($sections); $i++) {
                         $section = $sections[$i];
                         $sectionData = $newSectionsData[$i];
                         $lessons = $section->lessons()->createMany($sectionData['lessons']);
-                        foreach ($lessons as $lesson){
+                        foreach ($lessons as $lesson) {
                             $lesson->room()->create();
                         }
                         $section->questions()->createMany($sectionData['questions']);
-                        foreach ( $sectionData['questions'] as $questionData) {
-                            if(isset($questionData['answers'])){
+                        foreach ($sectionData['questions'] as $questionData) {
+                            if (isset($questionData['answers'])) {
                                 $this->answerRepository->createMany($questionData['answers']);
                             }
                         }
@@ -193,57 +212,70 @@ class CourseResourceController extends Controller
             DB::commit();
             return \response()
                 ->json([
-                    "status"=>"success",
-                    "course"=>$this->courseRepository
-                        ->with(['topics','sections', 'sections.lessons', 'sections.questions', 'sections.questions.answers'])
+                    "status" => "success",
+                    "course" => $this->courseRepository
+                        ->with(['topics', 'sections', 'sections.lessons', 'sections.questions', 'sections.questions.answers'])
                         ->find($course->id)
                 ]);
         } catch (Exception $e) {
             DB::rollBack();
 //            throw $e;
-            return \response(["status"=>"error", "message"=>$e]);
+            return \response(["status" => "error", "message" => $e]);
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        $course = $this->courseRepository
-        ->with([
-            'instructor',
-            'sections.lessons:section_id,id,name,estimate_time',
-            'sections.questions',
-            'sections.liveLessons',
-            ])
-        ->findOrFail($id);
+        $statistic = DB::table('courses')
+            ->join('course_student', 'courses.id', '=', 'course_student.course_id')
+            ->where('courses.id', $id)
+            ->groupBy('rate')
+            ->selectRaw('rate, count(rate) as rate_count')
+            ->orderBy('rate')
+            ->get();
+        $query = $this->courseRepository
+            ->with([
+                'instructor',
+                'sections.lessons:section_id,id,name,estimate_time',
+                'sections.questions',
+                'sections.liveLessons',
+                'students',
+            ]);
+
         $bought = false;
         $sectionCheckpoint = null;
         $lessonCheckpoint = null;
         $user = Auth::user();
         try {       //remove when remigrate
             if ($user) {
-                $bought = Auth::user()->boughtCourses->contains($course->id);
+                $bought = Auth::user()->boughtCourses->contains($id);
                 if ($bought) {
+                    $query = $query
+                        ->join('course_student', 'courses.id', '=', 'course_student.course_id')
+                        ->where('course_student.student_id', $user->id)
+                        ->select('*', 'rate', 'comment');
                     $sectionCheckpoint = $user->boughtCourses
-                    ->find($course->id)->pivot->section_checkpoint;
+                        ->find($id)->pivot->section_checkpoint;
                     $lessonCheckpoint = $user->sections
-                    ->find($sectionCheckpoint)->pivot->lesson_checkpoint;
+                        ->find($sectionCheckpoint)->pivot->lesson_checkpoint;
                 }
             }
         } catch (Exception $e) {
         }
         // $bought = Auth::user();
         return response()->json([
-            'status'=>'success',
-            'data'=>$course,
-            'bought'=>$bought,
-            'lessonCheckpoint'=>$lessonCheckpoint,
-            'sectionCheckpoint'=>$sectionCheckpoint
+            'status' => 'success',
+            'data' => new CourseResource($query->findOrFail($id)),
+            'bought' => $bought,
+            'statistic' => $statistic,
+            'lessonCheckpoint' => $lessonCheckpoint,
+            'sectionCheckpoint' => $sectionCheckpoint
         ], 200);
     }
 
@@ -251,8 +283,8 @@ class CourseResourceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -263,7 +295,7 @@ class CourseResourceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

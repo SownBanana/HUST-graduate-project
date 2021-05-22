@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('confirmation_code')->nullable();
             $table->text('introduce')->nullable();
             $table->string('avatar_url')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->tinyInteger('role')->default(UserRole::Student);
             $table->rememberToken();
             $table->timestamps();
