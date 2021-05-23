@@ -4,11 +4,13 @@ namespace App\Http\Controllers\CourseController;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Notifications\BuyCourse;
 use App\Repositories\Course\CourseRepository;
 use App\Repositories\Lesson\LessonRepository;
 use App\Repositories\Section\SectionRepository;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class BuyCourseController extends Controller
 {
@@ -22,15 +24,17 @@ class BuyCourseController extends Controller
         CourseRepository $courseRepository,
         SectionRepository $sectionRepository,
         LessonRepository $lessonRepository
-    ) {
+    )
+    {
         $this->courseRepository = $courseRepository;
         $this->sectionRepository = $sectionRepository;
         $this->lessonRepository = $lessonRepository;
     }
+
     /**
      * Handle the incoming request.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function __invoke($id)
     {
@@ -45,8 +49,8 @@ class BuyCourseController extends Controller
                 }
                 foreach ($course->sections() as $section) {
                     $user->sections()->attach($section->id, [
-                        'lesson_checkpoint'=>null,
-                        'highest_point'=>0
+                        'lesson_checkpoint' => null,
+                        'highest_point' => 0
                     ]);
                     foreach ($section->lessons() as $lesson) {
                         if ($lesson->room()) {
@@ -54,12 +58,19 @@ class BuyCourseController extends Controller
                         }
                     }
                 }
-                return response()->json(["status"=>"success"]);
+                Notification::send($course->instructor, new BuyCourse(
+                    $user,
+                    $course,
+                    [
+                        'timestamp' => now()
+                    ]
+                ));
+                return response()->json(["status" => "success"]);
             } else {
-                return response()->json(["status"=>"Not found"]);
+                return response()->json(["status" => "Not found"]);
             }
         } else {
-            return response()->json(["status"=>"You bought this course before"]);
+            return response()->json(["status" => "You bought this course before"]);
         }
     }
 }

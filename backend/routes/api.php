@@ -63,6 +63,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/fetch-my-data', 'User\FetchDataController');
     Route::get('/user/{social}/attach-social', 'User\AttachSocialAccount');
     Route::post('/user/detach-social', 'User\DetachSocialAccount');
+
+    //Notification
+    Route::apiResource('notifications', 'Notification\NotificationController');
 });
 
 // Admin user

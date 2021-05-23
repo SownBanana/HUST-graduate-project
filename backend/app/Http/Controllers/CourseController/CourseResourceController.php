@@ -75,15 +75,17 @@ class CourseResourceController extends Controller
         }
         $query = $this->courseRepository
             ->with('instructor')
-            ->join('course_student', 'courses.id', '=', 'course_student.course_id')
+            ->leftJoin('course_student', 'courses.id', '=', 'course_student.course_id')
             ->groupBy('courses.id')
-            ->whereNotNull('course_student.rate')
+//            ->whereNotNull('course_student.rate')
             ->join('users', 'courses.instructor_id', '=', 'users.id')
             ->select(
                 'courses.id',
                 'courses.title',
                 'courses.introduce',
-                'courses.thumbnail_url'
+                'courses.thumbnail_url',
+                'courses.price',
+                'courses.status'
             )
             ->selectRaw('
             avg(rate) as rate_avg,

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
+use App\Notifications\RateCourse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use League\Flysystem\Exception;
 
 class RateCourseController extends Controller
@@ -33,6 +35,7 @@ class RateCourseController extends Controller
             ]);
         }
 
+
         $statistic = DB::table('courses')
             ->join('course_student', 'courses.id', '=', 'course_student.course_id')
             ->where('courses.id', $request->course_id)
@@ -52,6 +55,15 @@ class RateCourseController extends Controller
             ->select('*', 'rate', 'comment')
             ->findOrFail($request->course_id);
         // $bought = Auth::user();
+        if ($request->filled('rate')) {
+            Notification::send($course->instructor, new RateCourse(
+                $user,
+                $course,
+                [
+                    'rate' => $request->rate,
+                    'timestamp' => now()
+                ]));
+        }
         return response()->json([
             'status' => 'success',
             'data' => new CourseResource($course),
