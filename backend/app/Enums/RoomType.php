@@ -11,8 +11,8 @@ use BenSampo\Enum\Enum;
  */
 final class RoomType extends Enum
 {
-    const ChatRoom = 0;
-    const CourseComment = 1;
-    const LessonComment = 2;
-    const LiveLessonComment = 3;
+    const ChatRoom = 'App\Models\User';
+    const CourseComment = 'App\Models\Course';
+    const LessonComment = 'App\Models\Lesson';
+    const LiveLessonComment = 'App\Models\LiveLesson';
 }

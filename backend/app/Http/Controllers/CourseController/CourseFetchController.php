@@ -16,14 +16,16 @@ class CourseFetchController extends Controller
 
     public function __construct(
         CourseRepository $courseRepository
-    ) {
+    )
+    {
         $this->courseRepository = $courseRepository;
     }
+
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function __invoke($id)
     {
@@ -37,9 +39,9 @@ class CourseFetchController extends Controller
                 break;
             case UserRole::Student:
                 $exists = DB::table('course_student')
-                ->whereCourseId($id)
-                ->whereStudentId($user->id)
-                ->count() > 0;
+                        ->whereCourseId($id)
+                        ->whereStudentId($user->id)
+                        ->count() > 0;
                 if (!$exists) {
                     \abort(403);
                 }
@@ -48,7 +50,7 @@ class CourseFetchController extends Controller
                 # Admin not check
                 break;
         }
-        $course = $this->courseRepository->with(['topics','sections', 'sections.lessons', 'sections.questions.answers'])->findOrFail($id);
-        return response()->json(['status'=>'success','data'=>$course], 200);
+        $course = $this->courseRepository->with(['topics', 'sections', 'sections.lessons', 'sections.liveLessons', 'sections.questions.answers'])->findOrFail($id);
+        return response()->json(['status' => 'success', 'data' => $course], 200);
     }
 }

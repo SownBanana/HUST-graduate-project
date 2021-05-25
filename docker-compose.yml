@@ -32,6 +32,8 @@ services:
         "--character-set-server=utf8mb4",
         "--collation-server=utf8mb4_unicode_ci",
         "--default-authentication-plugin=mysql_native_password",
+        "--innodb_ft_min_token_size=1",
+        "--ft_min_word_len=1",
       ]
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

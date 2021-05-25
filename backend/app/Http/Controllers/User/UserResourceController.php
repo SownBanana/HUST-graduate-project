@@ -38,13 +38,13 @@ class UserResourceController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        $user = User::select(['id', 'name', 'role', 'username', 'avatar_url'])->with('ownerCourses')->find($id);
+        $user = User::select(['id', 'name', 'role', 'username', 'avatar_url', 'introduce'])->with('ownerCourses', 'socialAccounts')->find($id);
         if (!$user) {
-            $user = User::select(['id', 'name', 'role', 'username', 'avatar_url'])->with('ownerCourses')->where('username', $id)->first();
+            $user = User::select(['id', 'name', 'role', 'username', 'avatar_url', 'introduce'])->with('ownerCourses', 'socialAccounts')->where('username', $id)->first();
         }
         if (!$user) {
             return response()->json(["status" => "fail", "message" => "not found"]);

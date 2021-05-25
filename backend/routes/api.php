@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', 'UserController@logout');
     Route::get('/courses/fetch/{id}', 'CourseController\CourseFetchController');
     Route::post('chats/private', 'Chat\SendPrivateChatController');
+    Route::get('/chat-room/{id}', 'Chat\GetRoomController');
     Route::apiResource('chats', 'Chat\ChatController');
     Route::apiResource('users', 'User\UserResourceController')->only([
         'update'
@@ -84,6 +85,9 @@ Route::group(['middleware' => ['auth:api', 'checkInstructor']], function () {
 Route::group(['middleware' => ['auth:api', 'checkStudent']], function () {
     Route::get('/buy-course/{id}', 'CourseController\BuyCourseController');
     Route::apiResource('lessons', 'Lesson\LessonController')->only([
+        'show'
+    ]);
+    Route::apiResource('live-lessons', 'LiveLesson\LiveLessonController')->only([
         'show'
     ]);
     Route::get('/sections/{section_id}/questions', 'Question\QuestionInSectionController');

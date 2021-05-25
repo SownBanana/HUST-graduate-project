@@ -82,6 +82,7 @@ class CourseResourceController extends Controller
             ->select(
                 'courses.id',
                 'courses.title',
+                'courses.type',
                 'courses.introduce',
                 'courses.thumbnail_url',
                 'courses.price',
@@ -93,13 +94,20 @@ class CourseResourceController extends Controller
             users.id as instructor_id
             ')
             ->where($matchThese);
+        if (!$request->filled('search')) {
+            $query->orderBy('courses.updated_at', $time);
+        }
         if (!$request->filled('instructor_id')) {
             $query->where('status', CourseType::Publish);
         }
+//        $subQuery = clone $query;
+//        $likeQuery = $subQuery->where('title', 'LIKE', '%' . $search . '%');
+//        if ($request->filled('search')) {
+//            $query = $query->whereRaw('match(courses.title, courses.introduce) against (\'' . $search . '\' with QUERY EXPANSION)')
+//                ->union($likeQuery);
+//        }
         return response()->json(['status' => 'success', 'data' =>
-            $query->where('title', 'LIKE', '%' . $search . '%')
-                ->orderBy('courses.updated_at', $time)
-                ->paginate($perPage, $columns)], 200);
+            $query->where('title', 'LIKE', '%' . $search . '%')->paginate($perPage, $columns)], 200);
     }
 
 
@@ -121,6 +129,7 @@ class CourseResourceController extends Controller
                 $course = $this->courseRepository->update($courseData['id'], shallow_copy_array($courseData));
             } else {
                 $course = $this->courseRepository->create(shallow_copy_array($courseData));
+                // Update index of elastic search
             }
 
             if (isset($courseData["sections"])) {
@@ -146,19 +155,24 @@ class CourseResourceController extends Controller
                         foreach ($lessons as $lesson) {
                             $lesson->room()->create();
                         }
+                        $liveLessons = $section->liveLessons()->createMany($sectionData['live_lessons']);
+                        foreach ($liveLessons as $liveLesson) {
+                            $liveLesson->room()->create();
+                        }
                         $section->questions()->createMany($sectionData['questions']);
                         foreach ($sectionData['questions'] as $questionData) {
                             if (isset($questionData['answers'])) {
                                 $this->answerRepository->createMany($questionData['answers']);
                             }
                         }
-                        // $section->liveLessons()->createMany(shallow_copy_array_of_array($sectionData['live_lessons']));
                     }
                 }
                 foreach ($oldSectionsData as $sectionData) {
                     $section = $this->sectionRepository->update($sectionData['id'], shallow_copy_array($sectionData));
                     $newLessonsData = [];
                     $oldLessonsData = [];
+                    $newLiveLessonsData = [];
+                    $oldLiveLessonsData = [];
                     $newQuestionsData = [];
                     $oldQuestionsData = [];
                     if (isset($sectionData["lessons"])) {
@@ -167,6 +181,15 @@ class CourseResourceController extends Controller
                                 $newLessonsData[] = $lessonData;
                             } else {
                                 $oldLessonsData[] = $lessonData;
+                            }
+                        }
+                    }
+                    if (isset($sectionData["live_lessons"])) {
+                        foreach ($sectionData["live_lessons"] as $liveLessonData) {
+                            if (!isset($liveLessonData['id'])) {
+                                $newLiveLessonsData[] = $liveLessonData;
+                            } else {
+                                $oldLiveLessonsData[] = $liveLessonData;
                             }
                         }
                     }
@@ -179,14 +202,24 @@ class CourseResourceController extends Controller
                             }
                         }
                     }
+
                     $lessons = $section->lessons()->createMany(shallow_copy_array_of_array($newLessonsData));
                     foreach ($lessons as $lesson) {
                         $lesson->room()->create();
                     }
-                    $section->questions()->createMany(shallow_copy_array_of_array($newQuestionsData));
                     foreach ($oldLessonsData as $lessonData) {
                         $this->lessonRepository->update($lessonData['id'], $lessonData);
                     }
+
+                    $liveLessons = $section->liveLessons()->createMany(shallow_copy_array_of_array($newLiveLessonsData));
+                    foreach ($liveLessons as $liveLesson) {
+                        $liveLesson->room()->create();
+                    }
+                    foreach ($oldLiveLessonsData as $liveLessonData) {
+                        $this->liveLessonRepository->update($liveLessonData['id'], $liveLessonData);
+                    }
+
+                    $section->questions()->createMany(shallow_copy_array_of_array($newQuestionsData));
                     foreach ($oldQuestionsData as $questionData) {
                         $question = $this->questionRepository->update($questionData['id'], $questionData);
                         $newAnswersData = [];
@@ -209,6 +242,7 @@ class CourseResourceController extends Controller
             }
             $this->sectionRepository->whereIn('id', $request->deleteSections)->delete();
             $this->lessonRepository->whereIn('id', $request->deleteLessons)->delete();
+            $this->liveLessonRepository->whereIn('id', $request->deleteLiveLessons)->delete();
             $this->questionRepository->whereIn('id', $request->deleteQuestions)->delete();
             $this->answerRepository->whereIn('id', $request->deleteAnswers)->delete();
             DB::commit();
@@ -216,7 +250,7 @@ class CourseResourceController extends Controller
                 ->json([
                     "status" => "success",
                     "course" => $this->courseRepository
-                        ->with(['topics', 'sections', 'sections.lessons', 'sections.questions', 'sections.questions.answers'])
+                        ->with(['topics', 'sections', 'sections.lessons', 'sections.liveLessons', 'sections.questions', 'sections.questions.answers'])
                         ->find($course->id)
                 ]);
         } catch (Exception $e) {
@@ -273,7 +307,7 @@ class CourseResourceController extends Controller
         // $bought = Auth::user();
         return response()->json([
             'status' => 'success',
-            'data' => new CourseResource($query->findOrFail($id)),
+            'data' => new CourseResource($query->withCount('students AS total')->findOrFail($id)),
             'bought' => $bought,
             'statistic' => $statistic,
             'lessonCheckpoint' => $lessonCheckpoint,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Chat;
 
+use App\Enums\RoomType;
 use App\Http\Controllers\Controller;
 use App\Repositories\Message\PrivateMessageRepository;
 use App\Repositories\Room\RoomRepository;
@@ -22,18 +23,21 @@ class ChatController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $rooms = $this->roomRepository->with(['users','messages'])->whereNull('roomable_id')->get();
-        return response()->json(["status"=>"success","data"=>$rooms]);
+        $rooms = $this->roomRepository->with(['users', 'messages'])->where('roomable_type', RoomType::ChatRoom)
+            ->join('room_user', 'rooms.id', '=', 'room_user.room_id')
+            ->where('room_user.user_id', Auth::id())
+            ->get();
+        return response()->json(["status" => "success", "data" => $rooms]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -44,27 +48,27 @@ class ChatController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $room = $this->roomRepository->with(['users','messages'])->find($id);
+        $room = $this->roomRepository->with(['users', 'messages'])->find($id);
         if ($room) {
             $user = $room->users()->where('users.id', Auth::id())->first();
             if ($user) {
-                return response()->json(["status"=>"success","data"=>$room]);
+                return response()->json(["status" => "success", "data" => $room]);
             }
             abort(403);
         }
-        return response()->json(["status"=>"not found"]);
+        return response()->json(["status" => "not found"]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -75,7 +79,7 @@ class ChatController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

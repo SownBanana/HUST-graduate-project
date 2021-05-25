@@ -18,6 +18,7 @@ class CreateMessagesTable extends Migration
             $table->integer('sender_id');
             $table->integer('room_id');
             $table->string('content');
+            $table->boolean('read')->nullable();
             $table->timestamps();
         });
     }

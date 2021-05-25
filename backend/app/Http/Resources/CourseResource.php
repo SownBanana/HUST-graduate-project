@@ -19,6 +19,7 @@ class CourseResource extends JsonResource
             'instructor_id' => $this->instructor_id,
             'status' => $this->status,
             'title' => $this->title,
+            'type' => $this->type,
             'thumbnail_url' => $this->thumbnail_url,
             'introduce' => $this->introduce,
             'price' => $this->price,
@@ -31,6 +32,7 @@ class CourseResource extends JsonResource
             'rate' => $this->rate,
             'comment' => $this->comment,
             'rate_avg' => $this->rate_avg,
+            'total' => $this->total,
         ];
     }
 }

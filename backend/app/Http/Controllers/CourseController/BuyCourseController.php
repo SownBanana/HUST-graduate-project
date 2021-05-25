@@ -57,6 +57,11 @@ class BuyCourseController extends Controller
                             $user->rooms()->attach($lesson->room->id);
                         }
                     }
+                    foreach ($section->liveLessons() as $liveLesson) {
+                        if ($liveLesson->room()) {
+                            $user->rooms()->attach($liveLesson->room->id);
+                        }
+                    }
                 }
                 Notification::send($course->instructor, new BuyCourse(
                     $user,

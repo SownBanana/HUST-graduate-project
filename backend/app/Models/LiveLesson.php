@@ -19,7 +19,10 @@ class LiveLesson extends Model
         'name',
         'schedule_time',
         'uuid',
-        'order'
+        'order',
+        'start_time',
+        'end_time',
+        'content'
     ];
 
     /**

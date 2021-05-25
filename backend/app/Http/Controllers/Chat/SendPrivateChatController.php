@@ -25,8 +25,8 @@ class SendPrivateChatController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function __invoke(Request $request)
     {
@@ -41,28 +41,28 @@ class SendPrivateChatController extends Controller
                 $room = $this->roomRepository->find($request->room_id);
             }
             if (!$room) {
-                $rooms = $user->rooms()->get();
+                $rooms = $user->rooms()->where('roomable_type', RoomType::ChatRoom)->get();
                 foreach ($rooms as $r) {
-                    $r->users()->where('users.id', $data['id'])->first();
-                    if ($r) {
+                    $friend = $r->users()->where('users.id', $data['id'])->first();
+                    if ($friend) {
                         $room = $r;
-                        dump($room->id);
                         break;
                     }
                 }
             }
             if (!$room) {
                 $room = $this->roomRepository->create([
-                    'roomable_type'=>RoomType::ChatRoom
+                    'roomable_type' => RoomType::ChatRoom
                 ]);
                 $room->users()->attach([$user->id, $data['id']]);
             }
             $data['room_id'] = $room->id;
+            $data['users'] = $room->users;
             $this->privateMessageRepository->createWithEvent($data, $data);
-            return response()->json(["status"=>"success", "room_id"=>$data['room_id']]);
+            return response()->json(["status" => "success", "room_id" => $data['room_id']]);
         } catch (Exception $e) {
             throw $e;
-            return response()->json(["status"=>"error", "message"=>$e]);
+            return response()->json(["status" => "error", "message" => $e]);
         }
     }
 }
