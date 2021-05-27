@@ -67,6 +67,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //Notification
     Route::apiResource('notifications', 'Notification\NotificationController');
+
+    Route::post('/draw-board/{id}', 'LiveLesson\DrawBoardController');
 });
 
 // Admin user

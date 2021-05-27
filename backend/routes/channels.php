@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int)$user->id === (int)$id;
 });
+Broadcast::channel('App.LiveLesson.{id}', function ($user, $id) {
+    return \App\Models\LiveLesson::find($id)->section->course->students->contains($user->id);
+});
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int)$user->id === (int)$id;
 });

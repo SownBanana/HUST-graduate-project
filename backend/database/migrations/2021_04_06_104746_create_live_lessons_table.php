@@ -19,6 +19,7 @@ class CreateLiveLessonsTable extends Migration
             $table->string('uuid')->nullable();
             $table->string('name')->nullable();
             $table->mediumText('content')->nullable();
+            $table->mediumText('board')->nullable();
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
             $table->integer('order')->nullable();
