@@ -12,8 +12,16 @@ class Asset extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'url', 'owner_id', 'lesson_id', 'message_id', 'course_id', 'is_public'
+        'name',
+        'url',
+        'type',
+        'owner_id',
+        'lesson_id',
+        'message_id',
+        'course_id',
+        'is_public'
     ];
+
     /**
      * Get the message that owns the Asset
      */
@@ -30,6 +38,7 @@ class Asset extends Model
     {
         return $this->belongsTo(Lesson::class);
     }
+
     /**
      * Get the lesson that owns the Asset
      *

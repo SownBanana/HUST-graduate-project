@@ -22,10 +22,11 @@ class FileUploadController extends Controller
     {
         $this->assetRepository = $assetRepository;
     }
+
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function __invoke(Request $request)
@@ -34,8 +35,8 @@ class FileUploadController extends Controller
             // try {
             $file = $request->file('upload');
             // \dump($file);
-            $fileName   =  'uploads/'.Str::uuid()->toString(). '.' . $file->getClientOriginalExtension();
-                
+            $fileName = 'uploads/' . Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
+
             // Store file data only, not generate random name
             // Storage::disk('local')->put('public/'.$fileName, file_get_contents($file), 'public');
             Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
@@ -43,14 +44,15 @@ class FileUploadController extends Controller
             $attr['owner_id'] = Auth::user()->id;
             $attr['name'] = isset($request['name']) ? $request->name : $fileName;
             $attr['url'] = Storage::disk('s3')->url($fileName);
-            $this->assetRepository->create($attr);
+            $attr['type'] = $file->getClientMimeType();
+            $asset = $this->assetRepository->create($attr);
             // return response()->json(['uploaded'=>true,"url"=>Config::get('app.url').'/storage/'.$fileName]);
-            return response()->json(['uploaded'=>true,"url"=>$attr['url']]);
-        // } catch (Exception $e) {
+            return response()->json(['uploaded' => true, "url" => $attr['url'], "asset" => $asset]);
+            // } catch (Exception $e) {
             //     return response()->json(['uploaded'=>false,"error"=>["message"=>$e]]);
             // }
         } else {
-            return response()->json(['uploaded'=>false,"error"=>"Not a file"]);
+            return response()->json(['uploaded' => false, "error" => "Not a file"]);
         }
     }
 }

@@ -53,13 +53,15 @@ class BuyCourseController extends Controller
                         'highest_point' => 0
                     ]);
                     foreach ($section->lessons() as $lesson) {
-                        if ($lesson->room()) {
-                            $user->rooms()->attach($lesson->room->id);
+                        $room = $lesson->room;
+                        if ($room) {
+                            $user->rooms()->attach($room->id);
                         }
                     }
                     foreach ($section->liveLessons() as $liveLesson) {
-                        if ($liveLesson->room()) {
-                            $user->rooms()->attach($liveLesson->room->id);
+                        $room = $liveLesson->room;
+                        if ($liveLesson->room) {
+                            $user->rooms()->attach($room->id);
                         }
                     }
                 }
