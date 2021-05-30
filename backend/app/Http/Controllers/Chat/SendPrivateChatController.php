@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Chat;
 
 use App\Enums\RoomType;
 use App\Http\Controllers\Controller;
+use App\Models\Asset;
 use App\Models\User;
 use App\Repositories\Message\PrivateMessageRepository;
 use App\Repositories\Room\RoomRepository;
@@ -36,6 +37,7 @@ class SendPrivateChatController extends Controller
             $data['sender_id'] = $user->id;
             $data['to'] = $data['id'];
             // broadcast(new PrivateMessageSend($data));
+
             $room = null;
             if (isset($request['room_id'])) {
                 $room = $this->roomRepository->find($request->room_id);
@@ -58,7 +60,8 @@ class SendPrivateChatController extends Controller
             }
             $data['room_id'] = $room->id;
             $data['users'] = $room->users;
-            $this->privateMessageRepository->createWithEvent($data, $data);
+            $message = $this->privateMessageRepository->createWithEvent($data, $data);
+
             return response()->json(["status" => "success", "room_id" => $data['room_id']]);
         } catch (Exception $e) {
             throw $e;

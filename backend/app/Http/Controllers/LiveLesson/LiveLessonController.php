@@ -67,6 +67,8 @@ class LiveLessonController extends Controller
                 ]);
             }
             return response()->json(["status" => "success", "data" => $lesson]);
+        } elseif ($user->ownerCourses->contains($course->id)) {
+            return response()->json(["status" => "success", "data" => $lesson]);
         } else {
             return response()->json(["status" => "fail"]);
         }

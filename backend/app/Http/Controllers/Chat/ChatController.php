@@ -27,7 +27,7 @@ class ChatController extends Controller
      */
     public function index()
     {
-        $rooms = $this->roomRepository->with(['users', 'messages'])->where('roomable_type', RoomType::ChatRoom)
+        $rooms = $this->roomRepository->with(['users', 'messages.assets'])->where('roomable_type', RoomType::ChatRoom)
             ->join('room_user', 'rooms.id', '=', 'room_user.room_id')
             ->where('room_user.user_id', Auth::id())
             ->get();
@@ -49,11 +49,11 @@ class ChatController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        $room = $this->roomRepository->with(['users', 'messages'])->find($id);
+        $room = $this->roomRepository->with(['users', 'messages.assets'])->find($id);
         if ($room) {
             $user = $room->users()->where('users.id', Auth::id())->first();
             if ($user) {

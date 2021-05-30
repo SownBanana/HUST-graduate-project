@@ -13,9 +13,11 @@ class LessonController extends Controller
 
     public function __construct(
         LessonRepository $lessonRepository
-    ) {
+    )
+    {
         $this->lessonRepository = $lessonRepository;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +31,7 @@ class LessonController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -40,8 +42,8 @@ class LessonController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -51,30 +53,32 @@ class LessonController extends Controller
         $user = Auth::user();
         if ($user->boughtCourses->contains($course->id)) {
             $user->boughtCourses()->updateExistingPivot($course->id, [
-                'section_checkpoint'=>$section->id,
+                'section_checkpoint' => $section->id,
             ]);
             if (!$user->sections->contains($section->id)) {
                 // Delete this condition after remigrate
                 $user->sections()->attach($section->id, [
-                    'lesson_checkpoint'=>$lesson->id,
-                    'highest_point'=>0
+                    'lesson_checkpoint' => $lesson->id,
+                    'highest_point' => 0
                 ]);
             } else {
                 $user->sections()->updateExistingPivot($section->id, [
-                    'lesson_checkpoint'=>$lesson->id,
+                    'lesson_checkpoint' => $lesson->id,
                 ]);
             }
-            return response()->json(["status"=>"success", "data"=>$lesson]);
+            return response()->json(["status" => "success", "data" => $lesson]);
+        } elseif ($user->ownerCourses->contains($course->id)) {
+            return response()->json(["status" => "success", "data" => $lesson]);
         } else {
-            return response()->json(["status"=>"fail"]);
+            return response()->json(["status" => "fail"]);
         }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -85,7 +89,7 @@ class LessonController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

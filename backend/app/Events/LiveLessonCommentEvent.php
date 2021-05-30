@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class LessonCommentEvent implements ShouldBroadcast
+class LiveLessonCommentEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -35,7 +35,7 @@ class LessonCommentEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('App.Lesson.' . $this->data['lesson_id']);
+        return new PrivateChannel('App.LiveLesson.' . $this->data['lesson_id']);
     }
 
     public function broadcastWith()

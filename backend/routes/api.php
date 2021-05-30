@@ -69,6 +69,18 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('notifications', 'Notification\NotificationController');
 
     Route::post('/draw-board/{id}', 'LiveLesson\DrawBoardController');
+
+    Route::apiResource('lessons', 'Lesson\LessonController')->only([
+        'show'
+    ]);
+    Route::get('/lessons/fetch-chats/{id}', 'Lesson\FetchLessonChatController');
+
+    Route::apiResource('live-lessons', 'LiveLesson\LiveLessonController')->only([
+        'show'
+    ]);
+    Route::get('/live-lessons/fetch-chats/{id}', 'LiveLesson\FetchLiveLessonChatController');
+
+    Route::post('/comments', 'Chat\CommentController');
 });
 
 // Admin user
@@ -86,12 +98,6 @@ Route::group(['middleware' => ['auth:api', 'checkInstructor']], function () {
 // Student user
 Route::group(['middleware' => ['auth:api', 'checkStudent']], function () {
     Route::get('/buy-course/{id}', 'CourseController\BuyCourseController');
-    Route::apiResource('lessons', 'Lesson\LessonController')->only([
-        'show'
-    ]);
-    Route::apiResource('live-lessons', 'LiveLesson\LiveLessonController')->only([
-        'show'
-    ]);
     Route::get('/sections/{section_id}/questions', 'Question\QuestionInSectionController');
     Route::post('/calculate-point', 'Question\CalculatePointController');
     Route::post('/rate-course', 'Student\RateCourseController');
