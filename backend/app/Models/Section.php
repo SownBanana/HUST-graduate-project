@@ -61,6 +61,6 @@ class Section extends Model
 
     public function students()
     {
-        return $this->belongsToMany(Student::class, 'section_student', 'section_id', 'student_id')->withPivot('lesson_checkpoint', 'highest_point', 'updated_at');
+        return $this->belongsToMany(Student::class, 'section_student', 'section_id', 'student_id')->withPivot('lesson_checkpoint', 'highest_point', 'last_test');
     }
 }

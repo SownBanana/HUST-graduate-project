@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Question extends Model
 {
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,7 +19,8 @@ class Question extends Model
         'question',
         'type',
         'order',
-        'uuid'
+        'uuid',
+        'last_test'
     ];
 
     public static function boot()
@@ -35,6 +37,7 @@ class Question extends Model
     {
         return $this->belongsTo(Section::class);
     }
+
     /**
      * Get all of the answers for the Question
      *

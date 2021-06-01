@@ -47,7 +47,7 @@ class LessonController extends Controller
      */
     public function show($id)
     {
-        $lesson = $this->lessonRepository->find($id);
+        $lesson = $this->lessonRepository->with('assets.owner:id,name,username')->find($id);
         $section = $lesson->section;
         $course = $lesson->section->course;
         $user = Auth::user();

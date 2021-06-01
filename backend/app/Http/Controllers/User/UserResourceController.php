@@ -16,11 +16,20 @@ class UserResourceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        return User::select(['id', 'name', 'role', 'username', 'avatar_url'])->get();
+        if (Auth::user() && Auth::user()->role == UserRole::Admin) {
+            return response()->json([
+                'status' => 'success',
+                'data' => User::all()
+            ]);
+        }
+        return response()->json([
+            'status' => 'success',
+            'data' => User::select(['id', 'name', 'role', 'username', 'avatar_url'])->get()
+        ]);
     }
 
     /**

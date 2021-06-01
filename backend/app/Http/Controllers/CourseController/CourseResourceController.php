@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\CourseController;
 
 use App\Enums\CourseType;
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CourseResource;
+use App\Models\Answer;
 use App\Models\Course;
+use App\Models\Lesson;
+use App\Models\LiveLesson;
+use App\Models\Question;
+use App\Models\Section;
 use App\Repositories\Answer\AnswerRepository;
 use App\Repositories\Course\CourseRepository;
 use App\Repositories\Lesson\LessonRepository;
@@ -86,7 +92,9 @@ class CourseResourceController extends Controller
                 'courses.introduce',
                 'courses.thumbnail_url',
                 'courses.price',
-                'courses.status'
+                'courses.status',
+                'courses.created_at',
+                'courses.updated_at'
             )
             ->selectRaw('
             avg(rate) as rate_avg,
@@ -97,7 +105,7 @@ class CourseResourceController extends Controller
         if (!$request->filled('search')) {
             $query->orderBy('courses.updated_at', $time);
         }
-        if (!$request->filled('instructor_id')) {
+        if (Auth::user()->role == UserRole::Student) {
             $query->where('status', CourseType::Publish);
         }
 //        $subQuery = clone $query;
@@ -138,7 +146,9 @@ class CourseResourceController extends Controller
                 if (isset($courseData['id'])) {
                     foreach ($courseData["sections"] as $sectionData) {
                         if (!isset($sectionData['id'])) {
-                            $newSectionsData[] = $sectionData;
+                            if (!Section::where('uuid', $sectionData['uuid'])->first()) {
+                                $newSectionsData[] = $sectionData;
+                            }
                         } else {
                             $oldSectionsData[] = $sectionData;
                         }
@@ -178,7 +188,9 @@ class CourseResourceController extends Controller
                     if (isset($sectionData["lessons"])) {
                         foreach ($sectionData["lessons"] as $lessonData) {
                             if (!isset($lessonData['id'])) {
-                                $newLessonsData[] = $lessonData;
+                                if (!Lesson::where('uuid', $lessonData['uuid'])->first()) {
+                                    $newLessonsData[] = $lessonData;
+                                }
                             } else {
                                 $oldLessonsData[] = $lessonData;
                             }
@@ -187,7 +199,9 @@ class CourseResourceController extends Controller
                     if (isset($sectionData["live_lessons"])) {
                         foreach ($sectionData["live_lessons"] as $liveLessonData) {
                             if (!isset($liveLessonData['id'])) {
-                                $newLiveLessonsData[] = $liveLessonData;
+                                if (!LiveLesson::where('uuid', $liveLessonData['uuid'])->first()) {
+                                    $newLiveLessonsData[] = $liveLessonData;
+                                }
                             } else {
                                 $oldLiveLessonsData[] = $liveLessonData;
                             }
@@ -196,7 +210,9 @@ class CourseResourceController extends Controller
                     if (isset($sectionData["questions"])) {
                         foreach ($sectionData["questions"] as $questionData) {
                             if (!isset($questionData['id'])) {
-                                $newQuestionsData[] = $questionData;
+                                if (!Question::where('uuid', $questionData['uuid'])->first()) {
+                                    $newQuestionsData[] = $questionData;
+                                }
                             } else {
                                 $oldQuestionsData[] = $questionData;
                             }
@@ -227,7 +243,9 @@ class CourseResourceController extends Controller
                         if (isset($questionData["answers"])) {
                             foreach ($questionData["answers"] as $answerData) {
                                 if (!isset($answerData['id'])) {
-                                    $newAnswersData[] = $answerData;
+                                    if (!Answer::where('uuid', $answerData['uuid'])->first()) {
+                                        $newAnswersData[] = $answerData;
+                                    }
                                 } else {
                                     $oldAnswersData[] = $answerData;
                                 }
@@ -281,7 +299,11 @@ class CourseResourceController extends Controller
                 'sections.lessons:section_id,id,name,estimate_time',
                 'sections.questions',
                 'sections.liveLessons',
-                'students',
+                'students:id,name,username,avatar_url',
+                'students.sections' => function ($query) use ($id) {
+                    $query->where('sections.course_id', $id)
+                        ->withCount('questions');
+                },
             ]);
 
         $bought = false;

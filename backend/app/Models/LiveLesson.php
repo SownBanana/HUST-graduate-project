@@ -38,4 +38,14 @@ class LiveLesson extends Model
     {
         return $this->morphOne(Room::class, 'roomable');
     }
+
+    /**
+     * Get all of the assets for the Message
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function assets()
+    {
+        return $this->morphMany(Asset::class, 'assetable');
+    }
 }

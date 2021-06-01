@@ -47,7 +47,7 @@ class LiveLessonController extends Controller
      */
     public function show($id)
     {
-        $lesson = $this->liveLessonRepository->find($id);
+        $lesson = $this->liveLessonRepository->with('assets.owner:id,name,username')->find($id);
         $section = $lesson->section;
         $course = $lesson->section->course;
         $user = Auth::user();

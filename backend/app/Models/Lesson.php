@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Lesson extends Model
 {
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -36,10 +37,19 @@ class Lesson extends Model
     /**
      * Get all of the assets for the Message
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function assets()
     {
-        return $this->hasMany(Asset::class);
+        return $this->morphMany(Asset::class, 'assetable');
     }
+//    /**
+//     * Get all of the assets for the Message
+//     *
+//     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+//     */
+//    public function assets()
+//    {
+//        return $this->hasMany(Asset::class);
+//    }
 }

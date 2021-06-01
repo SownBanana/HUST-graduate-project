@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\AssetController;
+namespace App\Http\Controllers\Asset;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Asset\AssetRepository;
@@ -40,7 +40,8 @@ class GetPresignedController extends Controller
         $s3Request = $client->createPresignedRequest($command, $expiry);
         $attr = $request->all();
         $attr['owner_id'] = Auth::user()->id;
-        $attr['name'] = $fileName;
+        $attr['name'] = $request->name;
+        $attr['size'] = $request->size;
         $attr['url'] = Storage::disk('s3')->url($fileName);
         $attr['type'] = $request->type;
         $asset = $this->assetRepository->create($attr);

@@ -42,16 +42,14 @@ Route::post('/auth/create-social', 'Auth\OauthController@createAccountWithSocial
 Route::post('/auth/attach-social', 'Auth\OauthController@attachUserWithSocialProvider');
 // Route::get('/auth/{social}/url', [OauthController::class, 'loginUrl']);
 
-Route::apiResource('users', 'User\UserResourceController')->only([
-    'index', 'show'
-]);
+
 Route::apiResource('topics', 'Topic\TopicController')->only([
     'index', 'show'
 ]);
 // All logged in user
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::post('/upload', 'AssetController\FileUploadController');
-    Route::get('/upload/presigned', 'AssetController\GetPresignedController');
+    Route::post('/upload', 'Asset\FileUploadController');
+    Route::get('/upload/presigned', 'Asset\GetPresignedController');
     Route::get('/check-passport', 'UserController@check_passport');
     Route::post('/logout', 'UserController@logout');
     Route::get('/courses/fetch/{id}', 'CourseController\CourseFetchController');
@@ -81,6 +79,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/live-lessons/fetch-chats/{id}', 'LiveLesson\FetchLiveLessonChatController');
 
     Route::post('/comments', 'Chat\CommentController');
+
+    Route::post('/upload-resource', 'Asset\UploadResourceToLesson');
+
+    Route::apiResource('assets', 'Asset\AssetController');
 });
 
 // Admin user
@@ -105,6 +107,9 @@ Route::group(['middleware' => ['auth:api', 'checkStudent']], function () {
 
 Route::group(['middleware' => ['injectAuth:api']], function () {
     Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
+        'index', 'show'
+    ]);
+    Route::apiResource('users', 'User\UserResourceController')->only([
         'index', 'show'
     ]);
 });

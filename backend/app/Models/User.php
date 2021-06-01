@@ -103,7 +103,7 @@ class User extends Authenticatable
 
     public function sections()
     {
-        return $this->belongsToMany(Section::class, 'section_student', 'student_id', 'section_id')->withPivot('lesson_checkpoint', 'highest_point', 'updated_at');
+        return $this->belongsToMany(Section::class, 'section_student', 'student_id', 'section_id')->withPivot('lesson_checkpoint', 'highest_point', 'last_test');
     }
 
     /**
@@ -152,7 +152,7 @@ class User extends Authenticatable
      */
     public function assets()
     {
-        return $this->hasMany(Asset::class);
+        return $this->hasMany(Asset::class, 'owner_id');
     }
 
     /**

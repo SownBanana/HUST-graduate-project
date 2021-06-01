@@ -18,6 +18,7 @@ class SectionStudentTable extends Migration
             $table->integer('student_id');
             $table->integer('lesson_checkpoint')->nullable();
             $table->integer('highest_point')->nullable();
+            $table->dateTime('last_test')->nullable();
             $table->timestamps();
         });
     }

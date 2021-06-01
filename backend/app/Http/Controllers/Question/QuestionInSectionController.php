@@ -22,7 +22,10 @@ class QuestionInSectionController extends Controller
 //        $user = Auth::user();
 //        if ($user->sections->contains($section_id)) {
         $settings = Section::find($section_id);
-        $lastTest = Carbon::createFromFormat('Y-m-d H:i:s', Auth::user()->sections->find($section_id)->pivot->updated_at);
+        $lastTimeTest = Auth::user()->sections->find($section_id)->pivot->last_test;
+        if ($lastTimeTest)
+            $lastTest = Carbon::createFromFormat('Y-m-d H:i:s', $lastTimeTest);
+        else $lastTest = null;
         if (!$lastTest) {
             $firstTime = true;
             $lastTestDuration = 0;

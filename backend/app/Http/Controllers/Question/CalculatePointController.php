@@ -83,7 +83,7 @@ class CalculatePointController extends Controller
         if ($highestPoint < $fancyPoint) {
             Auth::user()->sections()->updateExistingPivot($section->id, [
                 'highest_point' => $fancyPoint,
-                'updated_at' => now()
+                'last_test' => now()
             ]);
         }
         return response()->json([
