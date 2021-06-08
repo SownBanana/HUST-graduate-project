@@ -13,10 +13,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            \App\Repositories\Course\CourseRepository::class,
-            \App\Repositories\Course\CourseRepositoryInterface::class
+        $models = array(
+            'Course',
+            // 'Section'
         );
+
+        foreach ($models as $model) {
+            $this->app->bind("App\Repositories\\{$model}\{$model}RepositoryInterface", "App\Repositories\\{$model}\{$model}Repository");
+        }
+        // $this->app->singleton(
+        //     \App\Repositories\Course\CourseRepository::class,
+        //     \App\Repositories\Course\CourseRepositoryInterface::class
+        // );
     }
 
     /**
@@ -26,6 +34,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Carbon\Carbon::setLocale('vi');
     }
 }

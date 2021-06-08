@@ -15,11 +15,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    abort(404);
 });
 
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/verify/{code}', [UserController::class, 'verify'])->name('verify');
+Route::get('/reset/{code}', [UserController::class, 'reset'])->name('reset');

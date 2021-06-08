@@ -56,10 +56,12 @@ class OauthController extends Controller
                 ]
             );
         }
-
-        if (User::whereEmail($socialProvider->getEmail())->first()) {
+        $user = User::whereEmail($socialProvider->getEmail())->first();
+        if ($user) {
             return response()->json([
                 'status'=>'existed',
+                'name'=>$user->name,
+                'username'=>$user->username,
                 'social_provider' => $social,
                 'social_id'=>$socialProvider->getId(),
                 'social_email' => $socialProvider->getEmail(),
@@ -110,9 +112,12 @@ class OauthController extends Controller
         $socialAccount = SocialAccount::whereSocialProvider($request->social)
             ->whereSocialId($request->social_id)
             ->first();
-        $user = User::whereUsername($request->username)->first();
-        $socialAccount->user()->associate($user);
-        $socialAccount->save();
-        return response($this->authProxy->attemptSocial($socialAccount->social_provider, $socialAccount->social_id));
+        if($socialAccount->social_email === $request->email){
+            $user = User::whereEmail($request->email)->first();
+            $socialAccount->user()->associate($user);
+            $socialAccount->save();
+            return response($this->authProxy->attemptSocial($socialAccount->social_provider, $socialAccount->social_id));
+        }else abort(403);
+        return 403;
     }
 }

@@ -16,10 +16,13 @@ class CreateLessonsTable extends Migration
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->integer('section_id');
-            $table->string('name');
-            $table->integer('estimate_time');
-            $table->string('video_url');
-            $table->string('content');
+            $table->string('name')->nullable();
+            $table->string('uuid')->nullable();
+            $table->integer('estimate_time')->nullable();
+            $table->string('video_url')->nullable();
+            $table->integer('order')->nullable();
+            $table->mediumText('content')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

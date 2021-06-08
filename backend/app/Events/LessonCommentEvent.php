@@ -16,6 +16,7 @@ class LessonCommentEvent implements ShouldBroadcast
 
 
     private $data;
+
     /**
      * Create a new event instance.
      *
@@ -34,7 +35,7 @@ class LessonCommentEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('App.LessonComment.'.$this->data['lesson_id']);
+        return new PrivateChannel('App.Lesson.' . $this->data['lesson_id']);
     }
 
     public function broadcastWith()

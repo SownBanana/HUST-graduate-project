@@ -4,6 +4,7 @@ use App\Enums\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateUsersTable extends Migration
 {
@@ -21,8 +22,9 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('confirmation_code')->nullable();
+            $table->text('introduce')->nullable();
             $table->string('avatar_url')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->tinyInteger('role')->default(UserRole::Student);
             $table->rememberToken();
             $table->timestamps();

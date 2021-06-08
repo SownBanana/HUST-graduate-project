@@ -17,11 +17,14 @@ class CreateAssetsTable extends Migration
             $table->id();
             $table->string('name');
             $table->integer('owner_id');
-            $table->integer('lesson_id')->nullable();
-            $table->integer('message_id')->nullable();
-            $table->integer('course_id')->nullable();
+//            $table->integer('message_id')->nullable();
+            $table->string('assetable_type')->nullable();
+            $table->integer('assetable_id')->nullable();
             $table->string('url');
+            $table->string('type')->nullable();
+            $table->string('size')->nullable();
             $table->boolean('is_public')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

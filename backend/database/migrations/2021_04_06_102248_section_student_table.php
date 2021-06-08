@@ -16,8 +16,9 @@ class SectionStudentTable extends Migration
         Schema::create('section_student', function (Blueprint $table) {
             $table->integer('section_id');
             $table->integer('student_id');
-            $table->integer('lesson_checkpoint');
-            $table->integer('highest_point');
+            $table->integer('lesson_checkpoint')->nullable();
+            $table->integer('highest_point')->nullable();
+            $table->dateTime('last_test')->nullable();
             $table->timestamps();
         });
     }

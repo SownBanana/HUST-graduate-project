@@ -3,5 +3,5 @@ namespace App\Repositories\Room;
 
 interface RoomRepositoryInterface
 {
-    public function getRoom();
+    public function getRoom($type);
 }

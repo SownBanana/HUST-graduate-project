@@ -100,7 +100,7 @@ class AuthenticateProxy
         // dump(Config::get('oauth.personal_grant_client.client_id'));
         // dd($response);
         if (!$response->isSuccessful()) {
-            throw new Exception();
+            throw new Exception($response);
         }
 
         $data = json_decode($response->getContent());

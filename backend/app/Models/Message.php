@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'sender_id',
+        'room_id',
+        'content'
+    ];
+
+    /**
      * Get the room that owns the Message
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -15,6 +26,7 @@ class Message extends Model
     {
         return $this->belongsTo(Room::class);
     }
+
     /**
      * Get all of the mentions for the Message
      *
@@ -38,10 +50,19 @@ class Message extends Model
     /**
      * Get all of the assets for the Message
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function assets()
     {
-        return $this->hasMany(Asset::class);
+        return $this->morphMany(Asset::class, 'assetable');
     }
+//    /**
+//     * Get all of the assets for the Message
+//     *
+//     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+//     */
+//    public function assets()
+//    {
+//        return $this->hasMany(Asset::class);
+//    }
 }

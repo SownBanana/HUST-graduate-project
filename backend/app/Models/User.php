@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Course;
+use App\Models\Course;
 use App\Enums\UserRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'role', 'confirmation_code'
+        'name', 'username', 'email', 'password', 'role', 'confirmation_code', 'avatar_url'
     ];
 
     /**
@@ -51,20 +51,21 @@ class User extends Authenticatable
     {
         $role = $this->role;
         switch ($role) {
-            case UserRole::Student:{
-                return $this->hasOne('App\Models\Student');
-            }
-            case UserRole::Instructor:{
+            case UserRole::Instructor:
+            {
                 return $this->hasOne('App\Models\Instructor');
             }
-            case UserRole::Admin:{
+            case UserRole::Admin:
+            {
                 return $this->hasOne('App\Models\Admin');
             }
-            case UserRole::Mod:{
-                return $this->hasOne('App\Models\Mod');
+            default:
+            {
+                return $this->hasOne('App\Models\Student');
             }
         }
     }
+
     /**
      * Get all of the socialAccounts for the User
      *
@@ -89,31 +90,20 @@ class User extends Authenticatable
 
     public function ownerCourses()
     {
-        if ($this->role == UserRole::Instructor) {
-            return $this->hasMany(Course::class, 'instructor_id');
-        } else {
-            return null;
-        }
+        return $this->hasMany(Course::class, 'instructor_id');
     }
 
 
     public function boughtCourses()
     {
-        if ($this->role == UserRole::Student) {
-            return $this->belongsToMany(Course::class, 'course_student', 'student_id', 'course_id')->withPivot('rate', 'section_checkpoint');
-        } else {
-            return null;
-        }
+        return $this->belongsToMany(Course::class, 'course_student', 'student_id', 'course_id')
+            ->withPivot('rate', 'section_checkpoint');
     }
 
 
     public function sections()
     {
-        if ($this->role == UserRole::Student) {
-            return $this->belongsToMany(Section::class, 'section_student', 'student_id', 'section_id')->withPivot('lesson_checkpoint', 'highest_point');
-        } else {
-            return null;
-        }
+        return $this->belongsToMany(Section::class, 'section_student', 'student_id', 'section_id')->withPivot('lesson_checkpoint', 'highest_point', 'last_test');
     }
 
     /**
@@ -162,6 +152,18 @@ class User extends Authenticatable
      */
     public function assets()
     {
-        return $this->hasMany(Asset::class);
+        return $this->hasMany(Asset::class, 'owner_id');
+    }
+
+    /**
+     * Scope a query to only include users of a given type.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfRole($query, $type)
+    {
+        return $query->where('role', $type);
     }
 }

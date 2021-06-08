@@ -16,8 +16,14 @@ class CreateLiveLessonsTable extends Migration
         Schema::create('live_lessons', function (Blueprint $table) {
             $table->id();
             $table->integer('section_id');
-            $table->string('name');
-            $table->dateTime('schedule_time');
+            $table->string('uuid')->nullable();
+            $table->string('name')->nullable();
+            $table->mediumText('content')->nullable();
+            $table->mediumText('board')->nullable();
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
+            $table->integer('order')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

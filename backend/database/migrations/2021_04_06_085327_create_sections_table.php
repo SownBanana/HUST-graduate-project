@@ -16,8 +16,15 @@ class CreateSectionsTable extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->integer('course_id');
-            $table->integer('order');
-            $table->string('name');
+            $table->integer('order')->nullable();
+            $table->string('uuid')->nullable();
+            $table->string('name')->nullable();
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
+            $table->integer('question_duration')->nullable();
+            $table->float('pass_point')->nullable();
+            $table->integer('question_step')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -29,6 +36,7 @@ class CreateSectionsTable extends Migration
      */
     public function down()
     {
+
         Schema::dropIfExists('sections');
     }
 }

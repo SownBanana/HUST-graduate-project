@@ -6,8 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
-    protected $guarded = [];
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'room_code',
+        'roomable_type',
+        'roomable_id'
+    ];
     public function roomable()
     {
         return $this->morphTo();
