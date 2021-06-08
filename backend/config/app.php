@@ -56,6 +56,8 @@ return [
 
     'react_url' => env('APP_REACT_URL', 'http://localhost'),
 
+    'recommend_url' => env('APP_RECOMMEND_URL', 'http://localhost'),
+
     'asset_url' => env('ASSET_URL', null),
 
     /*

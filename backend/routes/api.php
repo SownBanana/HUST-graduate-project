@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/upload-resource', 'Asset\UploadResourceToLesson');
 
     Route::apiResource('assets', 'Asset\AssetController');
+
+    Route::get('/schedule', 'FetchSchedule');
 });
 
 // Admin user
@@ -113,3 +115,5 @@ Route::group(['middleware' => ['injectAuth:api']], function () {
         'index', 'show'
     ]);
 });
+
+Route::get('/recommend/{id}', 'User\GetRecommendController');

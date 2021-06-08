@@ -27,7 +27,7 @@ class Course extends Model
 
     public function sections()
     {
-        return $this->hasMany(Section::class)->orderBy('order');;
+        return $this->hasMany(Section::class)->orderBy('order');
     }
 
     /**
