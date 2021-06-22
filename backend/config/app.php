@@ -58,6 +58,8 @@ return [
 
     'recommend_url' => env('APP_RECOMMEND_URL', 'http://localhost'),
 
+    'elastic_url' => env('APP_ELASTIC_URL', 'http://localhost'),
+
     'asset_url' => env('ASSET_URL', null),
 
     /*

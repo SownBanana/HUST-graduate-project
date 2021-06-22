@@ -42,7 +42,6 @@ Route::post('/auth/create-social', 'Auth\OauthController@createAccountWithSocial
 Route::post('/auth/attach-social', 'Auth\OauthController@attachUserWithSocialProvider');
 // Route::get('/auth/{social}/url', [OauthController::class, 'loginUrl']);
 
-
 Route::apiResource('topics', 'Topic\TopicController')->only([
     'index', 'show'
 ]);
@@ -105,9 +104,12 @@ Route::group(['middleware' => ['auth:api', 'checkStudent']], function () {
     Route::get('/sections/{section_id}/questions', 'Question\QuestionInSectionController');
     Route::post('/calculate-point', 'Question\CalculatePointController');
     Route::post('/rate-course', 'Student\RateCourseController');
+    Route::get('/boughtCourses', 'Student\BoughtCoursesController');
 });
 
 Route::group(['middleware' => ['injectAuth:api']], function () {
+    Route::get('/search', 'Search\QuerySearchController');
+    Route::get('/esearch', 'Search\ElasticSearchController');
     Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
         'index', 'show'
     ]);
