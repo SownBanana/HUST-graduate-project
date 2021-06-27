@@ -18,12 +18,53 @@ class UserResourceController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         if (Auth::user() && Auth::user()->role == UserRole::Admin) {
+            $matchThese = [];
+            $matches = [];
+            foreach ($matches as $field) {
+                if ($request->filled($field) && $request->$field != 'vlearn_all_value') {
+                    $matchThese[$field] = $request->$field;
+                }
+            }
+            $search = "";
+            if ($request->has('search')) {
+                $search = $request->search;
+            }
+            $perPage = 9;
+            $columns = array('*');
+            $order = "desc";
+            if ($request->has('perPage')) {
+                $perPage = $request->perPage;
+            }
+            if ($request->has('columns')) {
+                $columns = $request->columns;
+            }
+            if ($request->has('order')) {
+                $order = $request->order;
+            }
+            $users = User::where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('username', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+                ->where($matchThese)
+                ->orderBy('created_at', $order);
+            if ($request->filled('status')) {
+                if ($request->status == 'active') {
+                    $users->whereNotNull('email_verified_at');
+                } elseif ($request->status == 'inactive') {
+                    $users->whereNull('email_verified_at');
+                }
+            }
+            if ($request->filled('roles')) {
+                $roles = explode(',', $request->roles);
+                $users->whereIn('role', $roles);
+            }
             return response()->json([
                 'status' => 'success',
-                'data' => User::all()
+                'data' => $users->paginate($perPage, $columns)
             ]);
         }
         return response()->json([

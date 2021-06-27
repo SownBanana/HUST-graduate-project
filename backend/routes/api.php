@@ -88,6 +88,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 // Admin user
 Route::group(['middleware' => ['auth:api', 'checkAdmin']], function () {
+    Route::post('/verify-user', 'Admin\VerifyUserController');
+    Route::post('/create-admin', 'Admin\CreateAdminController');
 });
 
 // Instructor user
@@ -116,6 +118,10 @@ Route::group(['middleware' => ['injectAuth:api']], function () {
     Route::apiResource('users', 'User\UserResourceController')->only([
         'index', 'show'
     ]);
+    Route::apiResource('instructors', 'Instructor\InstructorResourceController')->only([
+        'index'
+    ]);
+    Route::post('/course-status', 'Course\SetStatusController');
 });
 
 Route::get('/recommend/{id}', 'User\GetRecommendController');

@@ -59,7 +59,7 @@ class CourseResourceController extends Controller
         $matchThese = [];
         $matches = ['instructor_id', 'status'];
         foreach ($matches as $field) {
-            if ($request->has($field) && $request->$field != 'vlearn_all_value') {
+            if ($request->filled($field) && $request->$field != 'vlearn_all_value') {
                 $matchThese[$field] = $request->$field;
             }
         }
@@ -69,7 +69,7 @@ class CourseResourceController extends Controller
         }
         $perPage = 9;
         $columns = array('*');
-        $time = "asc";
+        $time = "desc";
         if ($request->has('perPage')) {
             $perPage = $request->perPage;
         }
@@ -102,8 +102,20 @@ class CourseResourceController extends Controller
             users.id as instructor_id
             ')
             ->where($matchThese);
+        if ($request->filled('statuses')) {
+            $statuses = explode(',', $request->statuses);
+            $query->whereIn('status', $statuses);
+        }
+        if ($request->filled('types')) {
+            $types = explode(',', $request->types);
+            $query->whereIn('type', $types);
+        }
         if (!$request->filled('search')) {
-            $query->orderBy('courses.updated_at', $time);
+            if ($request->filled('orderBy')) {
+                $query->orderBy('courses.' . $request->orderBy, $request->order);
+            } else {
+                $query->orderBy('courses.updated_at', $time);
+            }
         }
         if (Auth::user()->role == UserRole::Student) {
             $query->where('status', CourseType::Publish);
