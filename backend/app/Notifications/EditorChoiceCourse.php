@@ -7,20 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewAnnouncement extends Notification implements ShouldQueue
+class EditorChoiceCourse extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $announcement;
+    public $course;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($announcement)
+    public function __construct($course)
     {
-        $this->announcement = $announcement;
+        $this->course = $course;
     }
 
     /**
@@ -37,7 +37,12 @@ class NewAnnouncement extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
-            'announcement' => $this->announcement,
+            'course' => [
+                'id' => $this->course->id,
+                'title' => $this->course->title,
+                'thumbnail_url' => $this->course->thumbnail_url,
+                'is_editor_choice' => $this->course->is_editor_choice
+            ],
             'timestamp' => now()
         ];
     }
@@ -46,7 +51,12 @@ class NewAnnouncement extends Notification implements ShouldQueue
     {
         return [
             'data' => [
-                'announcement' => $this->announcement,
+                'course' => [
+                    'id' => $this->course->id,
+                    'title' => $this->course->title,
+                    'thumbnail_url' => $this->course->thumbnail_url,
+                    'is_editor_choice' => $this->course->is_editor_choice
+                ],
                 'timestamp' => now()
             ]
         ];

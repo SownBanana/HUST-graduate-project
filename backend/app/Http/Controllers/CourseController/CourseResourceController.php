@@ -93,6 +93,7 @@ class CourseResourceController extends Controller
                 'courses.thumbnail_url',
                 'courses.price',
                 'courses.status',
+                'courses.is_editor_choice',
                 'courses.created_at',
                 'courses.updated_at'
             )

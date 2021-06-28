@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAnnouncementsTable extends Migration
+class AddEditorChoiceToCoursesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateAnnouncementsTable extends Migration
      */
     public function up()
     {
-        Schema::create('announcements', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('target')->nullable();
-            $table->longText('content');
-            $table->timestamps();
+        Schema::table('courses', function (Blueprint $table) {
+            $table->boolean('is_editor_choice')->default(false);
         });
     }
 
@@ -29,6 +25,8 @@ class CreateAnnouncementsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('announcements');
+        Schema::table('courses', function (Blueprint $table) {
+            $table->dropColumn('is_editor_choice');
+        });
     }
 }

@@ -45,6 +45,7 @@ Route::post('/auth/attach-social', 'Auth\OauthController@attachUserWithSocialPro
 Route::apiResource('topics', 'Topic\TopicController')->only([
     'index', 'show'
 ]);
+
 // All logged in user
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/upload', 'Asset\FileUploadController');
@@ -90,6 +91,10 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::group(['middleware' => ['auth:api', 'checkAdmin']], function () {
     Route::post('/verify-user', 'Admin\VerifyUserController');
     Route::post('/create-admin', 'Admin\CreateAdminController');
+    Route::post('/course-editor-choice', 'Admin\SetEditorChoiceController');
+    Route::apiResource('announcements', 'Announcement\AnnouncementController')->only([
+        'store', 'update'
+    ]);
 });
 
 // Instructor user
@@ -122,6 +127,9 @@ Route::group(['middleware' => ['injectAuth:api']], function () {
         'index'
     ]);
     Route::post('/course-status', 'Course\SetStatusController');
+    Route::apiResource('announcements', 'Announcement\AnnouncementController')->only([
+        'index', 'show'
+    ]);
 });
 
 Route::get('/recommend/{id}', 'User\GetRecommendController');
