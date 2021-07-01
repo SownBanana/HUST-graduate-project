@@ -50,7 +50,7 @@ class GetRecommendController extends Controller
                 ->selectRaw('
                 avg(rate) as rate_avg,
                 count(student_id) as total,
-                users.id as instructor_id
+                courses.instructor_id
                 ')
                 ->whereIn('courses.id', $data);
             if (!empty($data)) {
