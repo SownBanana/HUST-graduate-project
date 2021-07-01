@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth:api', 'checkStudent']], function () {
     Route::post('/calculate-point', 'Question\CalculatePointController');
     Route::post('/rate-course', 'Student\RateCourseController');
     Route::get('/boughtCourses', 'Student\BoughtCoursesController');
+    Route::get('/recent-courses', 'Student\GetRecentCourseView');
 });
 
 Route::group(['middleware' => ['injectAuth:api']], function () {

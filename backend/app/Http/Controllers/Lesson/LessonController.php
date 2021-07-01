@@ -55,6 +55,7 @@ class LessonController extends Controller
         if ($user->boughtCourses->contains($course->id)) {
             $user->boughtCourses()->updateExistingPivot($course->id, [
                 'section_checkpoint' => $section->id,
+                'updated_at' => now(),
             ]);
             if (!$user->sections->contains($section->id)) {
                 // Delete this condition after remigrate

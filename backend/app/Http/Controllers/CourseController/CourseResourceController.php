@@ -39,8 +39,7 @@ class CourseResourceController extends Controller
         QuestionRepository $questionRepository,
         LiveLessonRepository $liveLessonRepository,
         AnswerRepository $answerRepository
-    )
-    {
+    ) {
         $this->courseRepository = $courseRepository;
         $this->sectionRepository = $sectionRepository;
         $this->questionRepository = $questionRepository;
@@ -70,6 +69,7 @@ class CourseResourceController extends Controller
         $perPage = 9;
         $columns = array('*');
         $time = "desc";
+
         if ($request->has('perPage')) {
             $perPage = $request->perPage;
         }
@@ -79,6 +79,7 @@ class CourseResourceController extends Controller
         if ($request->has('time')) {
             $time = $request->time;
         }
+
         $query = $this->courseRepository
             ->with('instructor')
             ->leftJoin('course_student', 'courses.id', '=', 'course_student.course_id')
@@ -113,12 +114,16 @@ class CourseResourceController extends Controller
         }
         if (!$request->filled('search')) {
             if ($request->filled('orderBy')) {
-                $query->orderBy('courses.' . $request->orderBy, $request->order);
+                if ($request->orderBy == 'rate') {
+                    $query->orderBy('rate_avg', $request->order);
+                } else {
+                    $query->orderBy('courses.' . $request->orderBy, $request->order);
+                }
             } else {
                 $query->orderBy('courses.updated_at', $time);
             }
         }
-        if (Auth::user()->role == UserRole::Student) {
+        if (!Auth::check() || Auth::user()->role == UserRole::Student) {
             $query->where('status', CourseType::Publish);
         }
 //        $subQuery = clone $query;
@@ -141,7 +146,7 @@ class CourseResourceController extends Controller
     public function store(Request $request)
     {
         $courseData = $request->course;
-        // dump($courseData);
+        unset($courseData['status']);
 
         DB::beginTransaction();
         try {
