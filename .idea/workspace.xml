@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a13e0433-6725-4716-93c0-36f52ad59d41" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/app/Jobs/SendResetPasswordEmail.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/resources/views/mail/resetpassword.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/backend/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Events/PrivateMessageSend.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Events/PrivateMessageSend.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Helpers/Helper.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Helpers/Helper.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Controllers/Auth/OauthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Controllers/Auth/OauthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Controllers/CourseController/CourseResourceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Controllers/CourseController/CourseResourceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Controllers/FileUploadController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Controllers/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Middleware/Authenticate.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Middleware/Authenticate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Http/Proxy/AuthenticateProxy.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Http/Proxy/AuthenticateProxy.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/Answer.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/Answer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/Course.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/Course.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/Instructor.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/Instructor.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/Lesson.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/Lesson.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/LiveLesson.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/LiveLesson.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/Message.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/Message.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/Question.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/Question.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/Room.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/Room.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/Section.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/Section.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/Student.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/Student.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Providers/AuthServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Providers/AuthServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Repositories/BaseRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Repositories/BaseRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Repositories/Course/CourseRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Repositories/Course/CourseRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Repositories/Lesson/LessonRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Repositories/Lesson/LessonRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Repositories/Room/RoomRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Repositories/Room/RoomRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Repositories/Room/RoomRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Repositories/Room/RoomRepositoryInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/Resource/UserResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/Enums/QuestionType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/config/services.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config/services.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2021_04_03_171936_create_instructors_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2021_04_03_171936_create_instructors_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2021_04_03_172506_create_admins_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2021_04_03_172506_create_admins_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_050926_create_courses_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_050926_create_courses_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_054517_course_student_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_054517_course_student_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_085327_create_sections_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_085327_create_sections_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_101315_create_lessons_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_101315_create_lessons_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_102248_section_student_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_102248_section_student_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_104014_create_questions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_104014_create_questions_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_104355_create_answers_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_104355_create_answers_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_104746_create_live_lessons_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/migrations/2021_04_06_104746_create_live_lessons_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/channels.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/channels.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/web.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1syqK8vLurSvDgQ54jarHnTqZpU" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/backend" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a13e0433-6725-4716-93c0-36f52ad59d41" name="Default Changelist" comment="" />
+      <created>1621855111156</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1621855111156</updated>
+      <workItem from="1621855118285" duration="12000" />
+    </task>
+    <servers />
+  </component>
+</project>

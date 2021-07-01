@@ -39,8 +39,7 @@ class CourseResourceController extends Controller
         QuestionRepository $questionRepository,
         LiveLessonRepository $liveLessonRepository,
         AnswerRepository $answerRepository
-    )
-    {
+    ) {
         $this->courseRepository = $courseRepository;
         $this->sectionRepository = $sectionRepository;
         $this->questionRepository = $questionRepository;
@@ -59,7 +58,7 @@ class CourseResourceController extends Controller
         $matchThese = [];
         $matches = ['instructor_id', 'status'];
         foreach ($matches as $field) {
-            if ($request->has($field) && $request->$field != 'vlearn_all_value') {
+            if ($request->filled($field) && $request->$field != 'vlearn_all_value') {
                 $matchThese[$field] = $request->$field;
             }
         }
@@ -69,7 +68,8 @@ class CourseResourceController extends Controller
         }
         $perPage = 9;
         $columns = array('*');
-        $time = "asc";
+        $time = "desc";
+
         if ($request->has('perPage')) {
             $perPage = $request->perPage;
         }
@@ -79,6 +79,7 @@ class CourseResourceController extends Controller
         if ($request->has('time')) {
             $time = $request->time;
         }
+
         $query = $this->courseRepository
             ->with('instructor')
             ->leftJoin('course_student', 'courses.id', '=', 'course_student.course_id')
@@ -93,6 +94,7 @@ class CourseResourceController extends Controller
                 'courses.thumbnail_url',
                 'courses.price',
                 'courses.status',
+                'courses.is_editor_choice',
                 'courses.created_at',
                 'courses.updated_at'
             )
@@ -102,10 +104,26 @@ class CourseResourceController extends Controller
             users.id as instructor_id
             ')
             ->where($matchThese);
-        if (!$request->filled('search')) {
-            $query->orderBy('courses.updated_at', $time);
+        if ($request->filled('statuses')) {
+            $statuses = explode(',', $request->statuses);
+            $query->whereIn('status', $statuses);
         }
-        if (Auth::user()->role == UserRole::Student) {
+        if ($request->filled('types')) {
+            $types = explode(',', $request->types);
+            $query->whereIn('type', $types);
+        }
+        if (!$request->filled('search')) {
+            if ($request->filled('orderBy')) {
+                if ($request->orderBy == 'rate') {
+                    $query->orderBy('rate_avg', $request->order);
+                } else {
+                    $query->orderBy('courses.' . $request->orderBy, $request->order);
+                }
+            } else {
+                $query->orderBy('courses.updated_at', $time);
+            }
+        }
+        if (!Auth::check() || Auth::user()->role == UserRole::Student) {
             $query->where('status', CourseType::Publish);
         }
 //        $subQuery = clone $query;
@@ -128,7 +146,7 @@ class CourseResourceController extends Controller
     public function store(Request $request)
     {
         $courseData = $request->course;
-        // dump($courseData);
+        unset($courseData['status']);
 
         DB::beginTransaction();
         try {

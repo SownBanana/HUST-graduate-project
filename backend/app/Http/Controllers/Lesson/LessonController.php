@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Lesson;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Repositories\Lesson\LessonRepository;
 use Illuminate\Http\Request;
@@ -54,6 +55,7 @@ class LessonController extends Controller
         if ($user->boughtCourses->contains($course->id)) {
             $user->boughtCourses()->updateExistingPivot($course->id, [
                 'section_checkpoint' => $section->id,
+                'updated_at' => now(),
             ]);
             if (!$user->sections->contains($section->id)) {
                 // Delete this condition after remigrate
@@ -67,7 +69,7 @@ class LessonController extends Controller
                 ]);
             }
             return response()->json(["status" => "success", "data" => $lesson]);
-        } elseif ($user->ownerCourses->contains($course->id)) {
+        } elseif ($user->role == UserRole::Admin || $user->ownerCourses->contains($course->id)) {
             return response()->json(["status" => "success", "data" => $lesson]);
         } else {
             return response()->json(["status" => "fail"]);

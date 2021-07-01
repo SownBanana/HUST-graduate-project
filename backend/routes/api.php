@@ -42,10 +42,10 @@ Route::post('/auth/create-social', 'Auth\OauthController@createAccountWithSocial
 Route::post('/auth/attach-social', 'Auth\OauthController@attachUserWithSocialProvider');
 // Route::get('/auth/{social}/url', [OauthController::class, 'loginUrl']);
 
-
 Route::apiResource('topics', 'Topic\TopicController')->only([
     'index', 'show'
 ]);
+
 // All logged in user
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/upload', 'Asset\FileUploadController');
@@ -89,6 +89,12 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 // Admin user
 Route::group(['middleware' => ['auth:api', 'checkAdmin']], function () {
+    Route::post('/verify-user', 'Admin\VerifyUserController');
+    Route::post('/create-admin', 'Admin\CreateAdminController');
+    Route::post('/course-editor-choice', 'Admin\SetEditorChoiceController');
+    Route::apiResource('announcements', 'Announcement\AnnouncementController')->only([
+        'store', 'update'
+    ]);
 });
 
 // Instructor user
@@ -105,13 +111,24 @@ Route::group(['middleware' => ['auth:api', 'checkStudent']], function () {
     Route::get('/sections/{section_id}/questions', 'Question\QuestionInSectionController');
     Route::post('/calculate-point', 'Question\CalculatePointController');
     Route::post('/rate-course', 'Student\RateCourseController');
+    Route::get('/boughtCourses', 'Student\BoughtCoursesController');
+    Route::get('/recent-courses', 'Student\GetRecentCourseView');
 });
 
 Route::group(['middleware' => ['injectAuth:api']], function () {
+    Route::get('/search', 'Search\QuerySearchController');
+    Route::get('/esearch', 'Search\ElasticSearchController');
     Route::apiResource('courses', 'CourseController\CourseResourceController')->only([
         'index', 'show'
     ]);
     Route::apiResource('users', 'User\UserResourceController')->only([
+        'index', 'show'
+    ]);
+    Route::apiResource('instructors', 'Instructor\InstructorResourceController')->only([
+        'index'
+    ]);
+    Route::post('/course-status', 'Course\SetStatusController');
+    Route::apiResource('announcements', 'Announcement\AnnouncementController')->only([
         'index', 'show'
     ]);
 });
