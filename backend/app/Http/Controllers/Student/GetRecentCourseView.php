@@ -22,7 +22,7 @@ class GetRecentCourseView extends Controller
         ->orderBy('course_student.updated_at', 'desc')
         ->take($recentCoursesNumber)->get()->pluck('id');
 
-        $courses = Course::whereIn('courses.id', $ids)
+        $query = Course::whereIn('courses.id', $ids)
         ->with('instructor')
         ->leftJoin('course_student', 'courses.id', '=', 'course_student.course_id')
         ->groupBy('courses.id')
@@ -42,10 +42,12 @@ class GetRecentCourseView extends Controller
         ->selectRaw('
         avg(rate) as rate_avg,
         count(student_id) as total,
-        users.id as instructor_id
-        ')
-        ->orderByRaw('FIELD(courses.id, '.implode(',', $ids->toArray()).')')
-        ->take($recentCoursesNumber)->get();
+        courses.instructor_id
+        ');
+        if(!empty($ids->toArray()))
+                $query->orderByRaw('FIELD(courses.id, '.implode(',', $ids->toArray()).')');
+        $courses = $query->take($recentCoursesNumber)->get();
+
         return response()->json([
             'status' => 'success',
             'data' => $courses
