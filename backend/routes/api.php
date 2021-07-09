@@ -104,6 +104,8 @@ Route::group(['middleware' => ['auth:api', 'checkInstructor']], function () {
     ]);
     Route::post('/attach-topic', 'Course\AttachTopicController');
     Route::post('/detach-topic', 'Course\DetachTopicController');
+    Route::get('/bought-data', 'Instructor\GetBoughtCourseTimeSeries');
+    Route::get('/rate-data', 'Instructor\GetRateTimeSeries');
 });
 // Student user
 Route::group(['middleware' => ['auth:api', 'checkStudent']], function () {

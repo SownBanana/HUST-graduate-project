@@ -19,32 +19,32 @@ services:
     restart: unless-stopped
 
   # The Database
-# database:
-#    image: "mysql:5.7.22"
-#    container_name: "database_${APP_NAME}"
-#    restart: unless-stopped
-#    tty: true
-#    volumes:
-#      - ./database/dbdata:/var/lib/mysql
-#      - ./database/my.cnf:/etc/mysql/conf.d/my.cnf
-#    command:
-#      [
-#        "--character-set-server=utf8mb4",
-#        "--collation-server=utf8mb4_unicode_ci",
-#        "--default-authentication-plugin=mysql_native_password",
-#      ]
-#    environment:
-#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#      MYSQL_DATABASE: ${MYSQL_DATABASE}
-#      MYSQL_USER: ${MYSQL_USER}
-#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#      SERVICE_TAGS: dev
-#      SERVICE_NAME: mysql
-#    ports:
-#      - "3307:3306"
-#    networks:
-#      - app-network
-#    restart: unless-stopped
+  database:
+    image: "mysql:5.7.22"
+    container_name: "database_${APP_NAME}"
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./database/dbdata:/var/lib/mysql
+      - ./database/my.cnf:/etc/mysql/conf.d/my.cnf
+    command:
+      [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+        "--default-authentication-plugin=mysql_native_password",
+      ]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - app-network
+    restart: unless-stopped
 
   # The Application
   backend:
